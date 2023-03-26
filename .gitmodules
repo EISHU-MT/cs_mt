@@ -2,3 +2,6 @@
 	path = mods/cs_core/cs_map/maps
 	url = https://github.com/EISHU92/cs_map.git
 	branch = main
+[submodule "mods/cs_core/cs_map/cs_map"]
+	path = mods/cs_core/cs_map/cs_map
+	url = https://github.com/EISHU92/cs_map.git
