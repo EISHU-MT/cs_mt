@@ -18,7 +18,11 @@ end)
 
 function armor.for_punch_to_fleshy(p,_,_,_,_,d)
 	local a = math.random(1, 6)
-	local b = armor.get_value(p)
+	if type(armor.get_value) == "function" then
+		local b = armor.get_value(p)
+	else
+		return
+	end
 	local c = d + a
 	local d = c - b
 	armor.set_value(p, d)
