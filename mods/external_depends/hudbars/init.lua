@@ -492,7 +492,7 @@ local function custom_hud(player)
 		local hp = player:get_hp()
 		local hp_max = player:get_properties().hp_max
 		hb.init_hudbar(player, "health", math.min(hp, hp_max), hp_max, hide)
-		hb.init_hudbar(player, "dummy", 0, 0)
+		--hb.init_hudbar(player, "dummy", 0, 0)
 		local breath = player:get_breath()
 		local breath_max = player:get_properties().breath_max
 		local hide_breath

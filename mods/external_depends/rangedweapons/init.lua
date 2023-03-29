@@ -932,7 +932,7 @@ minetest.register_abm({
 })
 
 minetest.register_on_joinplayer(function(player)
-	hb.init_hudbar(player, "ammo")
+	hb.init_hudbar(player, "ammo", 0, 150, false)
 --[[
  gunammo = 
 	player:hud_add({
