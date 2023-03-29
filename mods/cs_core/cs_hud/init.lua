@@ -2,8 +2,11 @@ cshud = {
     terrorist = {number=0},
     counter = {number=0},
 }
+chud_round = {}
+thud_round = {}
 minetest.register_on_joinplayer(function(ObjectRef, last_login)
-    chud_round = ObjectRef:hud_add({
+	pname = ObjectRef:get_player_name()
+    chud_round[pname] = ObjectRef:hud_add({
         hud_elem_type = "text",
         name = "hud_rounds",
         scale = {x = 1.5, y = 1.5},
@@ -11,7 +14,7 @@ minetest.register_on_joinplayer(function(ObjectRef, last_login)
         offset = {x = 30, y = 100},
         size = {x = 2},
         alignment = {x = 0, y = -1},
-        text = cshud.counter.number.." /",
+        text = cshud.counter.number,
         number = 0x491FF,
     })
     null = ObjectRef:hud_add({
@@ -25,7 +28,7 @@ minetest.register_on_joinplayer(function(ObjectRef, last_login)
         text = "/",
         number = 0x000000,
     })
-    thud_round = ObjectRef:hud_add({
+    thud_round[pname] = ObjectRef:hud_add({
         hud_elem_type = "text",
         name = "hud_rounds",
         scale = {x = 1.5, y = 1.5},
@@ -50,6 +53,13 @@ elseif team == "spectator" then
     cs_core.log("error", "cs_hud mod: *spectator* team cant be a winner, returning as an error")
     error("***Spectator team cant be the winner!")
 end
+
+for _, player in pairs(core.get_connected_players()) do
+	pname = player:get_player_name()
+        player:hud_change(thud_round[pname], "text", cshud.terrorist.number)
+        player:hud_change(chud_round[pname], "text", cshud.counter.number)
+end
+
 end)
 
 call.register_on_new_matches(function()
@@ -57,10 +67,7 @@ call.register_on_new_matches(function()
     cshud.counter.number = 0
 end)
 
-
+--[[
 minetest.register_globalstep(function(dtime)
-    for _, player in pairs(core.get_connected_players()) do
-        player:hud_change(thud_round, "text", cshud.terrorist.number)
-        player:hud_change(chud_round, "text", cshud.counter.number)
-    end
-end)
+    
+end)--]]
