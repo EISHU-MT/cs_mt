@@ -533,7 +533,7 @@ end
 
 
 minetest.register_on_joinplayer(function(playerrrr)
-	
+	hb.init_hudbar(playerrrr, "ammo", 0, 140)
 	playerrrr:set_hp(20)
 	local map_edit = clua.get_bool("map_edit", clua.get_table_value("central_csgo"))
 	if not map_edit then

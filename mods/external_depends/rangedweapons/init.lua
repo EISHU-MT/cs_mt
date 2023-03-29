@@ -114,8 +114,9 @@ if reload_ammo:get_definition().inventory_image ~= nil then
 ammo_icon = reload_ammo:get_definition().inventory_image
 end
 
-	player:hud_change(gunimg, "text", gun_icon)
-	player:hud_change(ammoimg, "text", ammo_icon)
+	hb.change_hudbar(player, "ammo", nil, nil, gun_icon, nil, nil)
+	--hb.change_hudbar(player, "ammo", nil, nil, gunimg, nil, nil)
+	--player:hud_change(ammoimg, "text", ammo_icon)
 
 local gunMeta = itemstack:get_meta()
 local ammoCount = gunMeta:get_int("RW_bullets")
@@ -135,7 +136,8 @@ end
 
 gunMeta:set_string("RW_ammo_name",reload_ammo:get_name())
 
-player:hud_change(gunammo, "text", gunMeta:get_int("RW_bullets"))
+hb.change_hudbar(player, "ammo", gunMeta:get_int("RW_bullets"), gunMeta:get_int("RW_bullets"))
+--player:hud_change(gunammo, "text", gunMeta:get_int("RW_bullets"))
 
 if GunCaps.gun_magazine ~= nil then
 		local pos = player:get_pos()
@@ -219,10 +221,13 @@ local ammo_icon = "rangedweapons_emergency_ammo_icon.png"
 if reload_ammo:get_definition().inventory_image ~= nil then
 ammo_icon = reload_ammo:get_definition().inventory_image
 end
-
+	hb.change_hudbar(player, "ammo", nil, nil, gun_icon, nil, nil)
+	--hb.change_hudbar(player, "ammo", nil, nil, gunimg, nil, nil)
+	--player:hud_change(ammoimg, "text", ammo_icon)
+--[[
 	player:hud_change(gunimg, "text", gun_icon)
 	player:hud_change(ammoimg, "text", ammo_icon)
-
+--]]
 local gunMeta = itemstack:get_meta()
 local ammoCount = gunMeta:get_int("RW_bullets")
 local ammoName = gunMeta:get_string("RW_ammo_name")
@@ -241,7 +246,8 @@ end
 
 gunMeta:set_string("RW_ammo_name",reload_ammo:get_name())
 
-player:hud_change(gunammo, "text", gunMeta:get_int("RW_bullets"))
+hb.change_hudbar(player, "ammo", gunMeta:get_int("RW_bullets"), gunMeta:get_int("RW_bullets"))
+--player:hud_change(gunammo, "text", gunMeta:get_int("RW_bullets"))
 
 if GunCaps.gun_unloaded ~= nil then
 itemstack:set_name(GunCaps.gun_unloaded)
@@ -377,13 +383,15 @@ if math.random(1,100) > gun_ammo_save then
 gunMeta:set_int("RW_bullets",gunMeta:get_int("RW_bullets")-1)
 end
 
-player:hud_change(gunammo, "text", gunMeta:get_int("RW_bullets"))
+hb.change_hudbar(player, "ammo", gunMeta:get_int("RW_bullets"))
+--player:hud_change(gunammo, "text", gunMeta:get_int("RW_bullets"))
 
 local gun_icon = "rangedweapons_emergency_gun_icon.png"
 if GunCaps.gun_icon ~= nil then
 gun_icon = GunCaps.gun_icon
 end
-	player:hud_change(gunimg, "text", gun_icon)
+	hb.change_hudbar(player, "ammo", nil, nil, gun_icon, nil, nil)
+	--player:hud_change(gunimg, "text", gun_icon)
 
 local OnCollision = function() end
 
@@ -469,7 +477,7 @@ local ammo_icon = "rangedweapons_emergency_ammo_icon.png"
 if bulletStack:get_definition().inventory_image ~= nil then
 ammo_icon = bulletStack:get_definition().inventory_image
 end
-player:hud_change(ammoimg, "text", ammo_icon)
+--player:hud_change(ammoimg, "text", ammo_icon)
 
 if AmmoCaps ~= nil then
 
@@ -924,6 +932,8 @@ minetest.register_abm({
 })
 
 minetest.register_on_joinplayer(function(player)
+	hb.init_hudbar(player, "ammo")
+--[[
  gunammo = 
 	player:hud_add({
 	hud_elem_type = "text",
@@ -954,7 +964,7 @@ minetest.register_on_joinplayer(function(player)
 	position = {x = 0.92, y = 0.874},
 	offset = {x = 30, y = 100},
 	alignment = {x = 0, y = -1}
-	})
+	})--]]
  hit = 
 	player:hud_add({
 	hud_elem_type = "image",
