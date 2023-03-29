@@ -1,8 +1,9 @@
 function armor.get_value(p)
 	return armor.player[p:get_player_name()].avalue or 0
 end
-function armor.set_value(p, v)
-	if type(armor.player[p:get_player_name()]) == "table" then
+function armor.set_value(p, r)
+	if type(armor.player[p:get_player_name()]) == "table" and tonumber(v) then
+		v = tonumber(r)
 		if v < 100 then
 			v2 = v
 		elseif v > 120 then

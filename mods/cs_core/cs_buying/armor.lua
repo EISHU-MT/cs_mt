@@ -66,7 +66,13 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 					local a1 = aval - 50
 					if a1 < 20 then
 						a2 = 20
+					else
+						a2 = a1
 					end
+					if not tonumber(a2) then
+						a2 = 50
+					end
+					
 					armor.set_value(player, a2)
 					local cmmm = core.colorize("#9B9B9B", "Armor Protection: helmet")
 					minetest.chat_send_player(pname, core.colorize("#eb8634","-$100 By Buying " .. cmmm .. ""))
