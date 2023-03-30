@@ -77,8 +77,25 @@ if mapeditor ~= true then
         run = false
         --annouce.winner("No winner", "Timed out has reached") -- Whatever, this will be dont more available.
         --core.after(2, cs_match.finished_match)
+       
         if not to_end then
-          number = math.random(2)
+        	number = {}
+          if csgo.team.counter.count > csgo.team.terrorist.count then
+          	number.r = clua.aif("Select random", {"the terrorist team is so tiny!", "timed out have been reached", "too low players in the game!"})
+          	number.n = 1
+          elseif csgo.team.terrorist.count > csgo.team.counter.count then
+          	number.r = clua.aif("Select random", {"the counter team is so tiny!", "timed out", "too low players!"})
+          	number.n = 2
+          elseif csgo.team.terrorist.count == csgo.team.counter.count then
+          	number.r = "By algotrithm this team have win!"
+          	number.n = math.random(2)
+          end
+          
+          
+          
+          
+          
+          --number = math.random(2)
         elseif to_end == "explode" then
           c4.bomb_now()
           user = c4.get_planter()
@@ -88,22 +105,22 @@ if mapeditor ~= true then
           c4.remove_bomb2()
           to_end = nil
         end
-        if number == 2 then
-          annouce.winner("counter", "By algorithm this team have win")
+        if number.n == 2 then
+          annouce.winner("counter", number.r)
           core.after(0.6, cs_match.finished_match, "counter")
           if c4.get_status() then
             c4.remove_bomb2()
           end
         end
-        if number == 1 then
-          annouce.winner("terrorist", "By algorithm this team have win")
+        if number.n == 1 then
+          annouce.winner("terrorist", number.r)
           core.after(0.6, cs_match.finished_match, "terrorist")
 
           if c4.get_status() then
             c4.remove_bomb2()
           end
         end
-
+	number = nil
         --print("debug9")
     end
 	if time == 60 then
