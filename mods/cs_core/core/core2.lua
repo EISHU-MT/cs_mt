@@ -622,6 +622,7 @@ minetest.register_on_dieplayer(function(player, reason)
 	
 	
 	
+	
 	local pname = player:get_player_name()
 --core.after(2, function()
 	if (csgo.online[pname]) then
@@ -648,4 +649,8 @@ minetest.register_on_dieplayer(function(player, reason)
 --end)
 
 	--print(reason)
+end)
+
+minetest.register_on_respawnplayer(function(ObjectRef)
+	return true
 end)

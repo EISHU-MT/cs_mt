@@ -1,0 +1,46 @@
+if csgo.pot[pname] ~= csgo.pot[victim] then
+		--local random = clua.aif("Select random", {" ", "the last one: @1", ""})
+		if player:get_hp() > 0 and player:get_hp() - damage <= 0 and hitter then
+			if csgo.team[csgo.pot[victim]].count - 1 == 0 then
+				print(csgo.pot[pname])
+				local random = clua.aif("Select random", {"The last killed player is: "..victim, "the team "..csgo.pot[pname].." did his job", "wajaaa"})
+				annouce.winner(csgo.pot[pname], random)
+				cs_match.finished_match(csgo.pot[pname])
+				for i = 1, #cb.registered_on_kill do
+					cb.registered_on_kill[i](victim, pname, csgo.pot[pname], csgo.pot[victim])
+				end
+			elseif csgo.team[csgo.pot[victim]].count - 1 == 0 and csgo.team[csgo.pot[pname]] == 1 then
+				local random = clua.aif("Select random", {"The last alive player is: "..victim, "the team "..csgo.pot[pname].." had only 1 player!", "wajaaaa"})
+				annouce.winner(csgo.pot[pname], random)
+				cs_match.finished_match(csgo.pot[pname])
+				for i = 1, #cb.registered_on_kill do
+					cb.registered_on_kill[i](victim, pname, csgo.pot[pname], csgo.pot[victim])
+				end
+			else
+				if died[victim] ~= true then 
+					
+					core.debug("green", "Player "..victim.." died. register_ondie player is in core2.", "CS:GO Core")
+					--return nil
+					died[victim] = true
+					he_team = csgo.pot[victim]
+					csgo.op[victim] = nil
+					csgo.pt[victim] = nil
+					csgo.online[victim] = nil
+					csgo.pot[victim] = nil
+					csgo.team[he_team].players[victim] = nil
+					csgo.team[he_team].count = csgo.team[he_team].count - 1
+
+					if finishedmatch() == true then
+					core.debug("green", "Putting player "..victim.." into dead players to be respawned again later...", "CS:GO Core")
+					ccore.teams[he_team].players[victim] = true
+					csgo.send_message(victim .. " will be a spectator. because he died. ", "spectator")
+					player:set_armor_groups({immortal = 1})
+					--minetest.set_player_privs(victim, {fly=true, fast=true, noclip=true, teleport=true, shout=true}) -- Teleport Is a feature
+					end
+					core.after(3,function()
+					csgo.spectator(victim)
+					end)
+				end
+			end
+		end
+	end
