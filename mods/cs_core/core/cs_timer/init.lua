@@ -141,7 +141,7 @@ if mapeditor ~= true then
       
         
       
-      if time ~= -1 then
+      if time ~= -1 and (timehud) then
         player:hud_change(timehud, "text", timerare)
       end
   

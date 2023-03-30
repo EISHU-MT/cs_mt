@@ -193,7 +193,7 @@ minetest.register_on_player_hpchange(function(player, hp_change, reason)
 		end
 	end
 	
-end, true)
+end)
 
 
 
