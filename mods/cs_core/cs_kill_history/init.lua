@@ -118,8 +118,8 @@ function cs_kh.add(killer, victim, weapon_image, comment)
 	killer = clua.pname(killer)
 	victim = clua.pname(victim)
 
-	local k_team = csgo.pot[]
-	local v_team = csgo.pot[]
+	local k_team = csgo.pot[killer]
+	local v_team = csgo.pot[victim]
 	local kt_color = csgo.team[k_team].colour
 	local vt_color = csgo.team[v_team].colour
 
