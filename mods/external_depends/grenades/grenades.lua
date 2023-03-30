@@ -219,12 +219,14 @@ grenades.register_grenade("grenades:flashbang", {
 				})
 
 				if math.acos(playerdir.x*grenadedir.x + playerdir.y*grenadedir.y + playerdir.z*grenadedir.z) <= math.pi/4 then
-					flash_huds[pname] = {}
+					
 					--]]
+				
 				if v:is_player() then
 				local playerdir = vector.round(v:get_look_dir())
 				local grenadedir = vector.round(vector.direction(v:get_pos(), pos))
 				local pname = v:get_player_name()
+				flash_huds[pname] = {}
 					for i = 0, 5, 1 do
 						local key = v:hud_add({
 							hud_elem_type = "image",
