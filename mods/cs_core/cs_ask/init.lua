@@ -8,16 +8,16 @@ cs_ask = {
 }
 
 function csgo.switch(name, value)
-	if name and value then
-		if cs_ask.switches[name].active == true then
-			cs_ask.switches[name] = value
+	if name and value and (not type(name) == "boolean") then
+		if cs_ask.switches[tostring(name)].active then
+			cs_ask.switches[tostring(name)].value = value
 		end
 	end
 end
 function csgo.ask(name)
 	if name then
-		if cs_ask.switches[name].active == true then
-			return cs_ask.switches[name].value
+		if cs_ask.switches[tostring(name)].active == true then
+			return cs_ask.switches[tostring(name)].value
 		end
 	end
 end
