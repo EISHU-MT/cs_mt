@@ -162,13 +162,19 @@ minetest.register_on_player_hpchange(function(player, hp_change, reason)
 			
 			
 			if csgo.pot[playerr] == "terrorist" and (csgo.team.terrorist.count == tokc_TEMP) then
-			mess = "The last player " .. playerr .. " in terrorist team did a suicide today!.." -- LOL
-			cs_match.finished_match("counter")
-			annouce.winner("counter", mess)
+				mess = "The last player " .. playerr .. " in terrorist team did a suicide today!.." -- LOL
+				cs_match.finished_match("counter")
+				annouce.winner("counter", mess)
+				local a1 = reason.object:get_wielded_item()
+				local a2 = a1:get_definition().inventory_image
+				cs_kh.add(pname, victim, a2)
 			elseif csgo.pot[playerr] == "counter" and (csgo.team.counter.count == tokc_TEMP) then
-			mess = "The last player " .. playerr .. " in counters team did a suicide today!.." -- LOL
-			cs_match.finished_match("terrorist")
-			annouce.winner("terrorist", mess)
+				mess = "The last player " .. playerr .. " in counters team did a suicide today!.." -- LOL
+				cs_match.finished_match("terrorist")
+				local a1 = reason.object:get_wielded_item()
+				local a2 = a1:get_definition().inventory_image
+				cs_kh.add(pname, victim, a2)
+				annouce.winner("terrorist", mess)
 			else
 				died[victim] = true
 				he_team = csgo.pot[victim]
@@ -176,6 +182,9 @@ minetest.register_on_player_hpchange(function(player, hp_change, reason)
 				csgo.pt[victim] = nil
 				csgo.online[victim] = nil
 				csgo.pot[victim] = nil
+				local a1 = reason.object:get_wielded_item()
+				local a2 = a1:get_definition().inventory_image
+				cs_kh.add(pname, victim, a2)
 				csgo.team[he_team].players[victim] = nil
 				csgo.team[he_team].count = csgo.team[he_team].count - 1
 				
