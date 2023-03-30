@@ -16,10 +16,15 @@ minetest.register_on_leaveplayer(function(ObjectRef, timed_out)
 	armor.player[ObjectRef:get_player_name()] = nil
 end)
 
-function armor.for_punch_to_fleshy(p,_,_,_,_,d)
+function armor.for_punch_to_fleshy(p,h,_,_,_,d)
+	pn = p:get_player_name()
+	hn = h:get_player_name()
+	if pn == hn then -- Dont substract the armor value if the player damages his own body :P
+		return
+	end
 	local a = math.random(1, 6)
 	if type(armor.get_value) == "function" then
-		local b = armor.get_value(p)
+		b = armor.get_value(p)
 	else
 		return
 	end
