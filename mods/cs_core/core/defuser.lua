@@ -26,7 +26,7 @@ minetest.register_craftitem("core:defuser", {
 					})
 					core.after(5, function(user)
 						if (defuser_interrupted() == false) then
-							annouce.winner("terrorist", "Congrats to "..user:get_player_name().." for defusing the bomb!")
+							annouce.winner("counter", "Congrats to "..user:get_player_name().." for defusing the bomb!")
 							cs_match.finished_match(csgo.pot[user:get_player_name()])
 							to_end = nil
 						end
