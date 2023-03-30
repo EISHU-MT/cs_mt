@@ -651,6 +651,6 @@ minetest.register_on_dieplayer(function(player, reason)
 	--print(reason)
 end)
 --]]
-minetest.register_on_respawnplayer(function(ObjectRef)
+minetest.register_on_respawnplayer(function()
 	return true
 end)

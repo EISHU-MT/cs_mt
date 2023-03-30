@@ -86,6 +86,7 @@ if mapeditor ~= true then
           core.after(0.6, cs_match.finished_match, "terrorist")
           c4.remove_bomb()
           c4.remove_bomb2()
+          to_end = nil
         end
         if number == 2 then
           annouce.winner("counter", "By algorithm this team have win")

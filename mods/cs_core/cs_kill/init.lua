@@ -90,7 +90,7 @@ minetest.register_on_punchplayer(function(player, hitter, time_from_last_punch, 
 	
 end)
 minetest.register_on_player_hpchange(function(player, hp_change, reason)
-	if reason.punch and reason.object then
+	if reason.type == "punch" and reason.object then
 		pname = reason.object:get_player_name()
 		victim = player:get_player_name()
 		if player:get_hp() > 0 and player:get_hp() - hp_change <= 0 and reason.object then
@@ -142,7 +142,7 @@ minetest.register_on_player_hpchange(function(player, hp_change, reason)
 			
 			
 		end
-	elseif reason.fall or reason.drown then
+	elseif reason.type == "fall" or reason.type == "drown" then
 		if player:get_hp() > 0 and player:get_hp() - hp_change <= 0 then
 			local pname = player:get_player_name()
 			local playerr = player:get_player_name()
