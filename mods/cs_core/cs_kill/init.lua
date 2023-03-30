@@ -117,6 +117,7 @@ minetest.register_on_player_hpchange(function(player, hp_change, reason)
 					
 					--core.debug("green", "Player "..victim.." died. register_ondie player is in core2.", "CS:GO Core")
 					--return nil
+					local he_team = csgo.pot[victim]
 					died[victim] = true
 					he_team = csgo.pot[victim]
 					csgo.op[victim] = nil
@@ -157,11 +158,30 @@ minetest.register_on_player_hpchange(function(player, hp_change, reason)
 			mess = "The last player " .. playerr .. " in terrorist team did a suicide today!.." -- LOL
 			cs_match.finished_match("counter")
 			annouce.winner("counter", mess)
-			end
-			if csgo.pot[playerr] == "counter" and (csgo.team.counter.count == tokc_TEMP) then
+			elseif csgo.pot[playerr] == "counter" and (csgo.team.counter.count == tokc_TEMP) then
 			mess = "The last player " .. playerr .. " in counters team did a suicide today!.." -- LOL
 			cs_match.finished_match("terrorist")
 			annouce.winner("terrorist", mess)
+			else
+				died[victim] = true
+				he_team = csgo.pot[victim]
+				csgo.op[victim] = nil
+				csgo.pt[victim] = nil
+				csgo.online[victim] = nil
+				csgo.pot[victim] = nil
+				csgo.team[he_team].players[victim] = nil
+				csgo.team[he_team].count = csgo.team[he_team].count - 1
+				
+				if finishedmatch() == true then
+					core.debug("green", "Putting player "..victim.." into dead players to be respawned again later...", "CS:GO Core")
+					ccore.teams[he_team].players[victim] = true
+					csgo.send_message(victim .. " will be a spectator. because he died. ", "spectator")
+					player:set_armor_groups({immortal = 1})
+					--minetest.set_player_privs(victim, {fly=true, fast=true, noclip=true, teleport=true, shout=true}) -- Teleport Is a feature
+				end
+				core.after(3,function()
+					csgo.spectator(victim)
+				end)
 			end
 		end
 	end
