@@ -97,7 +97,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 				
 				
 				local inventorytouse = minetest.get_inventory({ type="player", name=pname })
-				inventorytouse:add_item("main", "grenades:frag")
+				inventorytouse:add_item("main", "core:defuser")
 				
 				local cmmm = core.colorize("#9B9B9B", "Defuser")
 				minetest.chat_send_player(pname, core.colorize("#eb8634","-$70 By Buying " .. cmmm .. ""))
