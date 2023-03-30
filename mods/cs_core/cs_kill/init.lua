@@ -95,8 +95,15 @@ minetest.register_on_player_hpchange(function(player, hp_change, reason)
 		victim = player:get_player_name()
 		if player:get_hp() > 0 and player:get_hp() - hp_change <= 0 and reason.object then
 		
+		if (not defuser_guy) then
+			defuser_guy = "99hdq66dla--"
+		end
 		
-		
+		if csgo.pot[victim] == "counter" and victim == defuser_guy then -- avoid defusing while dead.
+			function defuser_interrupted()
+				return true
+			end
+		end
 			if csgo.team[csgo.pot[victim]].count - 1 == 0 then
 				--print(csgo.pot[pname])
 				local random = clua.aif("Select random", {"The last killed player is: "..victim, "the team "..csgo.pot[pname].." did his job", "wajaaa"})
@@ -186,7 +193,7 @@ minetest.register_on_player_hpchange(function(player, hp_change, reason)
 		end
 	end
 	
-end, false)
+end, true)
 
 
 
