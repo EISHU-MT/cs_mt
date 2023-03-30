@@ -590,7 +590,7 @@ function csgo.show_menu(player)
     	end -- hehe, here must be an error but its solved a long time ago in top of this file
 end
 
-
+--[[
 minetest.register_on_dieplayer(function(player, reason)
 --print(dump(reason))
 	if reason.type == "fall" and csgo.pot[player:get_player_name()] then
@@ -650,7 +650,7 @@ minetest.register_on_dieplayer(function(player, reason)
 
 	--print(reason)
 end)
-
+--]]
 minetest.register_on_respawnplayer(function(ObjectRef)
 	return true
 end)

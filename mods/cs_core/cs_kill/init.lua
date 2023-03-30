@@ -90,5 +90,99 @@ minetest.register_on_punchplayer(function(player, hitter, time_from_last_punch, 
 	
 end)
 minetest.register_on_player_hpchange(function(player, hp_change, reason)
-end)
+	if reason.punch and reason.object then
+		pname = reason.object:get_player_name()
+		victim = player:get_player_name()
+		if player:get_hp() > 0 and player:get_hp() - hp_change <= 0 and reason.object then
+		
+		
+		
+			if csgo.team[csgo.pot[victim]].count - 1 == 0 then
+				--print(csgo.pot[pname])
+				local random = clua.aif("Select random", {"The last killed player is: "..victim, "the team "..csgo.pot[pname].." did his job", "wajaaa"})
+				annouce.winner(csgo.pot[pname], random)
+				cs_match.finished_match(csgo.pot[pname])
+				for i = 1, #cb.registered_on_kill do
+					cb.registered_on_kill[i](victim, pname, csgo.pot[pname], csgo.pot[victim])
+				end
+			elseif csgo.team[csgo.pot[victim]].count - 1 == 0 and csgo.team[csgo.pot[pname]] == 1 then
+				local random = clua.aif("Select random", {"The last alive player is: "..victim, "the team "..csgo.pot[pname].." had only 1 player!", "wajaaaa"})
+				annouce.winner(csgo.pot[pname], random)
+				cs_match.finished_match(csgo.pot[pname])
+				for i = 1, #cb.registered_on_kill do
+					cb.registered_on_kill[i](victim, pname, csgo.pot[pname], csgo.pot[victim])
+				end
+			else
+				if died[victim] ~= true then 
+					
+					--core.debug("green", "Player "..victim.." died. register_ondie player is in core2.", "CS:GO Core")
+					--return nil
+					died[victim] = true
+					he_team = csgo.pot[victim]
+					csgo.op[victim] = nil
+					csgo.pt[victim] = nil
+					csgo.online[victim] = nil
+					csgo.pot[victim] = nil
+					csgo.team[he_team].players[victim] = nil
+					csgo.team[he_team].count = csgo.team[he_team].count - 1
+
+					if finishedmatch() == true then
+					core.debug("green", "Putting player "..victim.." into dead players to be respawned again later...", "CS:GO Core")
+					ccore.teams[he_team].players[victim] = true
+					csgo.send_message(victim .. " will be a spectator. because he died. ", "spectator")
+					player:set_armor_groups({immortal = 1})
+					--minetest.set_player_privs(victim, {fly=true, fast=true, noclip=true, teleport=true, shout=true}) -- Teleport Is a feature
+					end
+					core.after(3,function()
+						csgo.spectator(victim)
+					end)
+				end
+			end
+			
+			
+			
+		end
+	elseif reason.fall or reason.drown then
+		if player:get_hp() > 0 and player:get_hp() - hp_change <= 0 then
+			local pname = player:get_player_name()
+			local playerr = player:get_player_name()
+			
+			
+			local var4 = csgo.pot[pname]
+			local tokc_TEMP = csgo.team[var4].count - 1
+			local tokc = csgo.team[var4].count
+			
+			
+			if csgo.pot[playerr] == "terrorist" and (csgo.team.terrorist.count == tokc_TEMP) then
+			mess = "The last player " .. playerr .. " in terrorist team did a suicide today!.." -- LOL
+			cs_match.finished_match("counter")
+			annouce.winner("counter", mess)
+			end
+			if csgo.pot[playerr] == "counter" and (csgo.team.counter.count == tokc_TEMP) then
+			mess = "The last player " .. playerr .. " in counters team did a suicide today!.." -- LOL
+			cs_match.finished_match("terrorist")
+			annouce.winner("terrorist", mess)
+			end
+		end
+	end
+	
+end, false)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
