@@ -120,8 +120,8 @@ function cs_kh.add(killer, victim, weapon_image, comment)
 
 	local k_team = csgo.pot[]
 	local v_team = csgo.pot[]
-	local kt_color = csgo[k_team].colour
-	local vt_color = csgo[v_team].colour
+	local kt_color = csgo.team[k_team].colour
+	local vt_color = csgo.team[v_team].colour
 
 
 
