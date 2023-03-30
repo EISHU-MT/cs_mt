@@ -24,10 +24,12 @@ minetest.register_tool("rangedweapons:benelli", {
 		--print(hard.ifp.player[pname].arm.weapon_item)
 		if pname and inv then
 			central.save_state_arm(pname, false, "rangedweapons:benelli")
+			inv = lname:get_inventory()
 			inv:add_item("main", ItemStack("rangedweapons:benelli"))
 			table.ref:remove()
 		else
 			central.save_state_arm(pname, false, "rangedweapons:benelli")
+			inv = lname:get_inventory()
 			inv:add_item("main", ItemStack("rangedweapons:benelli"))
 			table.ref:remove()
 		end

@@ -51,10 +51,12 @@ minetest.register_tool("rangedweapons:g36_rrr", {
 		--print(hard.ifp.player[pname].arm.weapon_item)
 		if pname and inv then
 			central.save_state_arm(pname, false, "rangedweapons:g36")
+			inv = lname:get_inventory()
 			inv:add_item("main", ItemStack("rangedweapons:g36"))
 			table.ref:remove()
 		else
 			central.save_state_arm(pname, false, "rangedweapons:g36")
+			inv = lname:get_inventory()
 			inv:add_item("main", ItemStack("rangedweapons:g36"))
 			table.ref:remove()
 		end
