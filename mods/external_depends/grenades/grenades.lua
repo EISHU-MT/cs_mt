@@ -204,8 +204,8 @@ grenades.register_grenade("grenades:flashbang", {
 	on_explode = function(def, obj, pos, name)
 		grenade.player[name].arm.flashbang = grenade.player[name].arm.flashbang - 1
 		for _, v in ipairs(minetest.get_objects_inside_radius(pos, 20)) do
-			local hit = minetest.raycast(pos, v:get_pos(), true, true):next()
-
+			--local hit = minetest.raycast(pos, v:get_pos(), true, true):next()
+			--[[
 			if hit and v:is_player() and v:get_hp() > 0 and not flash_huds[v:get_player_name()] and hit.type == "object" and
 			hit.ref:is_player() and hit.ref:get_player_name() == v:get_player_name() then
 				local playerdir = vector.round(v:get_look_dir())
@@ -220,7 +220,8 @@ grenades.register_grenade("grenades:flashbang", {
 
 				if math.acos(playerdir.x*grenadedir.x + playerdir.y*grenadedir.y + playerdir.z*grenadedir.z) <= math.pi/4 then
 					flash_huds[pname] = {}
-
+					--]]
+				if v:is_player() then
 					for i = 0, 5, 1 do
 						local key = v:hud_add({
 							hud_elem_type = "image",
@@ -249,8 +250,8 @@ grenades.register_grenade("grenades:flashbang", {
 						end)
 					end
 				end
-
-			end
+			
+			--end
 		end
 	end,
 })
