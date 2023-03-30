@@ -95,6 +95,7 @@ minetest.register_on_joinplayer(function(player)
 		{x = 200, y = 219},
 		30
 	)
+	player:set_armor_groups({immortal=1}) --Fixed bug: i die if i was spectator and server resets
 end)
 
 function player_core.upgrade_to_mode(player, mode) -- Registered modes are here like player_api.register_model()
