@@ -97,12 +97,12 @@ function summary.return_formspec()
 end
 minetest.register_chatcommand("summary", {
 	func = function(name, param)
-		core.show_formspec(name, "Summary:Summary", summary.return_formspec)
+		core.show_formspec(name, "Summary:Summary", summary.return_formspec())
 	end,
 })
 minetest.register_chatcommand("s", {
 	func = function(name, param)
-		core.show_formspec(name, "Summary:Summary", summary.return_formspec)
+		core.show_formspec(name, "Summary:Summary", summary.return_formspec())
 	end,
 })
 call.register_on_new_matches(function()
