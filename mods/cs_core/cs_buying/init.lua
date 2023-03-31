@@ -467,7 +467,7 @@ return table.concat(formspec, "")
 end
 
 function cs_buying.enable_shopping(player)
-if player then
+	if player then
 	
 	player:set_inventory_formspec(central.main(player))
 	

@@ -79,16 +79,16 @@ if mapeditor ~= true then
         --core.after(2, cs_match.finished_match)
        
         if not to_end then
-        	number = {}
+        	numberrr = {}
           if csgo.team.counter.count > csgo.team.terrorist.count then
-          	number.r = clua.aif("Select random", {"the terrorist team is so tiny!", "timed out have been reached", "too low players in the game!"})
-          	number.n = tonumber(1)
+          	numberrr.r = clua.aif("Select random", {"the terrorist team is so tiny!", "timed out have been reached", "too low players in the game!"})
+          	numberrr.n = tonumber(1)
           elseif csgo.team.terrorist.count > csgo.team.counter.count then
-          	number.r = clua.aif("Select random", {"the counter team is so tiny!", "timed out", "too low players!"})
-          	number.n = tonumber(2)
+          	numberrr.r = clua.aif("Select random", {"the counter team is so tiny!", "timed out", "too low players!"})
+          	numberrr.n = tonumber(2)
           elseif csgo.team.terrorist.count == csgo.team.counter.count then
-          	number.r = "By algotrithm this team have win!"
-          	number.n = math.random(2)
+          	numberrr.r = "By algotrithm this team have win!"
+          	numberrr.n = math.random(2)
           end
           
           
@@ -112,8 +112,8 @@ if mapeditor ~= true then
             c4.remove_bomb2()
           end
         end
-        if number.n == 1 then
-          annouce.winner("terrorist", number.r)
+        if numberrr.n == 1 then
+          annouce.winner("terrorist", numberrr.r)
           core.after(0.6, cs_match.finished_match, "terrorist")
 
           if c4.get_status() then
