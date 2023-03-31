@@ -23,7 +23,7 @@ end
 
 temporal = {}
 timeeee = 0 
-minetest.register_globalstep(function(dtime)
+minetest.register_globalstep(function()
 
 	for pname, __ in pairs(csgo.team.terrorist.players) do
 		if pname then
