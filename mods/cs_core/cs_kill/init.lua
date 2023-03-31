@@ -150,7 +150,7 @@ minetest.register_on_player_hpchange(function(player, hp_change, reason)
 			
 			
 		end
-	elseif reason.type == "fall" or reason.type == "drown" then
+	elseif reason.type == "fall" then --
 		if player:get_hp() > 0 and player:get_hp() - hp_change <= 0 then
 			local pname = player:get_player_name()
 			local playerr = player:get_player_name()
@@ -185,6 +185,112 @@ minetest.register_on_player_hpchange(function(player, hp_change, reason)
 				local a1 = reason.object:get_wielded_item()
 				local a2 = a1:get_definition().inventory_image
 				cs_kh.add(pname, victim, a2)
+				csgo.team[he_team].players[victim] = nil
+				csgo.team[he_team].count = csgo.team[he_team].count - 1
+				
+				if finishedmatch() == true then
+					core.debug("green", "Putting player "..victim.." into dead players to be respawned again later...", "CS:GO Core")
+					ccore.teams[he_team].players[victim] = true
+					csgo.send_message(victim .. " will be a spectator. because he died. ", "spectator")
+					player:set_armor_groups({immortal = 1})
+					--minetest.set_player_privs(victim, {fly=true, fast=true, noclip=true, teleport=true, shout=true}) -- Teleport Is a feature
+				end
+				core.after(3,function()
+					csgo.spectator(victim)
+				end)
+			end
+		end
+	elseif reason.type == "drown" then
+		if player:get_hp() > 0 and player:get_hp() - hp_change <= 0 then
+			local pname = player:get_player_name()
+			local playerr = player:get_player_name()
+			
+			
+			local var4 = csgo.pot[pname]
+			local tokc_TEMP = csgo.team[var4].count - 1
+			local tokc = csgo.team[var4].count
+			
+			
+			if csgo.pot[playerr] == "terrorist" and (csgo.team.terrorist.count == tokc_TEMP) then
+				mess = "The last player " .. playerr .. " did die by being drowned!.." -- LOL
+				cs_match.finished_match("counter")
+				annouce.winner("counter", mess)
+				local a1 = reason.object:get_wielded_item()
+				local a2 = a1:get_definition().inventory_image
+				cs_kh.add(clua.aif("Select random", {"MrBubble", "bubdle", "bubble", "b0bble"}), victim, "bubble.png", "drown")
+			elseif csgo.pot[playerr] == "counter" and (csgo.team.counter.count == tokc_TEMP) then
+				mess = "The player " .. playerr .. " is drown!.." -- LOL
+				cs_match.finished_match("terrorist")
+				local a1 = reason.object:get_wielded_item()
+				local a2 = a1:get_definition().inventory_image
+				cs_kh.add(clua.aif("Select random", {"MrBubble", "bubdle", "bubble", "b0bble"}), victim, "bubble.png", "drown")
+				annouce.winner("terrorist", mess)
+			else
+				died[victim] = true
+				he_team = csgo.pot[victim]
+				csgo.op[victim] = nil
+				csgo.pt[victim] = nil
+				csgo.online[victim] = nil
+				csgo.pot[victim] = nil
+				local a1 = reason.object:get_wielded_item()
+				local a2 = a1:get_definition().inventory_image
+				cs_kh.add(clua.aif("Select random", {"MrBubble", "bubdle", "bubble", "b0bble"}), victim, "bubble.png", "drown")
+				csgo.team[he_team].players[victim] = nil
+				csgo.team[he_team].count = csgo.team[he_team].count - 1
+				
+				if finishedmatch() == true then
+					core.debug("green", "Putting player "..victim.." into dead players to be respawned again later...", "CS:GO Core")
+					ccore.teams[he_team].players[victim] = true
+					csgo.send_message(victim .. " will be a spectator. because he died. ", "spectator")
+					player:set_armor_groups({immortal = 1})
+					--minetest.set_player_privs(victim, {fly=true, fast=true, noclip=true, teleport=true, shout=true}) -- Teleport Is a feature
+				end
+				core.after(3,function()
+					csgo.spectator(victim)
+				end)
+			end
+		end
+	elseif reason.type == "node_damage" then
+		if player:get_hp() > 0 and player:get_hp() - hp_change <= 0 then
+			local pname = player:get_player_name()
+			local playerr = player:get_player_name()
+			
+			
+			local var4 = csgo.pot[pname]
+			local tokc_TEMP = csgo.team[var4].count - 1
+			local tokc = csgo.team[var4].count
+			
+			
+			if csgo.pot[playerr] == "terrorist" and (csgo.team.terrorist.count == tokc_TEMP) then
+				mess = "The last player " .. playerr .. " did die by being sus (from a block)!.." -- LOL
+				cs_match.finished_match("counter")
+				annouce.winner("counter", mess)
+				local a1 = ItemStack(reason.node)
+				local a2 = (a1:get_definition().tiles[1]) or a1:get_definition().textures
+				local a3 = a1:get_definition().description
+				local a4 = a3:split("\n")
+				cs_kh.add(a4[1], victim, a2)
+			elseif csgo.pot[playerr] == "counter" and (csgo.team.counter.count == tokc_TEMP) then
+				mess = "The player " .. playerr .. " died from a block!.." -- LOL
+				cs_match.finished_match("terrorist")
+				local a1 = ItemStack(reason.node)
+				local a2 = a1:get_definition().description
+				local a3 = a2:split("\n")
+				local a4 = (a1:get_definition().tiles[1]) or a1:get_definition().textures
+				cs_kh.add(a3[1], victim, a4)
+				annouce.winner("terrorist", mess)
+			else
+				died[victim] = true
+				he_team = csgo.pot[victim]
+				csgo.op[victim] = nil
+				csgo.pt[victim] = nil
+				csgo.online[victim] = nil
+				csgo.pot[victim] = nil
+				local a1 = ItemStack(reason.node)
+				local a2 = a1:get_definition().description
+				local a3 = a2:split("\n")
+				local a4 = (a1:get_definition().tiles[1]) or a1:get_definition().textures
+				cs_kh.add(a3[1], victim, a4)
 				csgo.team[he_team].players[victim] = nil
 				csgo.team[he_team].count = csgo.team[he_team].count - 1
 				
