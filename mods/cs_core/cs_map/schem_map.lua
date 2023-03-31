@@ -74,6 +74,12 @@ local function set_next_by_param(name, param)
 	end
 end
 
+core.register_chatcommand("set_next_map", {
+	description = "Sets next map",
+	params = "<map name>",
+	func = set_next_by_param,
+	privs = {core=true}
+})
 
 local function load_map_meta(idx, dirname, meta)
 	cs_map.log("action", "load_map_meta: Loading map meta from '" .. dirname .. "/map.conf'")
