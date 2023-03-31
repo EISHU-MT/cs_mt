@@ -41,7 +41,7 @@ if minetest.is_creative_enabled("") then
 	local digtime = 42
 	local caps = {times = {digtime, digtime, digtime}, uses = 0, maxlevel = 256}
 
-	-- Override the hand tool
+	--[[
 	minetest.override_item("", {
 		range = 90,
 		tool_capabilities = {
@@ -59,7 +59,7 @@ if minetest.is_creative_enabled("") then
 			},
 			damage_groups = {fleshy = 10},
 		}
-	})
+	})--]]
 end
 
 -- Unlimited node placement
