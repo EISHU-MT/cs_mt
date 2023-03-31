@@ -12,6 +12,8 @@ core.register_on_chat_message(function(player, message)
             local ea = csgo.pot[pname]
             local med = core.colorize(csgo.team[ea].colour, "<"..pname..">")
             core.chat_send_all(med.." "..message)
+        else
+            core.chat_send_all("<"..pname.."> "..message)
         end
     end
     return true
