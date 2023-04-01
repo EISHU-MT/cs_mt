@@ -51,7 +51,7 @@ minetest.register_node(":csgo:kill", {
 	groups = {immortal = 1},
 	sounds = default.node_sound_glass_defaults(),
 })
-minetest.register_node("csgo:sign_a", {
+minetest.register_node(":csgo:sign_a", {
 	description = "(<= A) sign",
 	drawtype = "signlike",
 	paramtype = "light",
@@ -62,7 +62,7 @@ minetest.register_node("csgo:sign_a", {
 	groups = { immortal = 1 },
 	sunlight_propagates = true,
 })
-minetest.register_node("csgo:sign_b", {
+minetest.register_node(":csgo:sign_b", {
 	description = "(<= B) sign",
 	drawtype = "signlike",
 	paramtype = "light",
@@ -73,7 +73,7 @@ minetest.register_node("csgo:sign_b", {
 	groups = { immortal = 1 },
 	sunlight_propagates = true,
 })
-minetest.register_node("csgo:sign_a2", {
+minetest.register_node(":csgo:sign_a2", {
 	description = "(A) sign",
 	drawtype = "signlike",
 	paramtype = "light",
@@ -84,7 +84,7 @@ minetest.register_node("csgo:sign_a2", {
 	use_texture_alpha = true,
 	sunlight_propagates = true,
 })
-minetest.register_node("csgo:sign_b2", {
+minetest.register_node(":csgo:sign_b2", {
 	description = "(B) sign",
 	drawtype = "signlike",
 	paramtype = "light",
