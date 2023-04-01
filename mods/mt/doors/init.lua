@@ -10,15 +10,6 @@ doors.registered_trapdoors = {}
 local S = minetest.get_translator("doors")
 
 
-local function replace_old_owner_information(pos)
-	local meta = minetest.get_meta(pos)
-	local owner = meta:get_string("doors_owner")
-	if owner and owner ~= "" then
-		meta:set_string("owner", owner)
-		meta:set_string("doors_owner", "")
-	end
-end
-
 -- returns an object to a door object or nil
 function doors.get(pos)
 	local node_name = minetest.get_node(pos).name
@@ -326,10 +317,7 @@ function doors.register(name, def)
 			local meta = minetest.get_meta(pos)
 			meta:set_int("state", state)
 
-			if def.protected then
-				meta:set_string("owner", pn)
-				meta:set_string("infotext", def.description .. "\n" .. S("Owned by @1", pn))
-			end
+			
 
 			if not minetest.is_creative_enabled(pn) then
 				itemstack:take_item()
@@ -395,43 +383,6 @@ function doors.register(name, def)
 		return false
 	end
 
-	if def.protected then
-		def.can_dig = can_dig_door
-		def.on_blast = function() end
-		def.on_key_use = function(pos, player)
-			local door = doors.get(pos)
-			door:toggle(player)
-		end
-		def.on_skeleton_key_use = function(pos, player, newsecret)
-			replace_old_owner_information(pos)
-			local meta = minetest.get_meta(pos)
-			local owner = meta:get_string("owner")
-			local pname = player:get_player_name()
-
-			-- verify placer is owner of lockable door
-			if owner ~= pname then
-				minetest.record_protection_violation(pos, pname)
-				minetest.chat_send_player(pname, S("You do not own this locked door."))
-				return nil
-			end
-
-			local secret = meta:get_string("key_lock_secret")
-			if secret == "" then
-				secret = newsecret
-				meta:set_string("key_lock_secret", secret)
-			end
-
-			return secret, S("a locked door"), owner
-		end
-		def.node_dig_prediction = ""
-	else
-		def.on_blast = function(pos, intensity)
-			minetest.remove_node(pos)
-			-- hidden node doesn't get blasted away.
-			minetest.remove_node({x = pos.x, y = pos.y + 1, z = pos.z})
-			return {name}
-		end
-	end
 
 	def.on_destruct = function(pos)
 		minetest.remove_node({x = pos.x, y = pos.y + 1, z = pos.z})
@@ -484,7 +435,6 @@ doors.register("door_steel", {
 		tiles = {{name = "doors_door_steel.png", backface_culling = true}},
 		description = S("Steel Door"),
 		inventory_image = "doors_item_steel.png",
-		protected = true,
 		groups = {node = 1, cracky = 1, level = 2},
 		sounds = default.node_sound_metal_defaults(),
 		sound_open = "doors_steel_door_open",
@@ -602,50 +552,6 @@ function doors.register_trapdoor(name, def)
 	def.is_ground_content = false
 	def.use_texture_alpha = def.use_texture_alpha or "clip"
 
-	if def.protected then
-		def.can_dig = can_dig_door
-		def.after_place_node = function(pos, placer, itemstack, pointed_thing)
-			local pn = placer:get_player_name()
-			local meta = minetest.get_meta(pos)
-			meta:set_string("owner", pn)
-			meta:set_string("infotext", def.description .. "\n" .. S("Owned by @1", pn))
-
-			return minetest.is_creative_enabled(pn)
-		end
-
-		def.on_blast = function() end
-		def.on_key_use = function(pos, player)
-			local door = doors.get(pos)
-			door:toggle(player)
-		end
-		def.on_skeleton_key_use = function(pos, player, newsecret)
-			replace_old_owner_information(pos)
-			local meta = minetest.get_meta(pos)
-			local owner = meta:get_string("owner")
-			local pname = player:get_player_name()
-
-			-- verify placer is owner of lockable door
-			if owner ~= pname then
-				minetest.record_protection_violation(pos, pname)
-				minetest.chat_send_player(pname, S("You do not own this trapdoor."))
-				return nil
-			end
-
-			local secret = meta:get_string("key_lock_secret")
-			if secret == "" then
-				secret = newsecret
-				meta:set_string("key_lock_secret", secret)
-			end
-
-			return secret, S("a locked trapdoor"), owner
-		end
-		def.node_dig_prediction = ""
-	else
-		def.on_blast = function(pos, intensity)
-			minetest.remove_node(pos)
-			return {name}
-		end
-	end
 
 	if not def.sounds then
 		def.sounds = default.node_sound_wood_defaults()
