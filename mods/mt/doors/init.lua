@@ -137,7 +137,6 @@ function doors.door_toggle(pos, node, clicker)
 		state = tonumber(state)
 	end
 
-	replace_old_owner_information(pos)
 
 	if clicker and not default.can_interact_with_node(clicker, pos) then
 		return false
@@ -199,7 +198,6 @@ local function on_place_node(place_to, newnode,
 end
 
 local function can_dig_door(pos, digger)
-	replace_old_owner_information(pos)
 	return default.can_interact_with_node(digger, pos)
 end
 
@@ -222,7 +220,6 @@ function doors.register(name, def)
 				{{type = "b", state = 1}, {type = "b", state = 2}}
 			}
 			local new = replace[l][h]
-			-- retain infotext and doors_owner fields
 			minetest.swap_node(pos, {name = name .. "_" .. new.type, param2 = p2})
 			meta:set_int("state", new.state)
 			-- properly place doors:hidden at the right spot
@@ -511,7 +508,6 @@ end
 function doors.trapdoor_toggle(pos, node, clicker)
 	node = node or minetest.get_node(pos)
 
-	replace_old_owner_information(pos)
 
 	if clicker and not default.can_interact_with_node(clicker, pos) then
 		return false
