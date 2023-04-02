@@ -89,7 +89,20 @@ minetest.register_on_punchplayer(function(player, hitter, time_from_last_punch, 
 	-- delete that. this callback will dont be more the kill manager.
 	
 end)
-minetest.register_on_player_hpchange(function(player, hp_change, reason)
+function cs_kill.translate_to_real_damage(damage)
+	if not damage then
+		return 0
+	end
+	local a1 = tostring(damage)
+
+	local a2 = string.sub(a1, 2)
+
+	local a3 = tonumber(a2)
+
+	return a3
+end
+minetest.register_on_player_hpchange(function(player, hp_ch, reason)
+	local hp_change = cs_kill.translate_to_real_damage(hp_ch)
 	if reason.type == "punch" and reason.object then
 		pname = reason.object:get_player_name()
 		victim = player:get_player_name()
@@ -156,7 +169,7 @@ minetest.register_on_player_hpchange(function(player, hp_change, reason)
 			local playerr = player:get_player_name()
 			
 			
-			local var4 = csgo.pot[pname]
+			local var4 = csgo.pot[victim]
 			local tokc_TEMP = csgo.team[var4].count - 1
 			local tokc = csgo.team[var4].count
 			
