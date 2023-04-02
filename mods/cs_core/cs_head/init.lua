@@ -14,6 +14,7 @@ local lastdir = {}
 
 minetest.register_globalstep(function(dtime)
 	for _, player in pairs(get_connected_players()) do
+		if 
 		local pname = player:get_player_name()
 		local ldeg = -deg(player:get_look_vertical())
 
@@ -26,4 +27,7 @@ end)
 
 minetest.register_on_leaveplayer(function(player)
 	lastdir[player:get_player_name()] = nil
+	core.after(0.01, function()
+		list = core.get_connected_players()
+	end
 end)
