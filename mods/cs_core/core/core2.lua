@@ -31,10 +31,12 @@ end
 for team, def in pairs(csgo.team) do -- Insert
 	if team == "terrorist" then
 		co = "#FF8500"
+		coc = 0xFF8500
 	elseif team == "counter" then
 		co = "#0081FF"
+		coc 0x0081FF
 	end
-	csgo.team[team] = {count = 0, players = {}, inf = true, colour = co}
+	csgo.team[team] = {count = 0, players = {}, inf = true, colour = co, colour_code = coc}
 	table.insert(csgo.ctl, team)
 end
 
