@@ -29,5 +29,5 @@ minetest.register_on_leaveplayer(function(player)
 	lastdir[player:get_player_name()] = nil
 	core.after(0.01, function()
 		list = core.get_connected_players()
-	end
+	end)
 end)
