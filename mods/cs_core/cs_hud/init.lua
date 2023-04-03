@@ -53,12 +53,13 @@ elseif team == "spectator" then
     cs_core.log("error", "cs_hud mod: *spectator* team cant be a winner, returning as an error")
     error("***Spectator team cant be the winner!")
 end
-
-for _, player in pairs(core.get_connected_players()) do
-	pname = player:get_player_name()
-        player:hud_change(thud_round[pname], "text", cshud.terrorist.number)
-        player:hud_change(chud_round[pname], "text", cshud.counter.number)
-end
+core.after(0.3, function() 
+	for _, player in pairs(core.get_connected_players()) do
+		pname = player:get_player_name()
+		player:hud_change(thud_round[pname], "text", cshud.terrorist.number)
+		player:hud_change(chud_round[pname], "text", cshud.counter.number)
+	end
+end)
 
 end)
 
