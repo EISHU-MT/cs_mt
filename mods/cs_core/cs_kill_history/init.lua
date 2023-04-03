@@ -115,11 +115,39 @@ minetest.register_on_joinplayer(function(player)
 end)
 
 function cs_kh.add(killer, victim, weapon_image, comment)
-	killer = clua.pname(killer)
-	victim = clua.pname(victim)
-
-	local k_team = csgo.pot[killer]
-	local v_team = csgo.pot[victim]
+	if type(killer) == "userdata" then
+		killer2 = killer:get_player_name()
+	end
+	if type(victim) == "userdata" then
+		victim2 = victim:get_player_name()
+	end
+	
+	local function cs_kh.tmp_return_killer()
+		if type(killer) == "string" then
+			return killer
+		elseif killer2 then
+			return killer2
+		end
+	end
+	local function cs_kh.tmp_return_victim()
+		if type(victim) == "string" then
+			return victim
+		elseif victim2 then
+			return victim2
+		end
+	end
+	
+	
+	local k_team = csgo.pot[cs_kh.tmp_return_killer()]
+	local v_team = csgo.pot[cs_kh.tmp_return_victim()]
+	if not k_team then
+		core.debug("red", "A error have been found while making new line... Ignoring....", "CsKillHistory")
+		return
+	end
+	if not v_team then
+		core.debug("red", "A error have been found while making new line... Ignoring....", "CsKillHistory")
+		return
+	end
 	local kt_color = csgo.team[k_team].colour_code
 	local vt_color = csgo.team[v_team].colour_code
 
