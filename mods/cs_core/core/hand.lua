@@ -1,12 +1,12 @@
 local response = clua.get_bool("map_edit", clua.get_table_value("central_csgo"))
 ppng = "knife.png"
 cpng = "chand.png"
-if response == false then
+if not response then
     caps = {times = {[1]=500.99, [2]=500.99, [3]=500.99}, uses = 0, maxlevel = 1}
     dug =  {times = {[2] = 500.99, [3] = 500.99,}, uses = 0, maxlevel = 1}
     range = 2
     --wim = ppng
-    minetest.register_item(":", {
+    minetest.override_item("", {
         type = "none",
         range = range,
         wield_image = "knife.png",
@@ -26,11 +26,11 @@ if response == false then
             damage_groups = {fleshy = 10},
         }
     })
-elseif response == true then
+else
     caps = {times = {[1]=34, [2]=34, [3]=34}, uses = 0, maxlevel = 256}
     dug =  {times = {[2] = 34, [3] = 0,}, uses = 0, maxlevel = 256}
     range = 20
-    minetest.register_item(":", {
+    minetest.override_item("", {
         type = "none",
         range = range,
         wield_image = "chand.png",
