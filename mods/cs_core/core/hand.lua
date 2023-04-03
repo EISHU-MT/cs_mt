@@ -7,7 +7,6 @@ if not response then
     range = 2
     --wim = ppng
     minetest.override_item("", {
-        type = "none",
         range = range,
         wield_image = "knife.png",
         --wield_scale = {x=1,y=1,z=2.5},
@@ -31,7 +30,6 @@ else
     dug =  {times = {[2] = 34, [3] = 0,}, uses = 0, maxlevel = 256}
     range = 20
     minetest.override_item("", {
-        type = "none",
         range = range,
         wield_image = "chand.png",
         --wield_scale = {x=1,y=1,z=2.5},
