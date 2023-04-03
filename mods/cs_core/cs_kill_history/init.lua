@@ -156,8 +156,8 @@ function cs_kh.add(killer, victim, weapon_image, comment)
 	end
 
 	add_kill(
-		{text = killer, color = kt_color or 0xFFF},
+		{text = cs_kh.tmp_return_killer(), color = kt_color or 0xFFF},
 		weapon_image or "cs_files_hand.png",
-		{text = victim .. (comment or ""), color = vt_color or 0xFFF}
+		{text = cs_kh.tmp_return_victim() .. (comment or ""), color = vt_color or 0xFFF}
 	)
 end
