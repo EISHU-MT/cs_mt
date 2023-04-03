@@ -152,7 +152,7 @@ function cs_kh.add(killer, victim, weapon_image, comment)
 	local vt_color = csgo.team[v_team].colour_code
 
 	if type(discord) == "table" then
-		discord.send(killer.." from "..k_team.." killed "..victim.." of "..v_team)
+		discord.send(cs_kh.tmp_return_killer().." from "..k_team.." killed "..cs_kh.tmp_return_victim().." of "..v_team)
 	end
 
 	add_kill(
