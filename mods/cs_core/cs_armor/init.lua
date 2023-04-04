@@ -1,5 +1,6 @@
 armor = {
 	player = {},
+	refer = {},
 	register_on_change_armor_value = {},
 	enable = clua.get_bool("enable_armor", clua.get_table_value("central_csgo")),
 }
@@ -14,23 +15,26 @@ end)
 minetest.register_on_leaveplayer(function(ObjectRef, timed_out)
 	armor.player[ObjectRef:get_player_name()].avalue = nil
 	armor.player[ObjectRef:get_player_name()] = nil
+	armor.refer[ObjectRef:get_player_name()] = false
 end)
 
 function armor.for_punch_to_fleshy(p,h,_,_,_,d)
-	pn = p:get_player_name()
-	hn = h:get_player_name()
-	if pn == hn then -- Dont substract the armor value if the player damages his own body :P
-		return
+	if armor.refer[p:get_player_name()] == true then -- Fix bug: -** fleshy
+		pn = p:get_player_name()
+		hn = h:get_player_name()
+		if pn == hn then -- Dont substract the armor value if the player damages his own body :P
+			return
+		end
+		local a = math.random(1, 6)
+		if type(armor.get_value) == "function" then
+			b = armor.get_value(p)
+		else
+			return
+		end
+		local c = d + a
+		local d = c - b
+		armor.set_value(p, d)
 	end
-	local a = math.random(1, 6)
-	if type(armor.get_value) == "function" then
-		b = armor.get_value(p)
-	else
-		return
-	end
-	local c = d + a
-	local d = c - b
-	armor.set_value(p, d)
 end
 
 minetest.register_on_punchplayer(armor.for_punch_to_fleshy)

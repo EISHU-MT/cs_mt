@@ -73,7 +73,8 @@ function csgo.spectator(player, reason) -- Called when he died or directly turns
 	end
 	if playerr then
 	playerr:set_armor_groups({immortal = 1, })
-	playerr:set_player_privs({fly = true, shout = true, fast = true, noclip = true, interact = nil})
+	--playerr:set_player_privs({fly = true, shout = true, fast = true, noclip = true, interact = nil})
+	minetest.set_player_privs(player, {fly = true, shout = true, fast = true, noclip = true, interact = nil})
 	local invvv = playerr:get_inventory()
 	invvv:set_list("main", {})
 	end

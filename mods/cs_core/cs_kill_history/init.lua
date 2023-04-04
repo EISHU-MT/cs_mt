@@ -114,32 +114,17 @@ minetest.register_on_joinplayer(function(player)
 	update_kill_list_hud(player)
 end)
 
-function cs_kh.add(killer, victim, weapon_image, comment)
-	if type(killer) == "userdata" then
-		killer2 = killer:get_player_name()
-	end
-	if type(victim) == "userdata" then
-		victim2 = victim:get_player_name()
-	end
+function cs_kh.add(killerr, victim, weapon_image, comment, v_team_a)
+	--[[
+	-- Only Debug!
+	print(killerr)
+	print(victim)
 	
-	local function cs_kh.tmp_return_killer()
-		if type(killer) == "string" then
-			return killer
-		elseif killer2 then
-			return killer2
-		end
-	end
-	local function cs_kh.tmp_return_victim()
-		if type(victim) == "string" then
-			return victim
-		elseif victim2 then
-			return victim2
-		end
-	end
-	
-	
-	local k_team = csgo.pot[cs_kh.tmp_return_killer()]
-	local v_team = csgo.pot[cs_kh.tmp_return_victim()]
+	print(csgo.pot[killerr])
+	print(csgo.pot[victimm])
+	--]]
+	local k_team = csgo.pot[killerr]
+	local v_team = v_team_a
 	if not k_team then
 		core.debug("red", "A error have been found while making new line... Ignoring....", "CsKillHistory")
 		return
@@ -152,12 +137,12 @@ function cs_kh.add(killer, victim, weapon_image, comment)
 	local vt_color = csgo.team[v_team].colour_code
 
 	if type(discord) == "table" then
-		discord.send(cs_kh.tmp_return_killer().." from "..k_team.." killed "..cs_kh.tmp_return_victim().." of "..v_team)
+		discord.send(killerr.." from "..k_team.." killed "..victimm.." of "..v_team)
 	end
 
 	add_kill(
-		{text = cs_kh.tmp_return_killer(), color = kt_color or 0xFFF},
-		weapon_image or "cs_files_hand.png",
-		{text = cs_kh.tmp_return_victim() .. (comment or ""), color = vt_color or 0xFFF}
+		{text = killerr, color = kt_color or 0xFFF},
+		weapon_image.."^[transformFXR90" or "cs_files_hand.png",
+		{text = victim .. (comment or ""), color = vt_color or 0xFFF}
 	)
 end

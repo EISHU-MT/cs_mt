@@ -21,6 +21,9 @@ function armor.set_value(p, r)
 		armor.player[p:get_player_name()].avalue = v2
 		local _, sus = armor.edit_fleshy(p, v2)
 		upgrade(p)
+		if armor.refer[p:get_player_name()] == false then
+			armor.refer[p:get_player_name()] = true
+		end
 	else
 		clua.throw("CS:GO Armor API: Cant find the specified player in armor.player, does that player exists")
 	end
