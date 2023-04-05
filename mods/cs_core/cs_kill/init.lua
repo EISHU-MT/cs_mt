@@ -120,6 +120,70 @@ minetest.register_on_player_hpchange(function(player, hp_ch, reason)
 				return true
 			end
 		end
+		if csgo.pot[victim] == csgo.pot[pname] then -- They suicide and win, this is not ok >:(
+			if csgo.team[csgo.pot[victim]].count - 1 == 0 and csgo.team[csgo.pot[pname]] == 1 then
+				--print(csgo.pot[pname])
+				if csgo.pot[victim] == "counter" then
+					t = "terrorist"
+				elseif csgo.pot[victim] == "terrorist" then
+					t = "counter"
+				end
+				local random = clua.aif("Select random", {"The last alive player is: "..victim, "the team "..csgo.pot[pname].." had only 1 player!", "wajaaaa"})
+				
+				annouce.winner(t, random)
+				cs_match.finished_match(csgo.pot[pname])
+				for i = 1, #cb.registered_on_kill do
+					cb.registered_on_kill[i](victim, pname, csgo.pot[pname], csgo.pot[victim])
+				end
+			elseif csgo.team[csgo.pot[victim]].count - 1 == 0  then
+				if csgo.pot[victim] == "counter" then
+					t = "terrorist"
+				elseif csgo.pot[victim] == "terrorist" then
+					t = "counter"
+				end
+				local random = clua.aif("Select random", {"The last player that suicided is: "..victim, "the team "..t.." did his job", "wajaaa"})
+				annouce.winner(t, random)
+				cs_match.finished_match(csgo.pot[pname])
+				for i = 1, #cb.registered_on_kill do
+					cb.registered_on_kill[i](victim, pname, csgo.pot[pname], csgo.pot[victim])
+				end
+			else
+				if died[victim] ~= true then 
+					
+					local a1 = reason.object:get_wielded_item()
+					local image = a1:get_definition().inventory_image
+					
+					cs_kh.add(reason.object:get_player_name(), player:get_player_name(), image, "", csgo.pot[victim])
+					
+					
+					--core.debug("green", "Player "..victim.." died. register_ondie player is in core2.", "CS:GO Core")
+					--return nil
+					local he_team = csgo.pot[victim]
+					died[victim] = true
+					he_team = csgo.pot[victim]
+					csgo.op[victim] = nil
+					csgo.pt[victim] = nil
+					csgo.online[victim] = nil
+					csgo.pot[victim] = nil
+					csgo.team[he_team].players[victim] = nil
+					csgo.team[he_team].count = csgo.team[he_team].count - 1
+					
+					
+					
+					
+					if finishedmatch() == true then
+					core.debug("green", "Putting player "..victim.." into dead players to be respawned again later...", "CS:GO Core")
+					ccore.teams[he_team].players[victim] = true
+					csgo.send_message(victim .. " will be a spectator. because he died. ", "spectator")
+					player:set_armor_groups({immortal = 1})
+					--minetest.set_player_privs(victim, {fly=true, fast=true, noclip=true, teleport=true, shout=true}) -- Teleport Is a feature
+					end
+					core.after(3,function()
+						csgo.spectator(victim)
+					end)
+				end
+			end
+		end
 			if csgo.team[csgo.pot[victim]].count - 1 == 0 then
 				--print(csgo.pot[pname])
 				local random = clua.aif("Select random", {"The last killed player is: "..victim, "the team "..csgo.pot[pname].." did his job", "wajaaa"})
