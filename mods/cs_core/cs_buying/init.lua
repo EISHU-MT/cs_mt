@@ -41,7 +41,29 @@ arms = {
 	}
 }
 
-
+function RecognizeArm(arm)
+	if arm and type(arm) == "string" then
+		for a, i in pairs(arms.arms_type_1) do
+			if i == arm then
+				return true, "hard_arm"
+			end
+		end
+		for a, i in pairs(arms.arms_type_2) do
+			if i == arm then
+				return true, "soft_arm"
+			end
+		end
+		for a, i in pairs(arms.arms_type_3) do
+			if i == arm then
+				return true, "grenade", arm
+			end
+		end
+		if arm == "bomb" then -- Recognize the c4 bomb
+			return true, "c4_bomb"
+		end
+		return false, "non_existent"
+	end
+end
 
 
 

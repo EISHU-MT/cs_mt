@@ -278,7 +278,7 @@ function place_map(map)
 		cs_map.emerge_with_callbacks(nil, map.pos1, map.pos2, function()
 		local schempath = cs_map.mapdir .. map.dirname .. "/map.mts"
 		local res = minetest.place_schematic(map.pos1, schempath, map.rotation == "z" and "0" or "90")
-		locals = minetest.serialize(cs_map.map.pos1)
+		
 		--print(locals) -- used for debug.
 
 		assert(res, "Unable to place schematic, does the MTS file exist? Path: " .. schempath)
