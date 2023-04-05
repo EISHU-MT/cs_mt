@@ -183,6 +183,7 @@ minetest.register_on_player_hpchange(function(player, hp_ch, reason)
 					end)
 				end
 			end
+			return
 		end
 			if csgo.team[csgo.pot[victim]].count - 1 == 0 and csgo.team[csgo.pot[pname]] == 1 then
 				--print(csgo.pot[pname])
