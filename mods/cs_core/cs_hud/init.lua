@@ -14,7 +14,7 @@ minetest.register_on_joinplayer(function(ObjectRef, last_login)
         offset = {x = 30, y = 100},
         size = {x = 2},
         alignment = {x = 0, y = -1},
-        text = cshud.counter.number,
+        text = tostring(cshud.counter.number),
         number = 0x491FF,
     })
     null = ObjectRef:hud_add({
@@ -36,7 +36,7 @@ minetest.register_on_joinplayer(function(ObjectRef, last_login)
         offset = {x = 30, y = 100},
         size = {x = 2},
         alignment = {x = 0, y = -1},
-        text = cshud.terrorist.number,
+        text = tostring(cshud.terrorist.number),
         number = 0xFFA900,
     })
 end)
@@ -63,11 +63,9 @@ end)
 
 
 minetest.register_globalstep(function(dtime)
-	if get_connected_players then
-		for _, player in pairs(get_connected_players()) do
-			pname = player:get_player_name()
-			player:hud_change(thud_round[pname], "text", cshud.terrorist.number)
-			player:hud_change(chud_round[pname], "text", cshud.counter.number)
-		end
+	for _, player in pairs(core.get_connected_players()) do
+		pname = player:get_player_name()
+		player:hud_change(thud_round[pname], "text", tostring(cshud.terrorist.number))
+		player:hud_change(chud_round[pname], "text", tostring(cshud.counter.number))
 	end
 end)
