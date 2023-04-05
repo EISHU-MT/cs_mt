@@ -184,16 +184,16 @@ minetest.register_on_player_hpchange(function(player, hp_ch, reason)
 				end
 			end
 		end
-			if csgo.team[csgo.pot[victim]].count - 1 == 0 then
+			if csgo.team[csgo.pot[victim]].count - 1 == 0 and csgo.team[csgo.pot[pname]] == 1 then
 				--print(csgo.pot[pname])
-				local random = clua.aif("Select random", {"The last killed player is: "..victim, "the team "..csgo.pot[pname].." did his job", "wajaaa"})
+				local random = clua.aif("Select random", {"The last alive player is: "..victim, "the team "..csgo.pot[pname].." had only 1 player!", "wajaaaa"})
 				annouce.winner(csgo.pot[pname], random)
 				cs_match.finished_match(csgo.pot[pname])
 				for i = 1, #cb.registered_on_kill do
 					cb.registered_on_kill[i](victim, pname, csgo.pot[pname], csgo.pot[victim])
 				end
-			elseif csgo.team[csgo.pot[victim]].count - 1 == 0 and csgo.team[csgo.pot[pname]] == 1 then
-				local random = clua.aif("Select random", {"The last alive player is: "..victim, "the team "..csgo.pot[pname].." had only 1 player!", "wajaaaa"})
+			elseif csgo.team[csgo.pot[victim]].count - 1 == 0 then
+				local random = clua.aif("Select random", {"The last killed player is: "..victim, "the team "..csgo.pot[pname].." did his job", "wajaaa"})
 				annouce.winner(csgo.pot[pname], random)
 				cs_match.finished_match(csgo.pot[pname])
 				for i = 1, #cb.registered_on_kill do
