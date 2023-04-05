@@ -257,8 +257,8 @@ minetest.register_on_player_hpchange(function(player, hp_ch, reason)
 			
 			if csgo.pot[pname] and no == 0 then  -- nEW ForMULA
 				mess = "The last player " .. playerr .. " fell!" -- LOL
-				cs_match.finished_match(var4)
-				annouce.winner("counter", mess)
+				cs_match.finished_match(csgo.enemy_team(var4))
+				annouce.winner(csgo.enemy_team(var4), mess)
 				--cs_kh.add(clua.aif("Select random", {"MrBubble", "bubdle", "bubble", "b0bble"}), victim, "bubble.png", "drown")
 			else
 				if died[pname] == false or died[pname] == true then
@@ -301,8 +301,8 @@ minetest.register_on_player_hpchange(function(player, hp_ch, reason)
 			
 			if csgo.pot[pname] and no == 0 then
 				mess = "The last player " .. playerr .. " did die by being drowned!.." -- LOL
-				cs_match.finished_match(var4)
-				annouce.winner("counter", mess)
+				cs_match.finished_match(csgo.enemy_team(var4))
+				annouce.winner(csgo.enemy_team(var4), mess)
 				cs_kh.add(clua.aif("Select random", {"MrBubble", "bubdle", "bubble", "b0bble"}), pname, "bubble.png", "drown")
 			else
 				if died[pname] == false or died[pname] == true then

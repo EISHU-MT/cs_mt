@@ -40,6 +40,20 @@ for team, def in pairs(csgo.team) do -- Insert
 	table.insert(csgo.ctl, team)
 end
 
+function csgo.enemy_team(team)
+	if team then
+		if team == "counter" then
+			return "terrorist"
+		elseif team == "terrorist" then
+			return "counter"
+		elseif team == "spectator" then
+			return false
+			error("Cant get an enemy team for spectator!")
+		end
+		return false, "nothing"
+	end
+end
+
 function csgo.send_message(message, team, player) -- Send a message to every player in the specified team.
 	if (csgo.team[team].inf == true) then -- Verify team before continue.
 		for aplayer, def in pairs(csgo.team[team].players) do
