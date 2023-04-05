@@ -47,8 +47,8 @@ function csgo.enemy_team(team)
 		elseif team == "terrorist" then
 			return "counter"
 		elseif team == "spectator" then
+						error("Cant get an enemy team for spectator!")
 			return false
-			error("Cant get an enemy team for spectator!")
 		end
 		return false, "nothing"
 	end
