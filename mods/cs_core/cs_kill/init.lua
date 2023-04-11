@@ -13,6 +13,7 @@ cs_kill = {
 
 --]]
 
+local S = minetest.get_translator("cs_kill")
 
 for cs_coret, def in pairs(csgo.team) do -- Insert
 
@@ -31,12 +32,12 @@ minetest.register_on_punchplayer(function(player, hitter, time_from_last_punch, 
 				position = {x = 0.5, y = 0.5},
 				offset = {x = 0, y = 45},
 				alignment = {x = "center", y = "down"},
-				text = "You can't damage others players!!",
+				text = S("You can't damage others players!!"),
 				color = 0xFFC107,
 			})
 		else
 			if hud:exists(pname, "kill") then
-			hud:change(pname, "kill", {text = "You can't damage others players!!", color = 0xFFC107})
+			hud:change(pname, "kill", {text = S("You can't damage others players!!"), color = 0xFFC107})
 			end
 		end
 		
@@ -59,12 +60,12 @@ minetest.register_on_punchplayer(function(player, hitter, time_from_last_punch, 
 				position = {x = 0.5, y = 0.5},
 				offset = {x = 0, y = 45},
 				alignment = {x = "center", y = "down"},
-				text = victim .. " its your teammate! ( ! )",
+				text = S("@1 its your teammate! ( ! )", victim),
 				color = 0xDC3545,
 			})
 		else
 			if hud:exists(pname, "kill") then
-				hud:change(pname, "kill", {text = victim .. " its your teammate! ( ! )", color = 0xDC3545})
+				hud:change(pname, "kill", {text = S("@1 its your teammate! ( ! )", victim), color = 0xDC3545})
 			end
 		
 		end

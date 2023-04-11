@@ -1,6 +1,7 @@
 -- Registers bomb
+local S = minetest.get_translator("core")
 minetest.register_craftitem(":bomb", {
-	description = "C4\n only terrorists can had this.",
+	description = S("C4 | only terrorists can had this."),
 	inventory_image = "cs_files_c4.png",
 	on_use = function(item, player)
 		local inf = clua.get_player_inf(player)
@@ -22,7 +23,7 @@ minetest.register_craftitem(":bomb", {
 					end
 				else
 					hud_events.new(player, {
-						text = "(!) The bomb cant be placed here!",
+						text = S("(!) The bomb cant be placed here!"),
 						color = "warning",
 						quick = true,
 					})
@@ -30,7 +31,7 @@ minetest.register_craftitem(":bomb", {
 			end
 		else
 			hud_events.new(player, {
-				text = "(!) The bomb cant be planted on a map that had the bomb_planting disabled",
+				text = S("(!) The bomb cant be planted on a map that had the bomb_planting disabled"),
 				color = "danger",
 				quick = true,
 			})
@@ -74,7 +75,7 @@ minetest.register_craftitem(":bomb", {
 	end,
 })
 minetest.register_node(":c4", {
-    description = "C4 Node\nIf hading this while playing will be reported to CLua.",
+    description = S("C4 Node\nIf hading this while playing will be reported to CLua."),
     tiles = {"bomb_3.png", "bomb_1.png", "bomb_2.png"},
     groups = {immortal=1},
     drawtype = "nodebox",

@@ -71,7 +71,7 @@ time = default_timer
 --minetest.register_globalstep(function(dtime) -- Has too much errors
 function ctimer.commence()
 if mapeditor ~= true then
-	time = time - DEFAULT_TIME -- Reverse action
+	time = time - 1 -- Reverse action
 	--print(time)
     if time == 0 then
         run = false

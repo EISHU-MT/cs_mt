@@ -1,6 +1,6 @@
 local modpath = core.get_modpath(minetest.get_current_modname())
 
-
+local S = minetest.get_translator("core")
 
 -- Core 1 Dofiles
 

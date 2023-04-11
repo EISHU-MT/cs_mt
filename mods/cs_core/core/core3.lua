@@ -38,7 +38,7 @@ core.register_chatcommand("queue_restart", {
 })
 call.register_on_new_matches(function()
     if restart then
-        core.shutdown(restartm)
+        core.request_shutdown(restartm)
     end
 end)
 

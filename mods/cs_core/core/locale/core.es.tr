@@ -1,0 +1,5 @@
+# textdomain: core
+C4 | only terrorists can had this.=C4 | solo terroristas pueden tenerlo.
+(!) The bomb cant be placed here!=(!) La bomba no puede ser plantada aqui!
+(!) The bomb cant be planted on a map that had the bomb_planting disabled=(!) La bomba no puede ser plantada en un mapa viejo/desabilitada
+C4 Node\nIf hading this while playing will be reported to CLua.=Nodo de C4\n Si tienes esto, instantemente esto es reportado.
