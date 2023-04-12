@@ -5,6 +5,7 @@
 moneyts = 50
 
 
+
 function central.prepare(pname)
 bank.place_values(pname)
 money = playerv.money

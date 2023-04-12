@@ -41,6 +41,8 @@ arms = {
 	}
 }
 
+local S = minetest.get_translator("cs_buying")
+
 function RecognizeArm(arm)
 	if arm and type(arm) == "string" then
 		for a, i in pairs(arms.arms_type_1) do
@@ -368,21 +370,21 @@ function central.main(name)
 	"box[0,0;6.2,1;#00bfff]" ..
 	"box[6.2,0;5.2,1;#00cc00]" ..
 	"button[0.2,1.3;3,1.6;rifle;Rifles]" ..
-	"button[3.2,1.3;3,1.6;pistol;Pistols]" ..
-	"button[0.2,2.9;3,1.6;grenade;Grenades]" ..
-	"button[0.2,6.1;3,1.6;sniper;Snipers]" ..
-	"button[0.2,4.5;3,1.6;armor;Armors]" ..
-	"button[3.2,2.9;3,1.6;shotgun;Shotguns]" ..
+	"button[3.2,1.3;3,1.6;pistol;"..S('Pistols').."]" ..
+	"button[0.2,2.9;3,1.6;grenade;"..S('Grenades').."]" ..
+	"button[0.2,6.1;3,1.6;sniper;"..S('Snipers').."]" ..
+	"button[0.2,4.5;3,1.6;armor;"..S('Armor').."]" ..
+	"button[3.2,2.9;3,1.6;shotgun;"..S('Shotguns').."]" ..
 	"button[3.2,4.5;3,1.6;smg;Smgs]" ..
-	"button[3.2,6.1;3,1.6;ammo;Ammunations]" ..
+	"button[3.2,6.1;3,1.6;ammo;"..S('Ammo').."]" ..
 	"list[current_player;main;0.2,8.5;8,2;0]" ..
 	"label[4.4,8.1;Inventory]" ..
-	"label[2.3,0.5;Shop & Menu]" ..
-	"label[6.3,0.5;Total Money:]" ..
+	"label[2.3,0.5;"..S('Shop & Menu').."]" ..
+	"label[6.3,0.5;"..S('Total money:').."]" ..
 	"label[8.7,0.5;  " .. moneyr .. "]" ..
 	"box[6.5,1.3;3.4,1.4;#800000]" ..
-	"button[6.7,1.6;3,0.8;exit;Exit from the game]" ..
-	"button_exit[6.7,6.1;3,1.6;eee;Exit (ESC)]"
+	"button[6.7,1.6;3,0.8;exit;"..S('Exit of the game').."]" ..
+	"button_exit[6.7,6.1;3,1.6;eee;"..S('Exit').." (ESC)]"
     }
 
     return table.concat(formspec, "")
@@ -457,7 +459,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
     
     if fields.exit then
         local pname = player:get_player_name()
-        minetest.kick_player(pname, "Exiting of the game.....")
+        minetest.kick_player(pname, S('Exiting of the game.....'))
     end
 end)
 
@@ -481,9 +483,9 @@ local formspec = {
 	"formspec_version[6]" ..
 	"size[10.5,5]" ..
 	"box[0,0;10.7,0.9;#fc0303]" ..
-	"label[0.2,0.4;The Shop has been expired on new match will be available again]" ..
+	"label[0.2,0.4;"..S('The Shop has been expired on new match will be available again').."]" ..
 	"list[current_player;main;0.4,1.4;8,2;0]" ..
-	"button_exit[0.8,4;8.5,0.8;;Exit / Close]"
+	"button_exit[0.8,4;8.5,0.8;;"..S('Exit').."]"
 	}
 return table.concat(formspec, "")
 end
