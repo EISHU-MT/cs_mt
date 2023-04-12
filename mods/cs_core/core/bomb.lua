@@ -13,6 +13,7 @@ minetest.register_craftitem(":bomb", {
 			if pos.x < statspawn.x + 7 and pos.x > statspawn.x - 7 and pos.y < statspawn.y + 7  and pos.y > statspawn.y - 7 and pos.z < statspawn.z + 7 and pos.z > statspawn.z - 7 then
 				if inf.pos then
 					c4.plant_bomb_at(inf.pos, inf.name)
+					inf.inv:remove_item("main", item) -- Fix ridiculous bug
 				end
 			else
 				statspawn = b_bomb_area()

@@ -2,6 +2,7 @@ c4 = {
     planter = "none",
     pos = {x=1,y=1,z=1},
 	planted = false,
+    timer = 0,
 
 }
 -- CLua Tools.
@@ -25,7 +26,16 @@ function c4.plant_bomb_at(pos, player)
         core.after(1, function(pos)
         	pos.y = pos.y + 1 -- Fix bug
             core.set_node(pos, {name="c4", param1=1, param2=1})
-			
+            for _, p in pairs(core.get_connected_players()) do
+                pname = p:get_player_name()
+                
+                hud_events.new(p, {
+			text = ("(!) The bomb is planted!"),
+			color = "warning",
+			quick = false,
+               })
+               
+            end
         end, pos)
         time = 120
         ctimer.on_end_type("c4")
@@ -119,6 +129,21 @@ call.register_on_new_match(function()
 	end
 end)
 
+-- Beep when the bomb is on
+function hooks(time)
+	c4.timer = c4.timer + time
+	print("a")
+	if c4.planted == true then
+		print("b")
+		if c4.timer >= 1 then
+			print("c")
+			minetest.sound_play("cs_files_beep", {pos = c4.pos, gain = 0.5, max_hear_distance = 60})
+			c4.timer = 0
+		end
+	end
+end
+
+core.register_globalstep(hooks)
 
 
 
