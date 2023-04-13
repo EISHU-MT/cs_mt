@@ -7,16 +7,20 @@ armor = {
 clua.start_luat(core.get_modpath(core.get_current_modname()), "cs_armor")
 --Main
 minetest.register_on_joinplayer(function(ObjectRef, last_login)
-	armor.player[ObjectRef:get_player_name()] = {}
-	armor.player[ObjectRef:get_player_name()].avalue = 120
-	hb.init_hudbar(ObjectRef, "armor", 0, 100)
-	armor.refer[ObjectRef:get_player_name()] = false
-	--hb.unhide_hudbar(ObjectRef, "armor")
+	if armor.player and armor.refer then
+		armor.player[ObjectRef:get_player_name()] = {}
+		armor.player[ObjectRef:get_player_name()].avalue = 120
+		hb.init_hudbar(ObjectRef, "armor", 0, 100)
+		armor.refer[ObjectRef:get_player_name()] = false
+		--hb.unhide_hudbar(ObjectRef, "armor")
+	end
 end)
 minetest.register_on_leaveplayer(function(ObjectRef, timed_out)
-	armor.player[ObjectRef:get_player_name()].avalue = nil
-	armor.player[ObjectRef:get_player_name()] = nil
-	armor.refer[ObjectRef:get_player_name()] = false
+	if armor.player then
+		armor.player[ObjectRef:get_player_name()].avalue = nil
+		armor.player[ObjectRef:get_player_name()] = nil
+		armor.refer[ObjectRef:get_player_name()] = false
+	end
 end)
 
 function armor.for_punch_to_fleshy(p,h,_,_,_,d)
