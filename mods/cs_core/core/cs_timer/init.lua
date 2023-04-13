@@ -92,8 +92,11 @@ if mapeditor ~= true then
           end
           
           
-          
-          
+          if not numberrr then
+          	numberrr = {}
+          	numberrr.r = clua.aif("Select random", {"They had win", "timed out", "a", "By algotrithm this team have win!\n--Failure of lua engine!"})
+          	numberrr.n = math.random(2)
+          end
           
           --number = math.random(2)
         elseif to_end == "explode" then
@@ -120,7 +123,7 @@ if mapeditor ~= true then
             c4.remove_bomb2()
           end
         end
-	number = {}
+	numberrr = {}
         --print("debug9")
     end
 	if time == 60 then
