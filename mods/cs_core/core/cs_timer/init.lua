@@ -107,6 +107,7 @@ if mapeditor ~= true then
           c4.remove_bomb()
           c4.remove_bomb2()
           to_end = nil
+          return
         end
         if numberrr.n == 2 then
           annouce.winner("counter", numberrr.r)
