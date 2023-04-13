@@ -10,6 +10,7 @@ minetest.register_on_joinplayer(function(ObjectRef, last_login)
 	armor.player[ObjectRef:get_player_name()] = {}
 	armor.player[ObjectRef:get_player_name()].avalue = 120
 	hb.init_hudbar(ObjectRef, "armor", 0, 100)
+	armor.refer[ObjectRef:get_player_name()] = true
 	--hb.unhide_hudbar(ObjectRef, "armor")
 end)
 minetest.register_on_leaveplayer(function(ObjectRef, timed_out)
