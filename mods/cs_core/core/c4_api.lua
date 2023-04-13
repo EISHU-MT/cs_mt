@@ -130,11 +130,29 @@ call.register_on_new_match(function()
 end)
 
 -- Beep when the bomb is on
-function hooks(time)
-	c4.timer = c4.timer + time
+function hooks(dtime)
+	c4.timer = c4.timer + dtime
 	if c4.planted == true then
-		if c4.timer >= 1 then
-			minetest.sound_play("cs_files_beep", {pos = c4.pos, gain = 0.2, max_hear_distance = 50})
+		
+		-- Increase the beeps when the time is less.
+		if time > 90 and time < 120 then
+			time_to = 0.8
+		end
+		if time > 60 and time < 100 then
+			time_to = 0.8
+		end
+		if time > 30 and time < 50 then
+			time_to = 0.6
+		end
+		if time > 10 and time < 30 then
+			time_to = 0.4
+		end
+		if time > 5 and time < 10 then
+			time_to = 0.2
+		end
+		
+		if c4.timer >= time_to then
+			minetest.sound_play("cs_files_beep", {pos = c4.pos, gain = 0.2, max_hear_distance = 40})
 			c4.timer = 0
 		end
 	end

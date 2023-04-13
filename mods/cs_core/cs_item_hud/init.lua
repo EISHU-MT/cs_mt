@@ -199,7 +199,7 @@ local function on_step()
 						end
 					elseif str == "c4_bomb" then
 						if csgo.pot[pname] == "counter" then
-							clua.throw("CsItemHud: line 199: The bomb holder cant be a counter!")
+							clua.throw("CsItemHud: line 202: The bomb holder cant be a counter!")
 						end
 						e:hud_change(cih.c4d[pname], "text", tostring(i))
 						e:hud_change(cih.c4[pname], "text", "cs_files_c4.png")
