@@ -10,7 +10,7 @@ minetest.register_on_joinplayer(function(ObjectRef, last_login)
 	armor.player[ObjectRef:get_player_name()] = {}
 	armor.player[ObjectRef:get_player_name()].avalue = 120
 	hb.init_hudbar(ObjectRef, "armor", 0, 100)
-	armor.refer[ObjectRef:get_player_name()] = true
+	armor.refer[ObjectRef:get_player_name()] = false
 	--hb.unhide_hudbar(ObjectRef, "armor")
 end)
 minetest.register_on_leaveplayer(function(ObjectRef, timed_out)
@@ -20,21 +20,25 @@ minetest.register_on_leaveplayer(function(ObjectRef, timed_out)
 end)
 
 function armor.for_punch_to_fleshy(p,h,_,_,_,d)
-	if armor.refer[p:get_player_name()] == true then -- Fix bug: -** fleshy
-		pn = p:get_player_name()
-		hn = h:get_player_name()
-		if pn == hn then -- Dont substract the armor value if the player damages his own body :P
-			return
+	if p:get_player_name() then
+		if armor.refer then -- *Strokes* *ACHOOO*
+			if armor.refer[p:get_player_name()] == true then -- Fix bug: -** fleshy
+				pn = p:get_player_name()
+				hn = h:get_player_name()
+				if pn == hn then 
+					return
+				end
+				local a = math.random(1, 6)
+				if type(armor.get_value) == "function" then
+					b = armor.get_value(p)
+				else
+					return
+				end
+				local c = d + a
+				local d = c - b
+				armor.set_value(p, d)
+			end
 		end
-		local a = math.random(1, 6)
-		if type(armor.get_value) == "function" then
-			b = armor.get_value(p)
-		else
-			return
-		end
-		local c = d + a
-		local d = c - b
-		armor.set_value(p, d)
 	end
 end
 
