@@ -110,6 +110,11 @@ local function load_map_meta(idx, dirname, meta)
 		phys_jump     = tonumber(meta:get("phys_jump")),
 		phys_gravity  = tonumber(meta:get("phys_gravity")),
 		offset        = offset,
+				-- Functions
+		functions     = meta:get_bool("enable_functions", false),
+		onactivate    = meta:get("on_activate"),
+		onload        = meta:get("on_load"),
+		
 		teams         = {},
 		bareas        = {},
 		chests        = {}
@@ -119,7 +124,28 @@ local function load_map_meta(idx, dirname, meta)
 
 	map.pos1 = vector.add(offset, { x = -map.r, y = -map.h / 2, z = -map.r })
 	map.pos2 = vector.add(offset, { x =  map.r, y =  map.h / 2, z =  map.r })
-
+	
+	if map.onactivate then
+		local ae, err = loadstring(map.onactivate)
+		if not ae then
+			error("Unable to load On_Activate correctly, Err: "..err)
+		end
+		map.on_activate = ae
+	end
+	
+	if map.onload then
+		local ei, err = loadstring(map.onload)
+		if not ei then
+			error("Unable to load On_Load correctly, Err: "..err)
+		end
+		map.on_load = ei
+	end
+	
+	if map.functions == true and map.on_load then
+		map.on_load(map)
+	end
+	
+	
 	-- Read teams from config
 	local i = 1
 	while meta:get("team." .. i) do
@@ -290,7 +316,7 @@ function place_map(map)
 			minetest.fix_light(cs_map.map.pos1, cs_map.map.pos2)
 		end)
 		end, nil)
-		cs_core.cooldown(1)
+		--cs_core.cooldown(1)
 end
 
 cs_map.registered_on_map_loaded = {}
@@ -309,6 +335,9 @@ function cs_map.new_match()
 	
 	minetest.clear_objects({ mode = "quick" })
 	
+	if cs_map.map.functions == true and cs_map.map.on_activate then
+		cs_map.map.on_activate(cs_map.map)
+	end
 	
 		-- Terrorists spawn
 		function terrorists_spawn()
