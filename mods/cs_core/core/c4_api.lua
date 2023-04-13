@@ -151,6 +151,14 @@ function hooks(dtime)
 			time_to = 0.2
 		end
 		
+		if time > 120 then
+			time_to = 1
+		end
+		
+		if not time_to then
+			time_to = 0.9
+		end
+		
 		if c4.timer >= time_to then
 			minetest.sound_play("cs_files_beep", {pos = c4.pos, gain = 0.2, max_hear_distance = 40})
 			c4.timer = 0
