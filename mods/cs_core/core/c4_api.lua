@@ -132,12 +132,9 @@ end)
 -- Beep when the bomb is on
 function hooks(time)
 	c4.timer = c4.timer + time
-	print("a")
 	if c4.planted == true then
-		print("b")
 		if c4.timer >= 1 then
-			print("c")
-			minetest.sound_play("cs_files_beep", {pos = c4.pos, gain = 0.5, max_hear_distance = 60})
+			minetest.sound_play("cs_files_beep", {pos = c4.pos, gain = 0.2, max_hear_distance = 50})
 			c4.timer = 0
 		end
 	end
