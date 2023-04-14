@@ -1,9 +1,7 @@
 --Defuser
 defuser_hooks_wait = 5
 defuser_hooks_wait2 = 7
-function defuser_interrupted()
-	return false
-end
+
 minetest.register_craftitem("core:defuser", {
 	description = "Defuser\n only counters can had this.",
 	inventory_image = "defuser.png",

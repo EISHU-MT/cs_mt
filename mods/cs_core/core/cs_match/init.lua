@@ -47,7 +47,7 @@ function cs_match.finished_match(teamare1)
 		for i = 1, #cb.registered_on_end_match do
 			cb.registered_on_end_match[i](teamare1)
 		end
-		core.after(3, function()
+		core.after(20, function()
 			function finishedmatch() return true end
 		end)
 		cs_core.log("action", "Starting new match, {Maps,ResetSettings.}")
@@ -152,7 +152,7 @@ function cs_match.finished_match(teamare1)
 		for i = 1, #cb.registered_on_end_match do
 			cb.registered_on_end_match[i](teamare1)
 		end
-		core.after(3, function()
+		core.after(20, function()
 		function finishedmatch() return true end
 		end)
 		cs_core.log("action", "Normal match commenced, available: " .. cs_match.available_matches)
@@ -193,9 +193,7 @@ function cs_match.finished_match(teamare1)
 				hud:remove(player, "timerrrr")
 			end
 
-			core.after(3, function()
-			function finishedmatch() return false end
-			end)
+
 
 			if (csgo.pot[playeree] == "terrorist") then
 				
@@ -231,6 +229,10 @@ function cs_match.finished_match(teamare1)
 		ccore.teams.terrorist.players = {} -- Fixed bug #5
 		ccore.teams.counter.players = {} -- Fixed bug #6
 		end)
+		core.after(20, function()
+			function finishedmatch() return true end
+		end)
+		
 		end
 	end
 
@@ -331,18 +333,7 @@ end)
 end)
 
 
-if ccore.teams.counter.players[aplayer] == true then
-			aplayert = "counter"
-			--print("HELOO")
-			if csgo.team.counter.count == 10 then
-			cs_core("Can't put player "..aplayer.." in counter team, Why: team is full")
-			else
-			csgo.counter(aplayer, true)
-			--print("DEBUGGGGG_____")
-			minetest.set_player_privs(aplayer, {fly=nil, fast=nil, noclip=nil, teleport=nil, interact=true, shout=true})
-			
-			end
-end
+
 
 
 
