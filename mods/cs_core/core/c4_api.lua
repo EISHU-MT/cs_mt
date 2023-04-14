@@ -111,29 +111,6 @@ function c4.bomb_now()
 	c4.planted = false
 
 end
--- the most important code:
-call.register_on_new_match(function()
-	if ask_for_bomb() then
-		core.after(1.3, function()
-			i = 0
-			for pname in pairs(csgo.team.terrorist.players) do
-				i = i + 1
-				core.debug("green", "Register_On_New_Match(): adding "..pname.." to the list... Value: "..i, "C4 API")
-			end
-			local r = math.random(1, i)
-			pname = csgo.team.terrorist.players[r]
-			if not pname then
-				return
-			end
-			core.debug("green", "Giving the bomb to a random player ("..pname..")", "C4 API")
-			Player = clua.player(pname)
-			if not clua.find_itemstack_from(clua.player(pname), "bomb") then
-				InvRef = Player:get_inventory()
-				InvRef:add_item("main", "bomb")
-			end
-		end)
-	end
-end)
 
 -- Beep when the bomb is on
 function hooks(dtime)
