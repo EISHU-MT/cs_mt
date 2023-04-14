@@ -221,6 +221,21 @@ function cs_match.finished_match(teamare1)
 		if not clua.get_bool("map_edit", clua.get_table_value("central_csgo")) then
 		cs_buying.enable_shopping()
 		core.after(1, ctimer.reset)
+		if ask_for_bomb() then
+			core.after(1.3, function()
+				for _, Player in pairs(core.get_connected_players()) do
+					pname = Player:get_player_name()
+					if csgo.pot[pname] == "terrorist" then
+						if not clua.find_itemstack_from(clua.player(pname), "bomb") then
+							InvRef = Player:get_inventory()
+							InvRef:add_item("main", "bomb")
+							core.debug("green", "Giving the bomb to a random player ("..pname..")", "C4 API")
+							return
+						end
+					end
+				end
+			end)
+		end
 		core.after(20, cs_buying.disable_shopping)
 		core.after(20, ctimer.set_timer)
 		core.after(20, csgo.on_movement)
