@@ -122,7 +122,7 @@ minetest.register_on_player_hpchange(function(player, hp_ch, reason)
 			end
 		end
 		if csgo.pot[victim] == csgo.pot[pname] then -- They suicide and win, this is not ok >:(
-			if csgo.team[csgo.pot[victim]].count - 1 == 0 and csgo.team[csgo.pot[pname]] == 1 then
+			if csgo.team[csgo.pot[victim]].count - 1 < 0 and csgo.team[csgo.pot[pname]] == 0 then
 				--print(csgo.pot[pname])
 				if csgo.pot[victim] == "counter" then
 					t = "terrorist"
@@ -136,7 +136,7 @@ minetest.register_on_player_hpchange(function(player, hp_ch, reason)
 				for i = 1, #cb.registered_on_kill do
 					cb.registered_on_kill[i](victim, pname, csgo.pot[pname], csgo.pot[victim])
 				end
-			elseif csgo.team[csgo.pot[victim]].count - 1 == 0  then
+			elseif csgo.team[csgo.pot[victim]].count - 1 < 1  then
 				if csgo.pot[victim] == "counter" then
 					t = "terrorist"
 				elseif csgo.pot[victim] == "terrorist" then
@@ -209,6 +209,7 @@ minetest.register_on_player_hpchange(function(player, hp_ch, reason)
 					
 					cs_kh.add(reason.object:get_player_name(), player:get_player_name(), image, "", csgo.pot[victim])
 					
+					bank.player_add_value(reason.object:get_player_name(), 50) 
 					
 					--core.debug("green", "Player "..victim.." died. register_ondie player is in core2.", "CS:GO Core")
 					--return nil

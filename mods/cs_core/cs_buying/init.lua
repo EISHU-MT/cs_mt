@@ -453,7 +453,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
     	local pname = player:get_player_name()
     	local a = core.find_mod("Armor", "cs_armor")
     	if a then
-    		minetest.show_formspec(pname, "central:armor", armor.fr(playerr))
+    		minetest.show_formspec(pname, "central:armor", armor.show_formspec(playerr))
     	end
     end
     

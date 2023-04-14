@@ -157,6 +157,13 @@ function cs_match.finished_match(teamare1)
 		end)
 		cs_core.log("action", "Normal match commenced, available: " .. cs_match.available_matches)
 		
+		for people in pairs(csgo.team[teamare1].players) do
+			bank.player_add_value(people, 100)
+		end
+		for people in pairs(csgo.team[csgo.enemy_team(teamare1)].players) do
+			bank.player_add_value(people, 50)
+		end
+		
 		--cs_map.new_match()
 		--cs_death.register_spawn("all", spectators_spawn()) -- ALL: terrorists and counters, spectators_spawn(): where the spectators spawn
 		
