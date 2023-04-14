@@ -60,6 +60,7 @@ bank.player_add_value(player, amount)
 
 --]]
 function bank.player_add_value(player, amount) 
+core.chat_send_player(player, core.colorize("#14FF14","You received $"..tostring(amount.."+")))
 bank.player[player].money = bank.player[player].money + amount
 end
 --Remove some values of a player, can be by buying some arms
