@@ -61,6 +61,7 @@ function armor.show_formspec(name, m)
 	return table.concat(form, '')
 end
 armor.fr = armor.show_formspec
+local S = minetest.get_translator("cs_buying")
 central.defusers = {}
 minetest.register_on_player_receive_fields(function(player, formname, fields)
 	if formname ~= "central:armor" then
