@@ -169,6 +169,10 @@ function cs_match.finished_match(teamare1)
 		
 		csgo.off_movement()
 		
+		for i = 1, #cb.registered_on_new_match do
+			cb.registered_on_new_match[i]()
+		end
+		
 		for _, player in pairs(core.get_connected_players()) do
 		if player and not hud:exists(player, "temp000x1") then
 			playeree = player:get_player_name()
@@ -223,9 +227,6 @@ function cs_match.finished_match(teamare1)
 		core.after(20, ctimer.set_timer)
 		core.after(20, csgo.on_movement)
 		core.after(20, remove_hsa)
-		for i = 1, #cb.registered_on_new_match do
-			cb.registered_on_new_match[i]()
-		end
 		core.after(3, function()
 		ccore.teams.terrorist.players = {} -- Fixed bug #5
 		ccore.teams.counter.players = {} -- Fixed bug #6
