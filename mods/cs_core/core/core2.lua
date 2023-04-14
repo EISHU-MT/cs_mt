@@ -18,7 +18,7 @@ csgo = {
 	online = {},
 
 }
-csgo.usrTlimit = 10
+csgo.usrTlimit = 20
 cs = {}
 function cs.s_t(name)
 player_api.set_textures(name, "red.png")
@@ -127,7 +127,7 @@ if player then
 			--csgo.spectator(player, "joined spectators, reason: Teams Limit has reached or other things....")
 			--error('no')
 			empty()
-			if csgo.team[ttt].count == 10 then
+			if csgo.team[ttt].count == 20 then
 			empty() -- Ignore if teams limit is reached.
 			minetest.log("warning", "Unavailable space for team counters. Ignoring for this time....")
 			else
@@ -250,7 +250,7 @@ if player then
 			--csgo.spectator(player, "joined spectators, reason: Teams Limit has reached or other things....")
 			empty()
 			--print("debug__#@")
-			if csgo.team[ttt].count == 10 then
+			if csgo.team[ttt].count == 20 then
 			empty()
 			minetest.log("warning", "Unavailable space for team counters. Ignoring for this time....")
 			else
@@ -425,7 +425,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 		
 	if fields.terrorist then
         local pname = player:get_player_name()
-        if not csgo.team.terrorist.count == 10 then
+        if not csgo.team.terrorist.count == 20 then
         var = "no teams had to join. Because teams limit reached"
         csgo.spectator(pname, var)
         else
@@ -437,7 +437,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
     
     if fields.counterr then
         local pname = player:get_player_name()
-        if not csgo.team.counter.count == 10 then
+        if not csgo.team.counter.count == 20 then
         var = "no teams had to join. Because teams limit reached"
         csgo.spectator(pname, var)
         else
@@ -550,7 +550,7 @@ core.close_formspec(name, "core:main")
 
 end
 
-
+defuser_huds = {}
 
 minetest.register_on_joinplayer(function(playerrrr)
 	--hb.init_hudbar(playerrrr, "ammo", 0, 140)
@@ -560,8 +560,8 @@ minetest.register_on_joinplayer(function(playerrrr)
 	name = playerrrr:get_player_name()
     	preparenow()
     	core.after(1, function()
-    	if csgo.team.terrorist.count == csgo.usrTlimit and csgo.team.counter.count == csgo.usrTlimit then
-    	preparenow("Unavailable teams. Limit reached. Spectator Is available.\n Trying to enter in there while the limit reached will convert into a spectator")
+    	if csgo.team.terrorist.count == tonumber(csgo.usrTlimit) and csgo.team.counter.count == tonumber(csgo.usrTlimit) then
+    	psuh = ("Unavailable teams. Limit reached. Spectator Is available.\n Trying to enter in there while the limit reached will convert into a spectator")
     	end
     	 minetest.show_formspec(name, "core:main", csgo.main(name))
     	end)
@@ -577,6 +577,19 @@ minetest.register_on_joinplayer(function(playerrrr)
     	end)
     	minetest.after(10, doit) -- hehe, here must be an error but its solved a long time ago in top of this file
 	end
+
+	defuser_huds[playerrrr:get_player_name()] = playerrrr:hud_add({
+		hud_elem_type = "text",
+		name = "defuser_timer",
+		scale = {x = 1.5, y = 1.5},
+		position = {x = 0.5, y = 0.5},
+		offset = {x = 0, y = 20},
+		--size = {x = 2},
+		alignment = {x = "center", y = "down"},
+		--alignment = {x = 0, y = -1},
+		text = " ",
+		number = 0xCECECE,
+	})
 
 end)
 

@@ -26,6 +26,7 @@ function c4.plant_bomb_at(pos, player)
         core.after(1, function(pos)
         	pos.y = pos.y + 1 -- Fix bug
             core.set_node(pos, {name="c4", param1=1, param2=1})
+            
             for _, p in pairs(core.get_connected_players()) do
                 pname = p:get_player_name()
                 
@@ -40,6 +41,7 @@ function c4.plant_bomb_at(pos, player)
         time = 120
         ctimer.on_end_type("c4")
         c4.planter = player
+        bank.player_add_value(player, 50)
         c4.pos = pos
 		c4.planted = true
     end
@@ -61,6 +63,7 @@ function c4.bomb_now()
 	if c4.get_status() == false then
 		return
 	end
+	bank.player_add_value(c4.planter, 200)
     local v3d = table.copy(vector)
     local distance = clua.get_int("dist", clua.get_table_value("c4"))
     local radius = clua.get_int("radio", clua.get_table_value("c4"))
@@ -106,6 +109,7 @@ function c4.bomb_now()
 		end
 	end
 	c4.planted = false
+
 end
 -- the most important code:
 call.register_on_new_match(function()
