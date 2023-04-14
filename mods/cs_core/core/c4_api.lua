@@ -114,22 +114,24 @@ end
 -- the most important code:
 call.register_on_new_match(function()
 	if ask_for_bomb() then
-		i = 0
-		for pname in pairs(csgo.team.terrorist.players) do
-			i = i + 1
-			core.debug("green", "Register_On_New_Match(): adding "..pname.." to the list... Value: "..i, "C4 API")
-		end
-		local r = math.random(1, i)
-		pname = csgo.team.terrorist.players[r]
-		if not pname then
-			return
-		end
-		core.debug("green", "Giving the bomb to a random player ("..pname..")", "C4 API")
-		Player = clua.player(pname)
-		if not clua.find_itemstack_from(clua.player(pname), "bomb") then
-			InvRef = Player:get_inventory()
-			InvRef:add_item("main", "bomb")
-		end
+		core.after(1.3, function()
+			i = 0
+			for pname in pairs(csgo.team.terrorist.players) do
+				i = i + 1
+				core.debug("green", "Register_On_New_Match(): adding "..pname.." to the list... Value: "..i, "C4 API")
+			end
+			local r = math.random(1, i)
+			pname = csgo.team.terrorist.players[r]
+			if not pname then
+				return
+			end
+			core.debug("green", "Giving the bomb to a random player ("..pname..")", "C4 API")
+			Player = clua.player(pname)
+			if not clua.find_itemstack_from(clua.player(pname), "bomb") then
+				InvRef = Player:get_inventory()
+				InvRef:add_item("main", "bomb")
+			end
+		end)
 	end
 end)
 
@@ -143,16 +145,16 @@ function hooks(dtime)
 			time_to = 0.8
 		end
 		if time > 60 and time < 100 then
-			time_to = 0.8
+			time_to = 0.7
 		end
 		if time > 30 and time < 50 then
-			time_to = 0.6
+			time_to = 0.5
 		end
 		if time > 10 and time < 30 then
-			time_to = 0.4
+			time_to = 0.3
 		end
 		if time > 5 and time < 10 then
-			time_to = 0.2
+			time_to = 0.1
 		end
 		
 		if time > 120 then
