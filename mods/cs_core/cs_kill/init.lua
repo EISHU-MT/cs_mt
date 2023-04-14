@@ -162,6 +162,9 @@ minetest.register_on_player_hpchange(function(player, hp_ch, reason)
 					csgo.team[he_team].count = csgo.team[he_team].count - 1
 					
 					
+					for i = 1, #cb.registered_on_kill do
+						cb.registered_on_kill[i](victim, pname, csgo.pot[pname], csgo.pot[victim])
+					end
 					
 					
 					if finishedmatch() == true then
@@ -216,6 +219,9 @@ minetest.register_on_player_hpchange(function(player, hp_ch, reason)
 					csgo.team[he_team].count = csgo.team[he_team].count - 1
 					
 					
+					for i = 1, #cb.registered_on_kill do
+						cb.registered_on_kill[i](victim, pname, csgo.pot[pname], csgo.pot[victim])
+					end
 					
 					
 					if finishedmatch() == true then
@@ -271,6 +277,10 @@ minetest.register_on_player_hpchange(function(player, hp_ch, reason)
 				csgo.team[he_team].players[victim] = nil
 				csgo.team[he_team].count = csgo.team[he_team].count - 1
 				
+				for i = 1, #cb.registered_on_kill do
+						cb.registered_on_kill[i](victim, "reason:fall", "none", csgo.pot[victim])
+				end
+				
 				if finishedmatch() == true then
 					core.debug("green", "Putting player "..victim.." into dead players to be respawned again later...", "CS:GO Core")
 					ccore.teams[he_team].players[victim] = true
@@ -314,6 +324,10 @@ minetest.register_on_player_hpchange(function(player, hp_ch, reason)
 				csgo.pot[victim] = nil
 				csgo.team[he_team].players[victim] = nil
 				csgo.team[he_team].count = csgo.team[he_team].count - 1
+				
+				for i = 1, #cb.registered_on_kill do
+						cb.registered_on_kill[i](victim, "reason:drown", "none", csgo.pot[victim])
+				end
 				
 				if finishedmatch() == true then
 					core.debug("green", "Putting player "..victim.." into dead players to be respawned again later...", "CS:GO Core")
@@ -367,6 +381,10 @@ minetest.register_on_player_hpchange(function(player, hp_ch, reason)
 				csgo.pt[victim] = nil
 				csgo.online[victim] = nil
 				csgo.pot[victim] = nil
+				
+				for i = 1, #cb.registered_on_kill do
+						cb.registered_on_kill[i](victim, "reason:table", "none", csgo.pot[victim], {node_name = a1:get_name(), reason = "node"})
+				end
 				
 				csgo.team[he_team].players[victim] = nil
 				csgo.team[he_team].count = csgo.team[he_team].count - 1
