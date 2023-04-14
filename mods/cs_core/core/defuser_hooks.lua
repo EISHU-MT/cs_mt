@@ -4,7 +4,7 @@ pnts2 = tonumber(defuser_hooks_wait2)
 function defuser_hooks(timedd)
 	timerd = timerd + timedd
 	if timerd >= 1 then
-		if defuser_interrupted() == false then
+		if ask_for_bomb and ask_for_bomb() then
 			if c4.planted then
 				local statspawn = c4.pos
 				if pos.x < statspawn.x + 2 and pos.x > statspawn.x - 2 and pos.y < statspawn.y + 2 and pos.y > statspawn.y - 2 and pos.z < statspawn.z + 2 and pos.z > statspawn.z - 2 then
