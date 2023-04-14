@@ -18,7 +18,7 @@ randomMSG = {
 "To get more money just shoot at the enemy with best bounty",
 "To do math here just say in chat \"CLUA math 4 + 4\" and then it will say 8."
 }
-time_to_say = 20
+time_to_say = 90
 rmtime = 0
 last_msg = " "
 core.register_globalstep(function(dtime)
@@ -27,7 +27,7 @@ core.register_globalstep(function(dtime)
 		local msg = clua.aif("Select random", randomMSG)
 		if randomMSG and last_msg ~= msg then
 			core.chat_send_all(core.colorize("#1BE22A", msg))
-			if discord then
+			if discord and clua_opts_disable_disco == false then
 				discord.send(msg)
 			end
 			last_msg = msg
