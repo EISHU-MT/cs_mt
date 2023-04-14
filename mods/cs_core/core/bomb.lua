@@ -54,6 +54,11 @@ minetest.register_craftitem(":bomb", {
 				text = "m",
 				world_pos = pos
 			})
+			hud_events.new(clua.player(pnamee), {
+				text = ("(!) The bomb is being dropped!"),
+				color = "warning",
+				quick = false,
+			})
 		end
 		core.item_drop(itm, drp, pos)
 		return "bomb -1"
