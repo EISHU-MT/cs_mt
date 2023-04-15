@@ -10,8 +10,10 @@ function summary.calculate_players(players_table)
         if csgo.spect[pname] ~= true then
             table.insert(table1, str:get_player_name())
             local doh = csgo.pot[pname]
-            table2[pname] = kills[doh][pname].kills
-            table3[pname] = kills[doh][pname].deaths
+            if doh and pname then
+                    table2[pname] = kills[doh][pname].kills
+                    table3[pname] = kills[doh][pname].deaths
+            end
             core.debug("green", "calculate_players(): added "..pname.." to the list for summary", "CS:GO Summary")
         else
             --i = i - 1

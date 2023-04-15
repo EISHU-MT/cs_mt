@@ -110,6 +110,9 @@ minetest.register_on_player_hpchange(function(player, hp_ch, reason)
 	if reason.type == "punch" and reason.object then
 		pname = reason.object:get_player_name()
 		victim = player:get_player_name()
+		if not victim then
+			victim = "nil"
+		end
 		if player:get_hp() > 0 and player:get_hp() - hp_change <= 0 and reason.object then
 		
 		
@@ -174,7 +177,7 @@ minetest.register_on_player_hpchange(function(player, hp_ch, reason)
 					player:set_armor_groups({immortal = 1})
 					--minetest.set_player_privs(victim, {fly=true, fast=true, noclip=true, teleport=true, shout=true}) -- Teleport Is a feature
 					end
-					core.after(3,function()
+					core.after(0.2,function()
 						csgo.spectator(victim)
 					end)
 				end
