@@ -21,6 +21,12 @@ call.register_on_kill_player(function(player, enemy, enemyt, playert)
 		end
 		return
 	end
+	if not enemyt then
+		return
+	end
+	if not enemy then
+		return
+	end
 	if kills[enemyt][enemy].kills > 20 and kills[enemyt][enemy].kills < 30 then
 		ruled_players[enemy] = true
 		if calified_players[enemy] ~= 5 then

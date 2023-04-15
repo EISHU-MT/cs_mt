@@ -90,7 +90,7 @@ function csgo.spectator(player, reason) -- Called when he died or directly turns
 	--playerr:set_player_privs({fly = true, shout = true, fast = true, noclip = true, interact = nil})
 	minetest.set_player_privs(player, {fly = true, shout = true, fast = true, noclip = true, interact = nil})
 	local invvv = playerr:get_inventory()
-	invvv:set_list("main", {})
+	--invvv:set_list("main", {}) -- Dropondie now is the eraser...
 	end
 	
 	player_core.upgrade_to_mode(player, "empty.b3d")

@@ -35,6 +35,8 @@ kills = {
 			kills[enemyt][enemy].kills = kills[enemyt][enemy].kills + 1
 			kills[playert][player].kills = kills[playert][player].deaths + 1
 		end
+	else
+		kills[playert][player].kills = kills[playert][player].deaths + 1
 	end
     end)
 --end)
