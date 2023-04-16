@@ -307,7 +307,8 @@ function cs_shop.buy_ammo(ammo, p)
 			inventory[pname] = p:get_inventory()
 			local amount = cs_shop.ammo_drops[ammo] or 80
 			inventory[pname]:add_item("main", ItemStack("rangedweapons:"..ammo.." "..tostring(amount)))
-			SendOnBuy(p, ammo, amount)
+			SendOnBuy(p, ammo, cs_shop.ammo_values[ammo])
+			bank.rm_player_value(pname, cs_shop.ammo_values[ammo])
 		else
 			SendOnFail(p, t)
 		end
@@ -323,7 +324,8 @@ function cs_shop.buy_grenade(gr, p, t)
 				inventory[pname] = p:get_inventory()
 				inventory[pname]:add_item("main", ItemStack(gr))
 				cs_shop.grenades[t][pname] = cs_shop.grenades[t][pname] + 1
-				SendOnBuy(p, t, his_money[pname])
+				SendOnBuy(p, t, cs_shop.grenades_values[gr])
+				bank.rm_player_value(pname, cs_shop.grenades_values[gr]))
 			end
 		else
 			SendOnFail(p, t)
@@ -334,22 +336,29 @@ function cs_shop.buy_grenade(gr, p, t)
 end
 
 function cs_shop.buy_arm(arm, p)
+	--print("a")
 	local pname = clua.pname(p)
 	local player = clua.player(p)
 	inventory[pname] = player:get_inventory()
 	if type(arm) == "string" then
+		--print("b")
 		get_named[pname] = RecognizeType(arm)
 		
 		if get_named[pname] == "rifle" or get_named[pname] == "shotgun" then
 			to_check[pname] = "arms_type_1"
+			--print("c1")
 		elseif get_named[pname] == "pistol" or get_named[pname] == "smg" then
 			to_check[pname] = "arms_type_2"
+			--print("c2")
 		end
 		
 		for _, typed in pairs(player:get_inventory():get_list("main")) do
+			--print("d")
 			local name = typed:get_name()
 			for i, str in pairs(cs_shop.arms[to_check[pname]]) do
+				--print("h")
 				if str == name then
+					--print("i")
 					local stack = ItemStack(str)
 					inventory[pname]:remove_item("main", stack)
 					minetest.item_drop(typed, player, player:get_pos())
@@ -358,11 +367,13 @@ function cs_shop.buy_arm(arm, p)
 					local a1 = RecognizeType(str)
 					local ammo = cs_shop.arms_ammo[a1][str]
 					if cs_shop.arms_ammo[a1].exe_amount then
+						--print("j")
 						local amount = cs_shop.arms_ammo[a1].ammo_amount
 						local stack = ItemStack(tostring(cs_shop.arms_ammo[a1][str])..tostring(amount))
 						inventory[pname]:remove_item("main", stack)
 						minetest.item_drop(stack, player, player:get_pos())
 					else
+						--print("k")
 						local stack = ItemStack(tostring(cs_shop.arms_ammo[a1][str]))
 						inventory[pname]:remove_item("main", stack)
 						minetest.item_drop(stack, player, player:get_pos())
@@ -376,16 +387,21 @@ function cs_shop.buy_arm(arm, p)
 		money_value[pname] = tonumber(cs_shop.arms_values[arm])
 		his_money[pname] = bank.return_val(pname)
 		if his_money[pname] >= (money_value[pname] + cs_shop.ammo_val) then
+			--print("l")
 			inventory[pname]:add_item("main", ItemStack(arm))
 			if cs_shop.arms_ammo[RecognizeType(arm)].exe_amount then
+				--print("m")
 				v = cs_shop.arms_ammo[RecognizeType(arm)].ammo_amount
 			end
 			if v then
+				--print("p")
 				inventory[pname]:add_item("main", ItemStack(cs_shop.arms_ammo[RecognizeType(arm)][arm]..v))
 			else
 				inventory[pname]:add_item("main", ItemStack(cs_shop.arms_ammo[RecognizeType(arm)][arm]))
+				print("q")
 			end
 			SendOnBuy(p, ItemStack(arm):get_short_description(), cs_shop.arms_values[arm])
+			bank.rm_player_value(player, money_value[pname] + cs_shop.ammo_val)
 		else
 			SendOnFail(p, t)
 		end
