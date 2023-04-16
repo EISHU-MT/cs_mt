@@ -1,4 +1,5 @@
-local S = minetest.get_translator("cs_buying")
+local S = minetest.get_translator("cs_shop")
+do
 cs_shop = {
 	ammo_val = 30,
 	arms = {
@@ -78,7 +79,7 @@ cs_shop = {
 	},
 	arms_ammo = {
 		--Rifles
-		rifles = {
+		rifle = {
 			exe_amount                   = false,
 			["rangedweapons:m16"] =        "rangedweapons:556mm 160",
 			["rangedweapons:scar"] =       "rangedweapons:556mm 160",
@@ -89,7 +90,7 @@ cs_shop = {
 			["rangedweapons:m200"] =       "rangedweapons:408cheytac 50",
 			["rangedweapons:kriss_sv"] =   "rangedweapons:9mm",
 		},
-		shotguns = {
+		shotgun = {
 			--Shotguns
 			exe_amount =                   true,
 			ammo_amount =                  50,
@@ -100,14 +101,14 @@ cs_shop = {
 			["rangedweapons:aa12"] =       "rangedweapons:shell",
 		},
 				--SMGs
-		smgs = {
+		smg = {
 			exe_amount =                   true,
 			ammo_amount =                  100,
 			["rangedweapons:tmp"] =        "rangedweapons:9mm",
 			["rangedweapons:tec9"] =       "rangedweapons:9mm",
 			["rangedweapons:uzi"] =        "rangedweapons:9mm",
 		},
-		pistols = {
+		pistol = {
 			--Pistols
 			exe_amount =                   true,
 			ammo_amount =                  60,
@@ -156,22 +157,77 @@ cs_shop = {
 		["armor100"] =                 "special",
 		["armor200"] =                 "special",
 	},
-	transactions = {}
+	transactions = {},
+	grenades = {
+		flashbang = {},
+		frag = {},
+		smoke = {},
+		frag_sticky = {},
+	},
+	grenades_values = {
+		["grenades:frag"] =        100,
+		["grenades:flashbang"] =   70,
+		["grenades:smoke"] =       80,
+		["grenades:frag_sticky"] = 130,
+	},
+	grenades_amounts = {
+		["grenades:frag"] =        1,
+		["grenades:flashbang"] =   2,
+		["grenades:smoke"] =       1,
+		["grenades:frag_sticky"] = 1,
+	},
+	ammo_values = {
+		["10mm"] = 50,
+		["308winchester"] = 50,
+		["357"] = 50,
+		["408cheytac"] = 50,
+		["40mm"] = 50,
+		["44"] = 50,
+		["45acp"] = 50,
+		["556mm"] = 50,
+		["762mm"] = 50,
+		["9mm"]   = 50,
+		["shell"] = 50,
+		["50ae"]  = 50,
+	},
+	ammo_drops = {
+		["10mm"] = 50,
+		["308winchester"] = 50,
+		["357"] = 45,
+		["408cheytac"] = 18,
+		["40mm"] = 5,
+		["44"] = 45,
+		["45acp"] = 85,
+		["556mm"] = 75,
+		["762mm"] = 70,
+		["9mm"]   = 100,
+		["shell"] = 25,
+		["50ae"]  = 45,
+	}
 }
+end
+
+local modpath = core.get_modpath(minetest.get_current_modname())
+dofile(modpath.."/arms/formspecs.lua")
+dofile(modpath.."/arms/grenades.lua")
+dofile(modpath.."/arms/rifles.lua")
+dofile(modpath.."/arms/pistol_smg.lua")
+dofile(modpath.."/arms/armor.lua")
+dofile(modpath.."/arms/shotgun.lua")
 
 function RecognizeArm(arm)
 	if arm and type(arm) == "string" then
-		for a, i in pairs(arms.arms_type_1) do
+		for a, i in pairs(cs_shop.arms.arms_type_1) do
 			if i == arm then
 				return true, "hard_arm"
 			end
 		end
-		for a, i in pairs(arms.arms_type_2) do
+		for a, i in pairs(cs_shop.arms.arms_type_2) do
 			if i == arm then
 				return true, "soft_arm"
 			end
 		end
-		for a, i in pairs(arms.arms_type_3) do
+		for a, i in pairs(cs_shop.arms.arms_type_3) do
 			if i == arm then
 				return true, "grenade", arm
 			end
@@ -181,6 +237,24 @@ function RecognizeArm(arm)
 		end
 		return false, "non_existent"
 	end
+end
+
+function IsGrenade(grt)
+	assert(grt, "No grenade name found!")
+	for _, gr in pairs(cs_shop.arms.arms_type_3) do
+		if grt == gr then
+			return true
+		end
+	end
+	return false
+end
+
+function SendOnBuy(p, m, a)
+	core.chat_send_player(clua.pname(p), core.colorize("#A67979", "-$"..tostring(a)).." "..core.colorize("#FF9D00", "On Buying "..tostring(m)))
+end
+
+function SendOnFail(p, a)
+	core.chat_send_player(clua.pname(p), core.colorize("#A67979", "Failed On Buy: "..tostring(a)..", No money?"))
 end
 
 function RecognizeType(arm)
@@ -194,6 +268,47 @@ to_check = {}
 get_named = {}
 money_value = {}
 his_money = {}
+pnamee = {}
+
+function RecognizeType(arm)
+	return cs_shop.arms_types[arm] or false
+end
+
+function cs_shop.buy_ammo(ammo, p)
+	assert(ammo, "No ammo presense found")
+	assert(type(p) ~= "userdata", "Player UserData not found or a string....")
+	local pname = p:get_player_name()
+	if cs_shop.ammo_values[ammo] then
+		his_money[pname] = bank.return_val(pname)
+		if (his_money >= cs_shop.ammo_values[ammo]) then
+			inventory[pname] = p:get_inventory()
+			local amount = cs_shop.ammo_drops[ammo] or 80
+			inventory[pname]:add_item("main", ItemStack("rangedweapons:"..ammo.." "..tostring(amount)))
+			SendOnBuy(p, ammo, amount)
+		else
+			SendOnFail(p, t)
+		end
+	end
+end
+
+function cs_shop.buy_grenade(gr, p, t)
+	local pname = clua.pname(p)
+	his_money[pname] = bank.return_val(pname) or 0
+	if IsGrenade(gr) and p then
+		if (his_money[pname] >= cs_shop.grenades_values[gr]) then
+			if cs_shop.grenades[t][pname] ~= cs_shop.grenades_amounts[gr] then
+				inventory[pname] = p:get_inventory()
+				inventory[pname]:add_item("main", ItemStack(gr))
+				cs_shop.grenades[t][pname] = cs_shop.grenades[t][pname] + 1
+				SendOnBuy(p, t, his_money[pname])
+			end
+		else
+			SendOnFail(p, t)
+		end
+		his_money[pname] = nil
+		inventory[pname] = nil
+	end
+end
 
 function cs_shop.buy_arm(arm, p)
 	local pname = clua.pname(p)
@@ -204,6 +319,8 @@ function cs_shop.buy_arm(arm, p)
 		
 		if get_named[pname] == "rifle" or get_named[pname] == "shotgun" then
 			to_check[pname] = "arms_type_1"
+		elseif get_named[pname] == "pistol" or get_named[pname] == "smg" then
+			to_check[pname] = "arms_type_2"
 		end
 		
 		for _, typed in pairs(player:get_inventory():get_list("main")) do
@@ -229,35 +346,115 @@ function cs_shop.buy_arm(arm, p)
 					end
 					
 					
-					minetest.item_drop(typed2, player, player:get_pos())
+					--minetest.item_drop(stack, player, player:get_pos())
 				end
 			end
 		end
 		money_value[pname] = tonumber(cs_shop.arms_values[arm])
 		his_money[pname] = bank.return_val(pname)
-		if his_money >= (money_value[pname] + cs_shop.ammo_val) then
+		if his_money[pname] >= (money_value[pname] + cs_shop.ammo_val) then
 			inventory[pname]:add_item("main", ItemStack(arm))
-			if cs_shop.arms_ammo[RecognizeType(str)].exe_amount then
-				v = cs_shop.arms_ammo[RecognizeType(str)].ammo_amount
+			if cs_shop.arms_ammo[RecognizeType(arm)].exe_amount then
+				v = cs_shop.arms_ammo[RecognizeType(arm)].ammo_amount
 			end
 			if v then
-				inventory[pname]:add_item("main", ItemStack(cs_shop.arms_ammo[RecognizeType(str)][str]..v))
+				inventory[pname]:add_item("main", ItemStack(cs_shop.arms_ammo[RecognizeType(arm)][arm]..v))
 			else
-				inventory[pname]:add_item("main", ItemStack(cs_shop.arms_ammo[RecognizeType(str)][str]))
+				inventory[pname]:add_item("main", ItemStack(cs_shop.arms_ammo[RecognizeType(arm)][arm]))
+			end
+			SendOnBuy(p, ItemStack(arm):get_short_description(), cs_shop.arms_values[arm])
+		else
+			SendOnFail(p, t)
+		end
+	end
+	-- Clean cache!
+	his_money[pname] = nil
+	money_value[pname] = nil
+	inventory[pname] = nil
+	to_check[pname] = nil
+	get_named[pname] = nil
+end
+
+-- Fields
+minetest.register_on_player_receive_fields(function(player, formname, field)
+	if formname ~= "" then
+		 return
+	end
+	if field.rifle or field.sniper then
+		local name = player:get_player_name()
+		minetest.show_formspec(name, "cs_shop:rifle", cs_shop.rifle(name))
+	end
+	if field.ammo then
+		local name = player:get_player_name()
+		minetest.show_formspec(name, "cs_shop:ammo", cs_shop.ammo(name))
+	end
+	if field.grenade then
+		local name = player:get_player_name()
+		minetest.show_formspec(name, "cs_shop:grenade", cs_shop.grenade(name))
+	end
+	if field.pistol then
+		local name = player:get_player_name()
+		minetest.show_formspec(name, "cs_shop:pistol", cs_shop.pistol(name))
+	end
+	if field.armor then
+		local name = player:get_player_name()
+		minetest.show_formspec(name, "cs_shop:armor", cs_shop.armor(name))
+	end
+	if field.shotguns then
+		local name = player:get_player_name()
+		minetest.show_formspec(name, "cs_shop:shotgun", cs_shop.shotgun(name))
+	end
+	if field.smg then
+		local name = player:get_player_name()
+		minetest.show_formspec(name, "cs_shop:smg", cs_shop.smg(name))
+	end
+	if field.exit then
+		local name = player:get_player_name()
+		minetest.disconnect_player(name, "Disconnected from gui (CsShop MSG)")
+	end
+end)
+
+
+do
+	if not clua.get_bool("map_edit", clua.get_table_value("central_csgo")) then
+		function cs_shop.enable_shopping(player)
+			if player then
+			player:set_inventory_formspec(cs_shop.main(player))
+			else
+				for _, player in pairs(core.get_connected_players()) do
+				--local playerr = core.get_player_by_name(player)
+				player:set_inventory_formspec(cs_shop.main(player))
+				end
 			end
 		end
+		function cs_shop.disable_shopping(player)
+			if player then
+			player:set_inventory_formspec(cs_shop.fmain(player))
+			else
+				for _, player in pairs(core.get_connected_players()) do
+				--local playerr = core.get_player_by_name(player)
+				player:set_inventory_formspec(cs_shop.fmain(player))
+				end
+			end
+		end
+	elseif clua.get_bool("map_edit", clua.get_table_value("central_csgo")) then
+		function cs_shop.disable_shopping() end
+		function cs_shop.enable_shopping() end
 	end
 end
 
+-- time to link
+do
+	cs_buying = cs_shop
+end
 
-
-
-
-
-
-
-
-
+minetest.register_on_joinplayer(function(player)
+	local p=player:get_player_name()
+	cs_shop.grenades.frag[p] = 0
+	cs_shop.grenades.flashbang[p] = 0
+	cs_shop.grenades.smoke[p] = 0
+	cs_shop.grenades.frag_sticky[p] = 0
+end)
 
 
 
