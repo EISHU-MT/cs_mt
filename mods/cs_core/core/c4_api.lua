@@ -151,7 +151,11 @@ end
 
 core.register_globalstep(hooks)
 
-
+call.register_on_new_match(function()
+	if c4.planted then
+		c4.remove_bomb2()
+	end
+end)
 
 
 
