@@ -151,7 +151,6 @@ if player then
 			if inventorytouse and not clua.find_itemstack_from(clua.player(player), "rangedweapons:glock17") then
     			inventorytouse:add_item("main", "rangedweapons:glock17")
         		inventorytouse:add_item("main", "rangedweapons:9mm 200")
-        		pistols.ifp.player[player].arm = {weapon_string = "Glock 17", weapon_item = "rangedweapons:glock17"}
 			end
 			main_hud.set_main_terrorist(csgo.team[ttt].count)
 			
@@ -208,7 +207,6 @@ if player then
 			if inventorytouse and not clua.find_itemstack_from(clua.player(player), "rangedweapons:glock17") then
     			inventorytouse:add_item("main", "rangedweapons:glock17")
         		inventorytouse:add_item("main", "rangedweapons:9mm 200")
-        		pistols.ifp.player[player].arm = {weapon_string = "Glock 17", weapon_item = "rangedweapons:glock17"}
 			end
 			if playerr then
 			playerr:set_armor_groups({fleshy = 120, })
@@ -271,7 +269,6 @@ if player then
 			if inventorytouse and not clua.find_itemstack_from(clua.player(player), "rangedweapons:m1991") then
     			inventorytouse:add_item("main", "rangedweapons:m1991")
         		inventorytouse:add_item("main", "rangedweapons:45acp 200")
-			pistols.ifp.player[player].arm = {weapon_string = "M1991", weapon_item = "rangedweapons:m1991"}
 			end
 			
 			csgo.team[ttt].count = csgo.team[ttt].count + 1
@@ -324,7 +321,6 @@ if player then
 			if inventorytouse and not clua.find_itemstack_from(clua.player(player), "rangedweapons:m1991") then
     			inventorytouse:add_item("main", "rangedweapons:m1991")
         		inventorytouse:add_item("main", "rangedweapons:45acp 200")
-			pistols.ifp.player[player].arm = {weapon_string = "M1991", weapon_item = "rangedweapons:m1991"}
 			end
 			
 			main_hud.set_main_counter(csgo.team[ttt].count)
