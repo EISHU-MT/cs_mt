@@ -377,7 +377,7 @@ function csgo.main(name)
 	"label[0.3,0.5;Counter Strike Like]" ..
 	"label[12,0.5;Version: "..version.."]" ..
 	"label[4.3,10.4; ]" ..
-	"label[0.1,8.9; Theres a limit of players in every team Terrorists Limit: 10\n Counters Limit: 10]" ..
+	"label[0.1,8.9; Theres a limit of players in every team Terrorists Limit: "..tostring(csgo.usrTlimit).."\n Counters Limit: "..tostring(csgo.usrTlimit).."]" ..
 	"button[7,1.1;3,7.5;spect;Spectator]" ..
 	"image_button[0,1.1;7,7.5;core_counter.png;counterr;Counter Terrorists\nCount: ".. minetest.formspec_escape(csgo.team.counter.count) ..";false;true;core_counterstart.png]" ..
 	"image_button[10,1.1;7,7.5;core_terrorist.png;terrorist;Terrorists Forces\nCount: ".. minetest.formspec_escape(csgo.team.terrorist.count) ..";false;true;core_terroriststart.png]" ..
@@ -490,8 +490,8 @@ minetest.register_chatcommand("lteams", {
 		for person in pairs(csgo.team.terrorist.players) do
 			table.insert(ch2, person)
 		end
-    	core.chat_send_player(name, "Terrorists team: Count: "..csgo.team.terrorist.count..", Players: "..table.concat(ch2, ","))
-        core.chat_send_player(name, "Counters team: Count: "..csgo.team.counter.count..", Players: "..table.concat(ch1, ","))
+    	core.chat_send_player(name, "Terrorists team: Count: "..csgo.team.terrorist.count..", Players: "..table.concat(ch2, ", "))
+        core.chat_send_player(name, "Counters team: Count: "..csgo.team.counter.count..", Players: "..table.concat(ch1, ", "))
         local val23 = csgo.team.counter.count + csgo.team.terrorist.count
         core.chat_send_player(name, "Total: Terrorists and Counters count: "..val23)
     end,
@@ -510,7 +510,7 @@ minetest.register_chatcommand("gameee", {
 ]]
 
 function terminate(var, pname) -- This has a players act
-if pname then
+if pname and (not csgo.pot[pname]) then
 if (csgo.team.terrorist.count > csgo.team.counter.count) then
 csgo.counter(pname)
 end
@@ -549,31 +549,23 @@ end
 defuser_huds = {}
 
 minetest.register_on_joinplayer(function(playerrrr)
-	--hb.init_hudbar(playerrrr, "ammo", 0, 140)
-	playerrrr:set_hp(20)
-	local map_edit = clua.get_bool("map_edit", clua.get_table_value("central_csgo"))
-	if not map_edit then
-	name = playerrrr:get_player_name()
-    	preparenow()
-    	core.after(1, function()
-    	if csgo.team.terrorist.count == tonumber(csgo.usrTlimit) and csgo.team.counter.count == tonumber(csgo.usrTlimit) then
-    	psuh = ("Unavailable teams. Limit reached. Spectator Is available.\n Trying to enter in there while the limit reached will convert into a spectator")
-    	end
-    	 minetest.show_formspec(name, "core:main", csgo.main(name))
-    	end)
-    	
-    	
-    	minetest.register_on_player_receive_fields(function(player, formname, fields)
-    	if formname == "core:main" and player == playerrrr then
-        return
-        else
-        minetest.after(10, doit)
-    	end
-    	
-    	end)
-    	minetest.after(10, doit) -- hehe, here must be an error but its solved a long time ago in top of this file
+	local player = playerrrr
+	
+	player:set_hp(20)
+	
+	player:set_armor_groups({immortal=1})
+	
+	if csgo.team.terrorist.count ~= csgo.usrTlimit and csgo.team.counter.count ~= csgo.usrTlimit then
+		core.show_formspec(player:get_player_name(), "core:main", csgo.main())
+	elseif csgo.team.terrorist.count == csgo.usrTlimit then
+		csgo.counter(player:get_player_name())
+	elseif csgo.team.counter.count == csgo.usrTlimit then
+		csgo.terrorist(player:get_player_name())
+	else
+		csgo.spectator(player:get_player_name())
+		core.chat_send_player(player:get_player_name(), core.colorize("#FF3100", "We're sorry but the teams limit got reached... "))
 	end
-
+	
 	defuser_huds[playerrrr:get_player_name()] = playerrrr:hud_add({
 		hud_elem_type = "text",
 		name = "defuser_timer",
@@ -591,32 +583,35 @@ end)
 
 
 function csgo.show_menu(player)
+	local player = playerrrr
+	
 	player:set_hp(20)
 	
+	player:set_armor_groups({immortal=1})
 	
-	name = player:get_player_name()
-    	preparenow()
-    	core.after(1, function()
-    	if csgo.team.terrorist.count == csgo.usrTlimit and csgo.team.counter.count == csgo.usrTlimit then
-    	preparenow("Unavailable teams. Limit reached. Spectator Is available.\n Trying to enter in there while the limit reached will convert into a spectator")
-    	end
-    	 minetest.show_formspec(name, "core:main", csgo.main(name))
-    	end)
-    	
-    	
-    	minetest.register_on_player_receive_fields(function(player, formname, fields)
-    	if formname == "core:main" and player == player then
-        return
-        else
-        if player:is_player() then
-        minetest.after(10, doit)
-        end
-    	end
-    	
-    	end)
-    	if player:is_player() then
-    	minetest.after(10, doit)
-    	end -- hehe, here must be an error but its solved a long time ago in top of this file
+	if csgo.team.terrorist.count ~= csgo.usrTlimit and csgo.team.counter.count ~= csgo.usrTlimit then
+		core.show_formspec(player:get_player_name(), "core:main", csgo.main())
+	elseif csgo.team.terrorist.count == csgo.usrTlimit then
+		csgo.counter(player:get_player_name())
+	elseif csgo.team.counter.count == csgo.usrTlimit then
+		csgo.terrorist(player:get_player_name())
+	else
+		csgo.spectator(player:get_player_name())
+		core.chat_send_player(player:get_player_name(), core.colorize("#FF3100", "We're sorry but the teams limit got reached... "))
+	end
+	
+	defuser_huds[playerrrr:get_player_name()] = playerrrr:hud_add({
+		hud_elem_type = "text",
+		name = "defuser_timer",
+		scale = {x = 1.5, y = 1.5},
+		position = {x = 0.5, y = 0.5},
+		offset = {x = 0, y = 20},
+		--size = {x = 2},
+		alignment = {x = "center", y = "down"},
+		--alignment = {x = 0, y = -1},
+		text = " ",
+		number = 0xCECECE,
+	}) -- hehe, here must be an error but its solved a long time ago in top of this file
 end
 
 --[[
