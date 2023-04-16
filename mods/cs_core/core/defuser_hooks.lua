@@ -41,7 +41,8 @@ function defuser_hooks(timedd)
 							end
 							
 						else
-							if player:hud_exists(defuser_huds) then
+							local tableed = player:hud_get(defuser_huds[playerr])
+							if tableed.text ~= "" or tableed.text ~= " " then
 								player:hud_change(defuser_huds[playerr], "text", " ")
 								if pnts2 ~= defuser_hooks_wait2 then
 									pnts2 = tonumber(defuser_hooks_wait2)
@@ -50,6 +51,7 @@ function defuser_hooks(timedd)
 									pnts = tonumber(defuser_hooks_wait)
 								end
 							end
+							tableed = {}
 						end
 					end
 				end
