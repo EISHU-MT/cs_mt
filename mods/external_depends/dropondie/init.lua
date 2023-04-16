@@ -22,6 +22,9 @@ function dropondie.drop_all(player)
 	elseif csgo.pot[pname] == "counter" then
 		inv:remove_item("main", "rangedweapons:m1991")
 		inv:remove_item("main", "rangedweapons:45acp 200")
+		if inv:contains_item("main", ItemStack("core:defuser")) then
+			inv:remove_item("main", "core:defuser")
+		end
 	end
 
 	local pos = player:get_pos()
