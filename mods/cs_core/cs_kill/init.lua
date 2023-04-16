@@ -24,6 +24,9 @@ end
 minetest.register_on_punchplayer(function(player, hitter, time_from_last_punch, tool_capabilities, dir, damage)
 	pname = hitter:get_player_name()
 	victim = player:get_player_name()
+	if not pname then
+		return
+	end
 	if (cs_core.ask_can_do_damage(pname) == false) then
 
 		if not hud:exists(pname, "kill") then
@@ -36,7 +39,7 @@ minetest.register_on_punchplayer(function(player, hitter, time_from_last_punch, 
 				color = 0xFFC107,
 			})
 		else
-			if hud:exists(pname, "kill") then
+		if hud:exists(pname, "kill") then
 			hud:change(pname, "kill", {text = S("You can't damage others players!!"), color = 0xFFC107})
 			end
 		end
