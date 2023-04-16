@@ -284,7 +284,7 @@ function cs_shop.save_state(pn, _, arm)
 			to_check[pn] = "arms_type_2"
 		end
 		for _, typed in pairs(player:get_inventory():get_list("main")) do
-			local pnamee[pn] = typed:get_name()
+			pnamee[pn] = typed:get_name()
 			for _, name in pairs(cs_shop.arms[to_check[pn]]) do
 				if pnamee == name then
 					local stack = ItemStack(arm)
