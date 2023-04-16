@@ -263,7 +263,7 @@ function cs_match.start_matches()
 		
 		if not clua.get_bool("map_edit", clua.get_table_value("central_csgo")) then
 		if not alreadyVAR then
-		minetest.register_on_joinplayer(function(player)
+		--[[[minetest.register_on_joinplayer(function(player)
 		csgo.show_menu(player)
 		if player and not hud:exists(player, "temp000x15") then
 			playeree = player:get_player_name()
@@ -276,7 +276,7 @@ function cs_match.start_matches()
 		
 		
 		end
-		end)
+		end)--]]
 		ctimer.reset()
 		core.after(35, ctimer.set_timer)
 		function finishedmatch() return false end
