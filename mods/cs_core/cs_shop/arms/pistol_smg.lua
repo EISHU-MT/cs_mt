@@ -1,5 +1,5 @@
 minetest.register_on_player_receive_fields(function(player, formname, fields)
-	if formname ~= "cs_shop:pistol"" then
+	if formname ~= "cs_shop:pistol" then
 		return
 	end
 	-- Pistols part
