@@ -21,6 +21,11 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 	if fields.deagle then
 		cs_shop.buy_arm("rangedweapons:deagle", player)
 	end
+end)
+minetest.register_on_player_receive_fields(function(player, formname, fields)
+	if formname ~= "cs_shop:smg" then
+		return
+	end
 	-- SMGs part
 	if fields.steyr then
 		cs_shop.buy_arm("rangedweapons:tmp", player)

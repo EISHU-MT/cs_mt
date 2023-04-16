@@ -439,7 +439,7 @@ minetest.register_on_player_receive_fields(function(player, formname, field)
 		local name = player:get_player_name()
 		minetest.show_formspec(name, "cs_shop:armor", cs_shop.armor(name))
 	end
-	if field.shotguns then
+	if field.shotgun then
 		local name = player:get_player_name()
 		minetest.show_formspec(name, "cs_shop:shotgun", cs_shop.shotgun(name))
 	end
