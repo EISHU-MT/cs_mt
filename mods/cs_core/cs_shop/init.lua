@@ -325,7 +325,7 @@ function cs_shop.buy_grenade(gr, p, t)
 				inventory[pname]:add_item("main", ItemStack(gr))
 				cs_shop.grenades[t][pname] = cs_shop.grenades[t][pname] + 1
 				SendOnBuy(p, t, cs_shop.grenades_values[gr])
-				bank.rm_player_value(pname, cs_shop.grenades_values[gr]))
+				bank.rm_player_value(pname, cs_shop.grenades_values[gr])
 			end
 		else
 			SendOnFail(p, t)
