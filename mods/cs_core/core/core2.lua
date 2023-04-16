@@ -27,6 +27,10 @@ function cs.s_c(name)
 player_api.set_textures(name, "blue.png")
 end
 
+function csgo.get_team_colour(team)
+	return csgo.team[team].colour or "#FFFFFF"
+end
+
 
 for team, def in pairs(csgo.team) do -- Insert
 	if team == "terrorist" then
@@ -622,6 +626,21 @@ function csgo.show_menu(playeri)
 		number = 0xCECECE,
 	}) -- hehe, here must be an error but its solved a long time ago in top of this file
 end
+
+core.send_leave_message = function(pname, timedout)
+	if timedout then
+		msg = "### "..core.colorize(csgo.get_team_colour(csgo.pot[pname]), pname).." left the game. (Timed Out)"
+	else
+		msg = "### "..core.colorize(csgo.get_team_colour(csgo.pot[pname]), pname).." left the game."
+	end
+	core.chat_send_all(msg or "*** "..pname.." left the game....")
+end
+
+core.send_join_message = function(pname)
+	msg = "### "..core.colorize("#D2D2D2", pname).." joins the game!"
+	core.chat_send_all(msg or "*** "..pname.." left the game....")
+end
+
 
 --[[
 minetest.register_on_dieplayer(function(player, reason)
