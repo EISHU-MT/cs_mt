@@ -274,6 +274,29 @@ function RecognizeType(arm)
 	return cs_shop.arms_types[arm] or false
 end
 
+--later this function will be linked
+function cs_shop.save_state(pn, _, arm)
+	if pn and arm then
+		get_named[pn] = RecognizeType(arm)
+		if get_named[pname] == "rifle" or get_named[pn] == "shotgun" then
+			to_check[pn] = "arms_type_1"
+		elseif get_named[pn] == "pistol" or get_named[pn] == "smg" then
+			to_check[pn] = "arms_type_2"
+		end
+		for _, typed in pairs(player:get_inventory():get_list("main")) do
+			local pnamee[pn] = typed:get_name()
+			for _, name in pairs(cs_shop.arms[to_check[pn]]) do
+				if pnamee == name then
+					local stack = ItemStack(arm)
+					inventory[pname]:remove_item("main", stack)
+					minetest.item_drop(stack, clua.player(pn), clua.player(pn):get_pos())
+					return true
+				end
+			end
+		end
+	end
+end
+
 function cs_shop.buy_ammo(ammo, p)
 	assert(ammo, "No ammo presense found")
 	assert(type(p) ~= "userdata", "Player UserData not found or a string....")
@@ -445,7 +468,11 @@ end
 
 -- time to link
 do
-	cs_buying = cs_shop
+	cs_buying = table.copy(cs_shop)
+	central = table.copy(cs_shop)
+	 -- here is linked!
+	central.save_state_pistol = cs_shop.save_state
+	central.save_state_arm = cs_shop.save_state
 end
 
 minetest.register_on_joinplayer(function(player)
