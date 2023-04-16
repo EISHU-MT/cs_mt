@@ -170,7 +170,9 @@ end
 
 function hud.remove(self, player, name)
 	local pobj = get_playerobj(player)
-	assert(pobj, "Attempt to remove hud from offline player!")
+	if not pobj then
+		return
+	end
 
 	local pname = get_playername(player)
 
