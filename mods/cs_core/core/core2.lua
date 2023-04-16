@@ -551,39 +551,50 @@ defuser_huds = {}
 minetest.register_on_joinplayer(function(playerrrr)
 	local player = playerrrr
 	
-	player:set_hp(20)
-	
-	player:set_armor_groups({immortal=1})
-	
-	if csgo.team.terrorist.count ~= csgo.usrTlimit and csgo.team.counter.count ~= csgo.usrTlimit then
-		core.show_formspec(player:get_player_name(), "core:main", csgo.main())
-	elseif csgo.team.terrorist.count == csgo.usrTlimit then
-		csgo.counter(player:get_player_name())
-	elseif csgo.team.counter.count == csgo.usrTlimit then
-		csgo.terrorist(player:get_player_name())
-	else
-		csgo.spectator(player:get_player_name())
-		core.chat_send_player(player:get_player_name(), core.colorize("#FF3100", "We're sorry but the teams limit got reached... "))
+	if not clua.get_bool("map_edit", clua.get_table_value("central_csgo")) then
+		player:set_hp(20)
+		
+		player:set_armor_groups({immortal=1})
+		
+		if csgo.team.terrorist.count ~= csgo.usrTlimit and csgo.team.counter.count ~= csgo.usrTlimit then
+			core.show_formspec(player:get_player_name(), "core:main", csgo.main())
+		elseif csgo.team.terrorist.count == csgo.usrTlimit then
+			csgo.counter(player:get_player_name())
+		elseif csgo.team.counter.count == csgo.usrTlimit then
+			csgo.terrorist(player:get_player_name())
+		else
+			csgo.spectator(player:get_player_name())
+			core.chat_send_player(player:get_player_name(), core.colorize("#FF3100", "We're sorry but the teams limit got reached... "))
+		end
+		
+		defuser_huds[playerrrr:get_player_name()] = playerrrr:hud_add({
+			hud_elem_type = "text",
+			name = "defuser_timer",
+			scale = {x = 1.5, y = 1.5},
+			position = {x = 0.5, y = 0.5},
+			offset = {x = 0, y = 20},
+			--size = {x = 2},
+			alignment = {x = "center", y = "down"},
+			--alignment = {x = 0, y = -1},
+			text = " ",
+			number = 0xCECECE,
+		})
+		
+		cs_buying.enable_shopping(player)
 	end
-	
-	defuser_huds[playerrrr:get_player_name()] = playerrrr:hud_add({
-		hud_elem_type = "text",
-		name = "defuser_timer",
-		scale = {x = 1.5, y = 1.5},
-		position = {x = 0.5, y = 0.5},
-		offset = {x = 0, y = 20},
-		--size = {x = 2},
-		alignment = {x = "center", y = "down"},
-		--alignment = {x = 0, y = -1},
-		text = " ",
-		number = 0xCECECE,
-	})
 
 end)
 
 
 function csgo.show_menu(player)
-	local player = playerrrr
+	error("executed")
+	if not player then
+		return
+	else
+		pl = player
+	end
+	
+	player = playerrrr
 	
 	player:set_hp(20)
 	
