@@ -61,8 +61,18 @@ bank.player_add_value(player, amount)
 
 
 --]]
+function CheckPlayer(name)
+	for _, p in pairs(core.get_connected_players()) do
+		local pname = p:get_player_name()
+		if pname == name then
+			return true
+		end
+	end
+end
+
+
 function bank.player_add_value(player, amount) 
-	if minetest.player_exists(player) and bank.player[player] then
+	if CheckPlayer(player) and bank.player[player] then
 		core.chat_send_player(player, core.colorize("#14FF14","You received $"..tostring(amount.."+")))
 			if bank.player[player].money then
 				bank.player[player].money = bank.player[player].money + amount
@@ -71,7 +81,7 @@ function bank.player_add_value(player, amount)
 end
 --Remove some values of a player, can be by buying some arms
 function bank.rm_player_value(player, amount)
-	if minetest.player_exists(player) and bank.player[player] then
+	if CheckPlayer(player) and bank.player[player] then
 		--core.chat_send_player(player, core.colorize("#14FF14","Transactions: $"..tostring(amount.."-")))
 		bank.player[player].money = bank.player[player].money - amount
 	end
