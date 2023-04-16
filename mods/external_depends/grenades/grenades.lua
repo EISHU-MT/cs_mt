@@ -33,7 +33,7 @@ local fragdef = {
 	on_explode = function(def, obj, pos, name)
 		if not name or not pos then return end
 
-		grenade.player[name].arm.normal_grenade = grenade.player[name].arm.normal_grenade - 1
+		cs_shop.grenades.frag[pname] = cs_shop.grenades.frag[pname] - 1
 
 		local player = minetest.get_player_by_name(name)
 		if not player then return end
@@ -117,7 +117,7 @@ local fragdef_sticky = table.copy(fragdef)
 fragdef_sticky.description = "Sticky Frag grenade (Sticks to surfaces)"
 uni_func = fragdef_sticky.on_explode
 fragdef_sticky.on_explode = function(def, obj, pos, name)
-	grenade.player[name].arm.sticky_frag = grenade.player[name].arm.sticky_frag + 1
+	cs_shop.grenades.frag_sticky[pname] = cs_shop.grenades.frag_sticky[pname] - 1
 	uni_func(def, obj, pos, name)
 end
 fragdef_sticky.image = "grenades_frag_sticky.png"
@@ -137,7 +137,7 @@ grenades.register_grenade("grenades:smoke", {
 		return true
 	end,
 	on_explode = function(def, obj, pos, pname)
-		grenade.player[pname].arm.smoke = grenade.player[pname].arm.smoke - 1
+		cs_shop.grenades.smoke[pname] = cs_shop.grenades.smoke[pname] + 1
 		local player = minetest.get_player_by_name(pname)
 		if not player or not pos then return end
 
@@ -202,7 +202,7 @@ grenades.register_grenade("grenades:flashbang", {
 	image = "grenades_flashbang.png",
 	clock = 4,
 	on_explode = function(def, obj, pos, name)
-		grenade.player[name].arm.flashbang = grenade.player[name].arm.flashbang - 1
+		cs_shop.grenades.flashbang[pname] = cs_shop.grenades.flashbang[pname] + 1
 		for _, v in ipairs(minetest.get_objects_inside_radius(pos, 20)) do
 			--local hit = minetest.raycast(pos, v:get_pos(), true, true):next()
 			--[[
