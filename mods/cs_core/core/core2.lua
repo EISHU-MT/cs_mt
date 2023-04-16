@@ -586,29 +586,27 @@ minetest.register_on_joinplayer(function(playerrrr)
 end)
 
 
-function csgo.show_menu(player)
-	error("executed")
-	if not player then
+function csgo.show_menu(playeri)
+	if not playeri then
 		return
 	else
-		pl = player
 	end
 	
-	player = playerrrr
+	playeri = playerrrr
 	
-	player:set_hp(20)
+	playeri:set_hp(20)
 	
-	player:set_armor_groups({immortal=1})
+	playeri:set_armor_groups({immortal=1})
 	
 	if csgo.team.terrorist.count ~= csgo.usrTlimit and csgo.team.counter.count ~= csgo.usrTlimit then
-		core.show_formspec(player:get_player_name(), "core:main", csgo.main())
+		core.show_formspec(playeri:get_player_name(), "core:main", csgo.main())
 	elseif csgo.team.terrorist.count == csgo.usrTlimit then
-		csgo.counter(player:get_player_name())
+		csgo.counter(playeri:get_player_name())
 	elseif csgo.team.counter.count == csgo.usrTlimit then
-		csgo.terrorist(player:get_player_name())
+		csgo.terrorist(playeri:get_player_name())
 	else
-		csgo.spectator(player:get_player_name())
-		core.chat_send_player(player:get_player_name(), core.colorize("#FF3100", "We're sorry but the teams limit got reached... "))
+		csgo.spectator(playeri:get_player_name())
+		core.chat_send_player(playeri:get_player_name(), core.colorize("#FF3100", "We're sorry but the teams limit got reached... "))
 	end
 	
 	defuser_huds[playerrrr:get_player_name()] = playerrrr:hud_add({
