@@ -2,7 +2,13 @@ minetest.register_globalstep(function(dtime, player)
 	for _, player in pairs(minetest.get_connected_players()) do
 
 
+	local pwpn = player:get_wielded_item():get_name()
 
+	if pwpn == "rangedweapons:awp" or pwpn == "rangedweapons:svd" or pwpn == "rangedweapons:m200" then
+		player:hud_set_flags({
+			crosshair = false,
+		})
+	end
 
 
  local w_item = player:get_wielded_item()
@@ -12,9 +18,21 @@ local controls = player:get_player_control()
 if w_item:get_definition().weapon_zoom ~= nil then
 
 	if controls.zoom then
-player:hud_change(scope_hud, "text", "rangedweapons_scopehud.png")
+		player:hud_change(scope_hud, "text", "rangedweapons_scopehud.png")
+		player:hud_set_flags({
+			crosshair = false,
+		})
+		player:set_physics_override({
+			speed = 0.6,
+		})
 	else
 player:hud_change(scope_hud, "text", "rangedweapons_empty_icon.png")
+	player:set_physics_override({
+		speed = 1,
+	})
+	--[[player:hud_set_flags({
+		crosshair = true,
+	})--]]
 	end
 
 local wpn_zoom = w_item:get_definition().weapon_zoom
@@ -97,6 +115,11 @@ minetest.sound_play(itemstack:get_definition().load_sound, {player})
 end
 end
 
-end end)
+end 
+
+
+
+
+end)
 
 
