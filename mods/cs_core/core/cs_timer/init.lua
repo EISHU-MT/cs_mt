@@ -11,19 +11,6 @@ local modpathh = core.get_modpath(minetest.get_current_modname())
 dofile(modpathh.."/cs_timer/timer.conf")
 dofile(modpathh.."/cs_timer/inv_timer_hud.lua")
 
-minetest.register_on_joinplayer(function(player)
-timehud = player:hud_add({
-  hud_elem_type = "text",
-  name = "hud_timer",
-  scale = {x = 1.5, y = 1.5},
-  position = {x = 0.485, y = -0.02},
-  offset = {x = 30, y = 100},
-  size = {x = 2},
-  alignment = {x = 0, y = -1},
-  text = "***D:HH:MM:SS***",
-  number = 0xCECECE,
-})
-end)
 
 function ctimer.on_end_type(type)
   if type == "c4" then
@@ -47,7 +34,7 @@ function ctimer.disp_time(time) -- 0.0
   if (seconds < 10) then
     seconds = "0" .. tostring(seconds)
   end
-  answer = tostring(days)..':'..hours..':'..minutes..':'..seconds
+  answer = tostring(minutes..':'..seconds)
   return answer
 end
 
@@ -146,7 +133,7 @@ if mapeditor ~= true then
         
       
       if time ~= -1 and (timehud) then
-        player:hud_change(timehud, "text", timerare)
+        player:hud_change(timehud[player:get_player_name()], "text", timerare)
       end
   
       
