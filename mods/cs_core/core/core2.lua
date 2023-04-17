@@ -583,6 +583,9 @@ minetest.register_on_joinplayer(function(playerrrr)
 			text = " ",
 			number = 0xCECECE,
 		})
+		player:set_physics_override({
+			sneak_glitch = true,
+		})
 		
 		cs_buying.enable_shopping(player)
 	end
