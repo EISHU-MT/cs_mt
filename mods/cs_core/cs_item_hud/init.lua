@@ -255,7 +255,7 @@ local function on_step()
 						if_on_had[pname].grenades.frag_sticky = ""
 					end
 					tmp6 = e:hud_get(cih.c4d[pname])
-					if tmp6.text ~= "-" and (not inv:contains_item("main", ItemStack("bomb")))
+					if tmp6.text ~= "-" and (not inv:contains_item("main", ItemStack("bomb"))) then
 						e:hud_change(cih.c4d[pname], "text", tostring(i))
 						e:hud_change(cih.c4[pname], "text", "cs_files_c4.png")
 					end
