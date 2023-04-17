@@ -99,7 +99,7 @@ minetest.register_on_joinplayer(function(player)
 			position = {x = 1.03, y = 0.5},
 			offset = {x=-100, y = 20},
 			scale = {x = 100, y = 100},
-			text = "",
+			text = " ",
 			--z_index = -200,
 		})
 
@@ -159,8 +159,13 @@ minetest.register_on_joinplayer(function(player)
 	player:hud_set_flags({
 		hotbar = false,
 	})
+	
+	if_on_had[pname] = {hard_arm = "", soft_arm = "", c4_bomb = "", grenades = {frag = "", flashbang = "", frag_sticky = "", smoke = ""}}
 
 end)
+do
+	if_on_had = {}
+end
 --[brighten
 local function on_step()
 	for a, e in pairs(core.get_connected_players()) do
@@ -176,35 +181,86 @@ local function on_step()
 						e:hud_change(cih.rhd[pname], "text", tostring(i))
 						local image = o:get_definition().inventory_image
 						e:hud_change(cih.rifle_hud[pname], "text", image)
+						if_on_had[pname].hard_arm = u
 					elseif str == "soft_arm" then
 						e:hud_change(cih.phd[pname], "text", tostring(i))
 						local image = o:get_definition().inventory_image
 						e:hud_change(cih.pistol_hud[pname], "text", image)
+						if_on_had[pname].soft_arm = u
 					elseif str == "grenade" and str2 then
 						if str2 == "grenades:frag" then
 							e:hud_change(cih.bhd.gr[pname], "text", tostring(i))
 							e:hud_change(cih.bombs_hud.gr[pname], "text", "grenades_frag.png")
+							if_on_had[pname].grenades.frag = "grenades:frag"
 						end
 						if str2 == "grenades:smoke" then
 							e:hud_change(cih.bhd.sg[pname], "text", tostring(i))
 							e:hud_change(cih.bombs_hud.gr[pname], "text", "grenades_smoke_grenade.png")
+							if_on_had[pname].grenades.smoke = "grenades:smoke"
 						end
 						if str2 == "grenades:flashbang" then
 							e:hud_change(cih.bhd.fb[pname], "text", tostring(i))
 							e:hud_change(cih.bombs_hud.fb[pname], "text", "grenades_flashbang.png")
+							if_on_had[pname].grenades.flashbang = "grenades:flashbang"
 						end
 						if str2 == "grenades:frag_sticky" then
 							e:hud_change(cih.bhd.sf[pname], "text", tostring(i))
 							e:hud_change(cih.bombs_hud.sf[pname], "text", "grenades_frag_sticky.png")
+							if_on_had[pname].grenades.frag_sticky = "grenades:frag_sticky"
 						end
 					elseif str == "c4_bomb" then
-						if csgo.pot[pname] == "counter" then
-							clua.throw("CsItemHud: line 202: The bomb holder cant be a counter!")
-						end
+						e:hud_change(cih.c4d[pname], "text", tostring(i))
+						e:hud_change(cih.c4[pname], "text", "cs_files_c4.png")
+						if_on_had[pname].grenades.c4_bomb = true
+					end
+					-- Now check if rifle dont exists anymore...
+					
+					local tmp6
+					tmp6 = e:hud_get(cih.rhd[pname])
+					if tmp6.text ~= "-" and (not inv:contains_item("main", ItemStack(if_on_had[pname].hard_arm))) then
+						e:hud_change(cih.rhd[pname], "text", "-")
+						--local image = o:get_definition().inventory_image
+						e:hud_change(cih.rifle_hud[pname], "text", "invisible.png")
+						if_on_had[pname].hard_arm = ""
+					end
+					tmp6 = e:hud_get(cih.phd[pname])
+					if tmp6.text ~= "-" and (not inv:contains_item("main", ItemStack(if_on_had[pname].soft_arm))) then
+						e:hud_change(cih.phd[pname], "text", "-")
+						--local image = o:get_definition().inventory_image
+						e:hud_change(cih.pistol_hud[pname], "text", "invisible.png")
+						if_on_had[pname].hard_arm = ""
+					end
+					tmp6 = e:hud_get(cih.bhd.gr[pname])
+					if tmp6.text ~= "-" and (not inv:contains_item("main", ItemStack(if_on_had[pname].grenades.frag))) then
+						e:hud_change(cih.bhd.gr[pname], "text", "-")
+						e:hud_change(cih.bombs_hud.gr[pname], "text", "grenades_frag.png")
+						if_on_had[pname].grenades.frag = ""
+					end
+					tmp6 = e:hud_get(cih.bhd.sg[pname])
+					if tmp6.text ~= "-" and (not inv:contains_item("main", ItemStack(if_on_had[pname].grenades.smoke))) then
+						e:hud_change(cih.bhd.sg[pname], "text", "-")
+						e:hud_change(cih.bombs_hud.sg[pname], "text", "grenades_smoke_grenade.png")
+						if_on_had[pname].grenades.smoke = ""
+					end
+					tmp6 = e:hud_get(cih.bhd.fb[pname])
+					if tmp6.text ~= "-" and (not inv:contains_item("main", ItemStack(if_on_had[pname].grenades.flashbang))) then
+						e:hud_change(cih.bhd.fb[pname], "text", "-")
+						e:hud_change(cih.bombs_hud.fb[pname], "text", "grenades_flashbang.png")
+						if_on_had[pname].grenades.flashbang = ""
+					end
+					tmp6 = e:hud_get(cih.bhd.sg[pname])
+					if tmp6.text ~= "-" and (not inv:contains_item("main", ItemStack(if_on_had[pname].grenades.frag_sticky))) then
+						e:hud_change(cih.bhd.sf[pname], "text", "-")
+						e:hud_change(cih.bombs_hud.sf[pname], "text", "grenades_frag_sticky.png")
+						if_on_had[pname].grenades.frag_sticky = ""
+					end
+					tmp6 = e:hud_get(cih.c4d[pname])
+					if tmp6.text ~= "-" and (not inv:contains_item("main", ItemStack("bomb")))
 						e:hud_change(cih.c4d[pname], "text", tostring(i))
 						e:hud_change(cih.c4[pname], "text", "cs_files_c4.png")
 					end
 				end
+				
 			end
 		end
 	end
