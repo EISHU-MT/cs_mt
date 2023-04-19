@@ -113,7 +113,8 @@ local function load_map_meta(idx, dirname, meta)
 				-- Functions
 		functions     = meta:get_bool("enable_functions", false),
 		onactivate    = meta:get("on_activate"),
-		onload        = meta:get("on_load"),
+		onload        = meta:get_bool("on_load", false),
+		
 		
 		teams         = {},
 		bareas        = {},
@@ -134,15 +135,7 @@ local function load_map_meta(idx, dirname, meta)
 	end
 	
 	if map.onload then
-		local ei, err = loadstring(map.onload)
-		if not ei then
-			error("Unable to load On_Load correctly, Err: "..err)
-		end
-		map.on_load = ei
-	end
-	
-	if map.functions == true and map.on_load then
-		map.on_load(map)
+		dofile(cs_map.mapdir..dirname.."/init.lua")
 	end
 	
 	
