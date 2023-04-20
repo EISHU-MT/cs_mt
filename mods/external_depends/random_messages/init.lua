@@ -24,10 +24,10 @@ last_msg = " "
 core.register_globalstep(function(dtime)
 	rmtime = rmtime + dtime
 	if rmtime > time_to_say then
-		local msg = clua.aif("Select random", randomMSG)
+		local msg = Randomise("Select random", randomMSG)
 		if randomMSG and last_msg ~= msg then
 			core.chat_send_all(core.colorize("#1BE22A", msg))
-			if discord and clua_opts_disable_disco == false then
+			if discord and no == false then
 				discord.send(msg)
 			end
 			last_msg = msg

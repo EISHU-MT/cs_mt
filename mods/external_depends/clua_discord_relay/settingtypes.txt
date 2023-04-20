@@ -1,2 +1,0 @@
-dcwebhook_url (Discord Webhook URL) string
-lang (Language) string en

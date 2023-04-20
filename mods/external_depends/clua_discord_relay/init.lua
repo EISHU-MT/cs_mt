@@ -1,1 +1,0 @@
-clua.init_plugin(core.get_modpath(core.get_current_modname()), core.get_current_modname())
