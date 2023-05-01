@@ -1,4 +1,4 @@
-local mapm = clua.get_bool("map_edit", clua.get_table_value("central_csgo"))
+local mapm = minetest.settings:get_bool("cs_map.mapmaking", false)
 if not mapm then
 assert(minetest.get_mapgen_setting("mg_name") == "singlenode", "singlenode mapgen is required.")
 end
@@ -8,19 +8,19 @@ function cs_map.log(act, message)
 if act and message then
 
 if (act == "warn") then
-print("\27[01;33m(CORE::WARNING)\27[0m\27[01;33m " .. message .. "\27[0m")
+core.log("warning", message)
 end
 
 if (act == "action") then
-print("\27[01;32m(CORE)\27[0m\27[32m " .. message .. "\27[0m")
+core.log("action", message)
 end
 
 if (act == "error") then
-print("\27[31m(CORE::ERROR) " .. message .. "\27[0m")
+core.log("error", message)
 end
 
 if (act == "ferror") then
-error("[CORE_E]: " .. message)
+error(message)
 end
 
 end
@@ -46,12 +46,10 @@ minetest.register_alias_force("default:bush_stem", "air")
 minetest.register_alias_force("default:stone_with_gold", "default:stone")
 
 
-local max_r    = 120
+local max_r   = 120
 cs_map.map    = nil
 cs_map.mapdir = minetest.get_modpath(minetest.get_current_modname()) .. "/cs_maps/"
 
--- Modify server status message to include map info
-local map_str
 
 function cs_map.get_idx_and_map(param)
 	param = param:lower():trim()
@@ -100,50 +98,35 @@ local function load_map_meta(idx, dirname, meta)
 		r             = tonumber(meta:get("r")),
 		h             = tonumber(meta:get("h")),
 		author        = meta:get("author"),
-		hint          = meta:get("hint"),
 		rotation      = meta:get("rotation"),
 		license       = meta:get("license"),
-		others        = meta:get("others"),
-		base_node     = meta:get("base_node"),
 		initial_stuff = initial_stuff and initial_stuff:split(","),
-		phys_speed    = tonumber(meta:get("phys_speed")),
-		phys_jump     = tonumber(meta:get("phys_jump")),
-		phys_gravity  = tonumber(meta:get("phys_gravity")),
 		offset        = offset,
 				-- Functions
 		functions     = meta:get_bool("enable_functions", false),
-		onactivate    = meta:get("on_activate"),
+		onactivate    = meta:get_bool("on_activate", false),
 		onload        = meta:get_bool("on_load", false),
 		
+		act_dir       = cs_map.mapdir .. dirname .. "/on_activate.lua",
 		
 		teams         = {},
 		bareas        = {},
-		chests        = {}
 	}
 
 	assert(map.r <= max_r)
 
 	map.pos1 = vector.add(offset, { x = -map.r, y = -map.h / 2, z = -map.r })
 	map.pos2 = vector.add(offset, { x =  map.r, y =  map.h / 2, z =  map.r })
-	
-	if map.onactivate then
-		local ae, err = loadstring(map.onactivate)
-		if not ae then
-			error("Unable to load On_Activate correctly, Err: "..err)
-		end
-		map.on_activate = ae
-	end
+
 	
 	if map.onload then
 		dofile(cs_map.mapdir..dirname.."/init.lua")
 	end
 	
 	
-	-- Read teams from config
 	local i = 1
 	while meta:get("team." .. i) do
 		local tname  = meta:get("team." .. i)
-		local tcolor = meta:get("team." .. i .. ".color")
 		local tpos   = minetest.string_to_pos(meta:get("team." .. i .. ".pos"))
 
 		map.teams[tname] = {
@@ -165,7 +148,7 @@ local function load_map_meta(idx, dirname, meta)
 		i2 = i2 + 1
 	end
 	
-	local response = meta:get("enable_bomb")
+	local response = meta:get("enable_bomb") or "no"
 	if response == "no" then
 		map.enable_bomb = false
 	elseif response == "yes" then
