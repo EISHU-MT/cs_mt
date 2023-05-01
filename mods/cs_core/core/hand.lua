@@ -1,4 +1,4 @@
-local response = clua.get_bool("map_edit", clua.get_table_value("central_csgo"))
+local response = minetest.settings:get_bool("cs_map.mapmaking", false)
 ppng = "knife.png"
 cpng = "chand.png"
 if not response then
@@ -31,7 +31,7 @@ else
     range = 20
     minetest.override_item("", {
         range = range,
-        wield_image = "chand.png",
+        wield_image = "hand.png",
         --wield_scale = {x=1,y=1,z=2.5},
         tool_capabilities = {
             full_punch_interval = 0.5,

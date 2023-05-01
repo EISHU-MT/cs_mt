@@ -16,7 +16,7 @@ minetest.register_node(":core:air", {
 	groups = {not_in_creative_inventory=1},
 })
 --]]
-local map_edit = clua.get_bool("map_edit", clua.get_table_value("central_csgo"))
+local map_edit = minetest.settings:get_bool("cs_map.mapmaking", false)
 if not map_edit then
 minetest.register_node(":cs_core:terrorists", {
 	description = "node\n Used for Terrorists Spawn.",
@@ -25,7 +25,7 @@ minetest.register_node(":cs_core:terrorists", {
 	pointable = false,
 	walkable = false,
 	tiles = {
-		"invisible.png",
+		"core_terrorists.png",
 	},
 	groups = {oddly_breakable_by_hand=1,snappy=3},
 })
@@ -36,7 +36,7 @@ minetest.register_node(":cs_core:counters", {
 	walkable = false,
 	pointable = false,
 	tiles = {
-		"invisible.png",
+		"core_counters.png",
 	},
 	groups = {oddly_breakable_by_hand=1,snappy=3},
 })

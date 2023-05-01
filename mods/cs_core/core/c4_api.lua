@@ -5,21 +5,18 @@ c4 = {
     timer = 0,
 
 }
--- CLua Tools.
-clua.register_table("c4", {
-    clua_loaded = true,
+c4c = {
     radio = 60,
     damage = 10,
     dist = 70,
     depend_on_range = false,
 	enable_deco = true,
-})
---clua.using(math)
+}
 function c4.get_planter()
 	return c4.planter or "no one"
 end
 function c4.plant_bomb_at(pos, player)
-    if pos and clua.pname(player) then
+    if pos and Name(player) then
 		if type(pos) ~= "table" then
 			error("c4.plant_bomb_at(): no table of position are found! or just a string...")
 		end
@@ -65,12 +62,12 @@ function c4.bomb_now()
 	end
 	bank.player_add_value(c4.planter, 200)
     local v3d = table.copy(vector)
-    local distance = clua.get_int("dist", clua.get_table_value("c4"))
-    local radius = clua.get_int("radio", clua.get_table_value("c4"))
+    local distance = c4c.dist
+    local radius = c4c.radio
     local pos = c4.pos
     local p1 = v3d.subtract(pos, radius)
 	local p2 = v3d.add(pos, radius)
-    if clua.get_bool("enable_deco", clua.get_table_value("c4")) then
+    if c4c.enable_deco then
 		minetest.add_particlespawner({
 			amount = 300,
 			time = 0.1,
@@ -91,22 +88,18 @@ function c4.bomb_now()
 	--p(core)
 	local objects = minetest.get_objects_inside_radius(pos, distance)
 	for _,obj in ipairs(objects) do
-		if clua.is_punchable_obj(obj) then
 			local obj_pos = obj:get_pos()
 			local dist = v3d.distance(obj_pos, pos)
-			local damage = clua.get_int("damage", clua.get_table_value("c4")) --(fleshy * 0.5 ^ dist) * 2 * config.damage_multiplier
+			local damage = c4c.damage
 			if dist ~= 0 then
 				obj_pos.y = obj_pos.y + 1
 				local blast_pos = {x=pos.x, y=pos.y + 4, z=pos.z}
-				if clua.is_punchable_obj(obj) and
-						minetest.line_of_sight(obj_pos, blast_pos, 1) then
-							--print(obj)
+						--minetest.line_of_sight(obj_pos, blast_pos, 1)
+						--print(obj)
 						if type(obj) ~= "string" and obj:get_player_name() then
-                        	obj:punch(core.get_player_by_name(c4.planter), nil, { damage_groups = {fleshy=damage}, }, nil)
+							obj:punch(core.get_player_by_name(c4.planter), nil, { damage_groups = {fleshy=damage}, }, nil)
 						end
-				end
 			end
-		end
 	end
 	c4.planted = false
 

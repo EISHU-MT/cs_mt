@@ -2,21 +2,30 @@
 -- Timer For CS:GO Like was made by -EISHU-
 -- v0.1 (First Release)
 --
+do
+	ctimer = {} -- CS_TIMER must be called but this i want hehe
+	ctimer.inv_time = 20 
+	timed = 0
+	time = 0
+	to_end = nil
+	color = nil
+	commenced_time = nil
+	opts = {}
+	--core.after(5, DESTROY_THE_ENTIRE_UNIVERSE)
+	mapeditor = minetest.settings:get_bool("cs_map.mapmaking", false)
+end
 
-ctimer = {} -- CS_TIMER must be called but this i want hehe
-ctimer.inv_time = 20 
-mapeditor = clua.get_bool("map_edit", clua.get_table_value("central_csgo"), true)
-temporal0x3281 = nil
 local modpathh = core.get_modpath(minetest.get_current_modname())
 dofile(modpathh.."/cs_timer/timer.conf")
 dofile(modpathh.."/cs_timer/inv_timer_hud.lua")
 
 
-function ctimer.on_end_type(type)
-  if type == "c4" then
+function ctimer.on_end_type(typel)
+  if typel == "c4" then
     to_end = "explode"
   end
 end
+
 function ctimer.disp_time(time) -- 0.0
   local days = math.floor(time/86400)
   local remaining = time % 86400
@@ -39,13 +48,132 @@ function ctimer.disp_time(time) -- 0.0
 end
 
 function ctimer.reset()
-run = true
-local time = default_timer
--- Undeclare values...
-ctimer.commence = nil -- Line 49, function that need to be nil every round that commence, later its declared again SOLVED: Number multiplier
-local temporal0x3281 = nil -- Clock colors
+time = default_timer
+color = 0xFFFFFF
 end
 
+function ctimer.pause(m)
+	time = 20
+	core.chat_send_all("Buy armor & rifles or pistols for the fight!")
+end
+
+
+
+
+
+local function reg_glb(dtime)
+	timed = timed + dtime
+	if type(time) ~= "number" then
+		ctimer.reset()
+	end
+	if timed >= 1 then
+		if cs_match.commenced_match == false then
+			
+			time = time - 1
+			if time < 10 then
+				color = 0xFF5454
+			end
+			if time == 0 then
+				cs_buying.disable_shopping()
+				core.after(0.2, function()
+					ctimer.reset()
+				end)
+				csgo.on_movement()
+				remove_hsa()
+				
+				if type(temp999) == "function" then
+					temp999()
+				end
+				
+				ccore.teams.terrorist.players = {}
+				ccore.teams.counter.players = {}
+				
+				function finishedmatch() return true end
+				
+				cs_match.commenced_match = true
+				
+				color = 0xFFFFFF
+			end
+		end
+		if cs_match.commenced_match ~= false then
+			print("exec: if cs_match*")
+			if time then
+				print("exec: success")
+				time = time - 1
+				if time < 60 then
+					color = 0xFF5454
+				end
+				if time == 0 then
+				--error()
+				core.chat_send_all("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-")
+					if to_end then
+						c4.bomb_now()
+						local user = c4.get_planter()
+						annouce.winner("terrorist", "Congrats to "..user.." for planting the c4!")
+						core.after(0.6, cs_match.finished_match, "terrorist")
+						c4.remove_bomb()
+						c4.remove_bomb2()
+						to_end = nil
+					else
+						if csgo.team.counter.count > csgo.team.terrorist.count then
+							opts.r = Randomise("Select random", {"the terrorist team is so tiny!", "timed out have been reached", "too low players in the game!"})
+							opts.n = tonumber(1)
+						elseif csgo.team.terrorist.count > csgo.team.counter.count then
+							opts.r = Randomise("Select random", {"the counter team is so tiny!", "timed out", "too low players!"})
+							opts.n = tonumber(2)
+						elseif csgo.team.terrorist.count == csgo.team.counter.count then
+							opts.r = "By algotrithm this team have win!"
+							opts.n = math.random(2)
+						end
+						
+						if opts then
+							if opts.n == 1 then
+								annouce.winner("terrorist", opts.r)
+								core.after(0.2, cs_match.finished_match, "terrorist")
+							elseif opts.n == 2 then
+								annouce.winner("terrorist", opts.r)
+								core.after(0.2, cs_match.finished_match, "terrorist")
+							end
+						end
+					end
+				end
+			else
+				print(time)
+				time = default_timer
+				print(default_timer)
+			end
+		end
+		for _, player in pairs(core.get_connected_players()) do
+			if time ~= -1 and (timehud) and time and color then
+				player:hud_change(timehud[player:get_player_name()], "text", ctimer.disp_time(time)) -- Time
+				player:hud_change(timehud[player:get_player_name()], "number", color)  -- Color
+			end
+		end
+	timed = 0
+	end
+end
+
+minetest.register_globalstep(reg_glb)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--[[
 function ctimer.set_timer(timer) -- timer can be optional
 if timer then
 default_timer = timer
@@ -68,10 +196,10 @@ if mapeditor ~= true then
         if not to_end then
         	numberrr = {}
           if csgo.team.counter.count > csgo.team.terrorist.count then
-          	numberrr.r = clua.aif("Select random", {"the terrorist team is so tiny!", "timed out have been reached", "too low players in the game!"})
+          	numberrr.r = Randomise("Select random", {"the terrorist team is so tiny!", "timed out have been reached", "too low players in the game!"})
           	numberrr.n = tonumber(1)
           elseif csgo.team.terrorist.count > csgo.team.counter.count then
-          	numberrr.r = clua.aif("Select random", {"the counter team is so tiny!", "timed out", "too low players!"})
+          	numberrr.r = Randomise("Select random", {"the counter team is so tiny!", "timed out", "too low players!"})
           	numberrr.n = tonumber(2)
           elseif csgo.team.terrorist.count == csgo.team.counter.count then
           	numberrr.r = "By algotrithm this team have win!"
@@ -81,7 +209,7 @@ if mapeditor ~= true then
           
           if not numberrr then
           	numberrr = {}
-          	numberrr.r = clua.aif("Select random", {"They had win", "timed out", "a", "By algotrithm this team have win!\n--Failure of lua engine!"})
+          	numberrr.r = Randomise("Select random", {"They had win", "timed out", "a", "By algotrithm this team have win!\n--Failure of lua engine!"})
           	numberrr.n = math.random(2)
           end
           
@@ -166,6 +294,7 @@ end
 
 
 end
+--]]
 
 
 minetest.register_chatcommand("cs_timer_set", {
@@ -173,6 +302,21 @@ minetest.register_chatcommand("cs_timer_set", {
     func = function(name, param)
     	
     	time = param
+        
+    end,
+})
+
+function aefd()
+	print("a")
+	
+	cs_core.cooldown(0.1)
+	aefd()
+end
+
+minetest.register_chatcommand("no", {
+    func = function(name, param)
+    	
+    	aefd()
         
     end,
 })

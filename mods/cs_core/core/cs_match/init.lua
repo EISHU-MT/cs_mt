@@ -43,6 +43,8 @@ end
 function cs_match.finished_match(teamare1)
 	assert(teamare1, "cs_core error, mods/cs_core/core/cs_match/init.lua Line 44.: No team have been found!")
 	if cs_match.available_matches == 0 then
+		cs_match.commenced_match = false
+		ctimer.pause()
 		function finishedmatch() return false end
 		for i = 1, #cb.registered_on_end_match do
 			cb.registered_on_end_match[i](teamare1)
@@ -121,17 +123,19 @@ function cs_match.finished_match(teamare1)
 		
 		
 		
-		if not clua.get_bool("map_edit", clua.get_table_value("central_csgo")) then
+		if not minetest.settings:get_bool("cs_map.mapmaking", false) then
+		
 		cs_buying.enable_shopping()
+		--[[
 		core.after(1, ctimer.reset)
 		core.after(20, cs_buying.disable_shopping)
 		core.after(20, remove_hsa)
-		function temp999() csgo.switch("frosen", false) end
+		
 		core.after(20, temp999)
 		core.after(20, csgo.on_movement)
 		core.after(20, ctimer.set_timer)
-	
-		
+		--]]
+		function temp999() csgo.switch("frosen", false) end
 		
 		for i = 1, #cb.registered_on_new_match do
 			cb.registered_on_new_match[i]()
@@ -148,6 +152,8 @@ function cs_match.finished_match(teamare1)
 	end
 	if (cs_match.available_matches ~= 0)  then
 		cs_match.available_matches = cs_match.available_matches - 1
+		ctimer.pause()
+		cs_match.commenced_match = false
 		function finishedmatch() return false end
 		for i = 1, #cb.registered_on_end_match do
 			cb.registered_on_end_match[i](teamare1)
@@ -218,16 +224,16 @@ function cs_match.finished_match(teamare1)
 			end
 		end
 		end
-		if not clua.get_bool("map_edit", clua.get_table_value("central_csgo")) then
+		if not minetest.settings:get_bool("cs_map.mapmaking", false) then
 		cs_buying.enable_shopping()
-		core.after(1, ctimer.reset)
+		--core.after(1, ctimer.reset)
 		if ask_for_bomb() then
 			core.after(1.3, function()
-				for _, Player in pairs(core.get_connected_players()) do
-					pname = Player:get_player_name()
+				for _, Playerr in pairs(core.get_connected_players()) do
+					pname = Playerr:get_player_name()
 					if csgo.pot[pname] == "terrorist" then
-						if not clua.find_itemstack_from(clua.player(pname), "bomb") then
-							InvRef = Player:get_inventory()
+						if not ItemFind(Player(Playerr)) then
+							InvRef = Playerr:get_inventory()
 							InvRef:add_item("main", "bomb")
 							core.debug("green", "Giving the bomb to a random player ("..pname..")", "C4 API")
 							return
@@ -236,6 +242,7 @@ function cs_match.finished_match(teamare1)
 				end
 			end)
 		end
+		--[[
 		core.after(20, cs_buying.disable_shopping)
 		core.after(20, ctimer.set_timer)
 		core.after(20, csgo.on_movement)
@@ -247,7 +254,7 @@ function cs_match.finished_match(teamare1)
 		core.after(20, function()
 			function finishedmatch() return true end
 		end)
-		
+		--]]
 		end
 	end
 
@@ -260,8 +267,9 @@ function cs_match.start_matches()
 		
 		cs_match.register_matches(cs_match.registered_matches) -- Register again all matchs to be default, to change limit, see cs-core/core/core1.lua
 		
+		ctimer.pause()
 		
-		if not clua.get_bool("map_edit", clua.get_table_value("central_csgo")) then
+		if not minetest.settings:get_bool("cs_map.mapmaking", false) then
 		if not alreadyVAR then
 		--[[[minetest.register_on_joinplayer(function(player)
 		csgo.show_menu(player)
@@ -277,8 +285,8 @@ function cs_match.start_matches()
 		
 		end
 		end)--]]
-		ctimer.reset()
-		core.after(35, ctimer.set_timer)
+		--ctimer.reset()
+		--ctimer.reset()
 		function finishedmatch() return false end
 		alreadyVAR = true
 		end

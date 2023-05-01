@@ -2,9 +2,13 @@ armor = {
 	player = {},
 	refer = {},
 	register_on_change_armor_value = {},
-	enable = clua.get_bool("enable_armor", clua.get_table_value("central_csgo")),
+	enable = true,
+	modpath = core.get_modpath("cs_armor")
 }
-clua.start_luat(core.get_modpath(core.get_current_modname()), "cs_armor")
+dofile(armor.modpath.."/UpgradeHud.lua")
+dofile(armor.modpath.."/RegisterHudBar.lua")
+dofile(armor.modpath.."/Functions.lua")
+dofile(armor.modpath.."/Formspec.lua")
 --Main
 minetest.register_on_joinplayer(function(ObjectRef, last_login)
 	if armor.player and armor.refer then

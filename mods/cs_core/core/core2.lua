@@ -28,7 +28,10 @@ player_api.set_textures(name, "blue.png")
 end
 
 function csgo.get_team_colour(team)
-	return csgo.team[team].colour or "#FFFFFF"
+	if not team then
+		return "#FFFFFF"
+	end
+	return csgo.team[team].colour
 end
 
 
@@ -152,7 +155,7 @@ if player then
 			local inventorytouse = minetest.get_inventory({ type="player", name=player })
 			
 			--Feature
-			if inventorytouse and not clua.find_itemstack_from(clua.player(player), "rangedweapons:glock17") then
+			if inventorytouse and not FindItem(Player(player), "rangedweapons:glock17") then
     			inventorytouse:add_item("main", "rangedweapons:glock17")
         		inventorytouse:add_item("main", "rangedweapons:9mm 200")
 			end
@@ -173,8 +176,7 @@ if player then
 				if terrorists_spawn() then
 					poss = terrorists_spawn()
 						if playerr then
-							--pst = clua.random_position(poss, 2, false)
-							playerr:setpos(clua.random_position(poss, 1, false))
+							playerr:set_pos(RandomPos(poss, 1))
 						end
 				else
 					minetest.log("error", "By-Core: No position for terrorists found!")
@@ -190,8 +192,8 @@ if player then
 			csgo.online[player] = true
 			csgo.pot[player] = "terrorist"
 			if csgo.team[ttt].count == 0 then
-				Player = clua.player(player)
-				InvRef = Player:get_inventory()
+				uplayer = Player(player)
+				InvRef = uplayer:get_inventory()
 				InvRef:add_item("main", "bomb")
 			end
 			csgo.team[ttt].count = csgo.team[ttt].count + 1
@@ -208,7 +210,7 @@ if player then
 			local inventorytouse = minetest.get_inventory({ type="player", name=player })
 			
 			--Feature
-			if inventorytouse and not clua.find_itemstack_from(clua.player(player), "rangedweapons:glock17") then
+			if inventorytouse and not FindItem(Player(player), "rangedweaopons:glock17") then
     			inventorytouse:add_item("main", "rangedweapons:glock17")
         		inventorytouse:add_item("main", "rangedweapons:9mm 200")
 			end
@@ -226,8 +228,7 @@ if player then
 			if terrorists_spawn() then
 			poss = terrorists_spawn()
 			if playerr then
-					--pst = clua.random_position(poss, 2, false)
-					playerr:setpos(clua.random_position(poss, 1, false))
+					playerr:set_pos(RandomPos(poss, 0.5))
 			end
 			else
 			minetest.log("error", "By-Core: No position for terrorists found!")
@@ -270,7 +271,7 @@ if player then
 			end
 			
 			local inventorytouse = minetest.get_inventory({ type="player", name=player })
-			if inventorytouse and not clua.find_itemstack_from(clua.player(player), "rangedweapons:m1991") then
+			if inventorytouse and not FindItem(Player(player), "rangedweapons:m1991") then
     			inventorytouse:add_item("main", "rangedweapons:m1991")
         		inventorytouse:add_item("main", "rangedweapons:45acp 200")
 			end
@@ -296,8 +297,7 @@ if player then
 				if counters_spawn() then
 					poss = counters_spawn()
 					if playerr then
-						--pst = clua.random_position(poss, 2, false)
-						playerr:setpos(clua.random_position(poss, 1, false))
+						playerr:set_pos(RandomPos(poss, 1))
 					end
 				else
 					core.log("error", "By-Core: No position for counters found!")
@@ -322,7 +322,7 @@ if player then
 			csgo.team[ttt].count = csgo.team[ttt].count + 1
 			
 			local inventorytouse = minetest.get_inventory({ type="player", name=player })
-			if inventorytouse and not clua.find_itemstack_from(clua.player(player), "rangedweapons:m1991") then
+			if inventorytouse and not FindItem(Player(player), "rangedweapons:m1991") then
     			inventorytouse:add_item("main", "rangedweapons:m1991")
         		inventorytouse:add_item("main", "rangedweapons:45acp 200")
 			end
@@ -347,8 +347,7 @@ if player then
 			if counters_spawn() then
 				poss = counters_spawn()
 				if playerr then
-					--pst = clua.random_position(poss, 2, false)
-					playerr:setpos(clua.random_position(poss, 1, false))
+					playerr:set_pos(RandomPos(poss, 1))
 					--error(dump(poss))
 				end
 			else
@@ -555,7 +554,7 @@ defuser_huds = {}
 minetest.register_on_joinplayer(function(playerrrr)
 	local player = playerrrr
 	
-	if not clua.get_bool("map_edit", clua.get_table_value("central_csgo")) then
+	if not minetest.settings:get_bool("cs_map.mapmaking", false) then
 		player:set_hp(20)
 		
 		player:set_armor_groups({immortal=1})

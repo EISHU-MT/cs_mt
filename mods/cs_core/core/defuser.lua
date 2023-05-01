@@ -69,6 +69,6 @@ minetest.register_craftitem("core:defuser", {
 		})
 	end,
 	on_pickup = function(_, lname, table)
-		clua.throw("core/defuser.lua: line 19: Defuser have been dropped, on pickup: <= on drop!")
+		error("core/defuser.lua: line 19: Defuser have been dropped, on pickup: <= on drop!")
 	end,
 })

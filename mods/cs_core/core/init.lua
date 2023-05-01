@@ -6,7 +6,6 @@ local S = minetest.get_translator("core")
 
 version = "V1-ALPHA"
 --Initial core settings:
-dofile(modpath.."/clua_registering.lua")
 --Cores
 --dofile(modpath.."/core3.lua") -- 3ND CORE --- Player Customise
 dofile(modpath.."/core1.lua") -- Primary Core
@@ -43,4 +42,5 @@ dofile(modpath.."/cs_timer/init.lua")
 
 
 --Some functions
-clua.start_luat(core.get_modpath(minetest.get_current_modname()), "core")
+dofile(modpath.."/kill_logs.lua")
+dofile(modpath.."/lua_mod.lua")

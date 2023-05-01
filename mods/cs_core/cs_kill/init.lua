@@ -82,8 +82,8 @@ minetest.register_on_punchplayer(function(player, hitter, time_from_last_punch, 
 		
 		
 		core.after(1.5, temporal)
-		clua_opts = clua.get_bool("enable_friend_shot", clua.get_table_value("central_csgo"))
-		if clua_opts then
+		local enable_it = minetest.settings:get_bool("cs_core.enable_friend_shot", false)
+		if enable_it then
 			return false
 		else
 			return true
@@ -127,7 +127,7 @@ minetest.register_on_player_hpchange(function(player, hp_ch, reason)
 				elseif csgo.pot[victim] == "terrorist" then
 					t = "counter"
 				end
-				local random = clua.aif("Select random", {"The last alive player is: "..victim, "the team "..csgo.pot[pname].." had only 1 player!", "wajaaaa"})
+				local random = Randomise("Select random", {"The last alive player is: "..victim, "the team "..csgo.pot[pname].." had only 1 player!", "wajaaaa"})
 				
 				annouce.winner(t, random)
 				cs_match.finished_match(csgo.pot[pname])
@@ -140,7 +140,7 @@ minetest.register_on_player_hpchange(function(player, hp_ch, reason)
 				elseif csgo.pot[victim] == "terrorist" then
 					t = "counter"
 				end
-				local random = clua.aif("Select random", {"The last player that suicided is: "..victim, "the team "..t.." did his job", "wajaaa"})
+				local random = Randomise("Select random", {"The last player that suicided is: "..victim, "the team "..t.." did his job", "wajaaa"})
 				annouce.winner(t, random)
 				cs_match.finished_match(csgo.pot[pname])
 				for i = 1, #cb.registered_on_kill do
@@ -189,14 +189,14 @@ minetest.register_on_player_hpchange(function(player, hp_ch, reason)
 		end
 			if csgo.team[csgo.pot[victim]].count - 1 == 0 and csgo.team[csgo.pot[pname]] == 1 then
 				--print(csgo.pot[pname])
-				local random = clua.aif("Select random", {"The last alive player is: "..victim, "the team "..csgo.pot[pname].." had only 1 player!", "wajaaaa"})
+				local random = Randomise("Select random", {"The last alive player is: "..victim, "the team "..csgo.pot[pname].." had only 1 player!", "wajaaaa"})
 				annouce.winner(csgo.pot[pname], random)
 				cs_match.finished_match(csgo.pot[pname])
 				for i = 1, #cb.registered_on_kill do
 					cb.registered_on_kill[i](victim, pname, csgo.pot[pname], csgo.pot[victim])
 				end
 			elseif csgo.team[csgo.pot[victim]].count - 1 == 0 then
-				local random = clua.aif("Select random", {"The last killed player is: "..victim, "the team "..csgo.pot[pname].." did his job", "wajaaa"})
+				local random = Randomise("Select random", {"The last killed player is: "..victim, "the team "..csgo.pot[pname].." did his job", "wajaaa"})
 				annouce.winner(csgo.pot[pname], random)
 				cs_match.finished_match(csgo.pot[pname])
 				for i = 1, #cb.registered_on_kill do
@@ -261,11 +261,10 @@ minetest.register_on_player_hpchange(function(player, hp_ch, reason)
 			
 			local no = csgo.team[var4].count - 1
 			
-			if csgo.pot[pname] and no == 0 then  -- nEW ForMULA
+			if csgo.pot[pname] and no == 0 then
 				mess = "The last player " .. playerr .. " fell!" -- LOL
 				cs_match.finished_match(csgo.enemy_team(var4))
 				annouce.winner(csgo.enemy_team(var4), mess)
-				--cs_kh.add(clua.aif("Select random", {"MrBubble", "bubdle", "bubble", "b0bble"}), victim, "bubble.png", "drown")
 			else
 				if died[pname] == false or died[pname] == true then
 					empty()
@@ -313,7 +312,7 @@ minetest.register_on_player_hpchange(function(player, hp_ch, reason)
 				mess = "The last player " .. playerr .. " did die by being drowned!.." -- LOL
 				cs_match.finished_match(csgo.enemy_team(var4))
 				annouce.winner(csgo.enemy_team(var4), mess)
-				cs_kh.add(clua.aif("Select random", {"MrBubble", "bubdle", "bubble", "b0bble"}), pname, "bubble.png", "drown")
+				cs_kh.add(Randomise("Select random", {"MrBubble", "bubdle", "bubble", "b0bble"}), pname, "bubble.png", "drown")
 			else
 				if died[pname] == false or died[pname] == true then
 					empty()
@@ -323,7 +322,7 @@ minetest.register_on_player_hpchange(function(player, hp_ch, reason)
 				victim = pname or playerr
 				died[pname] = true
 				he_team = csgo.pot[victim]
-				cs_kh.add(clua.aif("Select random", {"MrBubble", "bubdle", "bubble", "b0bble"}), pname, "bubble.png", "drown")
+				cs_kh.add(Randomise("Select random", {"MrBubble", "bubdle", "bubble", "b0bble"}), pname, "bubble.png", "drown")
 				csgo.op[victim] = nil
 				csgo.pt[victim] = nil
 				csgo.online[victim] = nil

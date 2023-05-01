@@ -250,11 +250,11 @@ function IsGrenade(grt)
 end
 
 function SendOnBuy(p, m, a)
-	core.chat_send_player(clua.pname(p), core.colorize("#A67979", "-$"..tostring(a)).." "..core.colorize("#FF9D00", "On Buying "..tostring(m)))
+	core.chat_send_player(Name(p), core.colorize("#A67979", "-$"..tostring(a)).." "..core.colorize("#FF9D00", "On Buying "..tostring(m)))
 end
 
 function SendOnFail(p, a)
-	core.chat_send_player(clua.pname(p), core.colorize("#A67979", "Failed On Buy: "..tostring(a)..", No money?"))
+	core.chat_send_player(Name(p), core.colorize("#A67979", "Failed On Buy: "..tostring(a)..", No money?"))
 end
 
 function RecognizeType(arm)
@@ -289,7 +289,7 @@ function cs_shop.save_state(pn, _, arm)
 				if pnamee == name then
 					local stack = ItemStack(arm)
 					inventory[pname]:remove_item("main", stack)
-					minetest.item_drop(stack, clua.player(pn), clua.player(pn):get_pos())
+					minetest.item_drop(stack, Player(pn), Player(pn):get_pos())
 					return true
 				end
 			end
@@ -316,7 +316,7 @@ function cs_shop.buy_ammo(ammo, p)
 end
 
 function cs_shop.buy_grenade(gr, p, t)
-	local pname = clua.pname(p)
+	local pname = Name(p)
 	his_money[pname] = bank.return_val(pname) or 0
 	if IsGrenade(gr) and p then
 		if (his_money[pname] >= cs_shop.grenades_values[gr]) then
@@ -337,8 +337,8 @@ end
 
 function cs_shop.buy_arm(arm, p)
 	--print("a")
-	local pname = clua.pname(p)
-	local player = clua.player(p)
+	local pname = Name(p)
+	local player = Player(p)
 	inventory[pname] = player:get_inventory()
 	if type(arm) == "string" then
 		--print("b")
@@ -455,7 +455,7 @@ end)
 
 
 do
-	if not clua.get_bool("map_edit", clua.get_table_value("central_csgo")) then
+	if not minetest.settings:get_bool("cs_map.mapmaking", false) then
 		function cs_shop.enable_shopping(player)
 			if player then
 			player:set_inventory_formspec(cs_shop.main(player))
@@ -476,7 +476,7 @@ do
 				end
 			end
 		end
-	elseif clua.get_bool("map_edit", clua.get_table_value("central_csgo")) then
+	elseif minetest.settings:get_bool("cs_map.mapmaking", false) then
 		function cs_shop.disable_shopping() end
 		function cs_shop.enable_shopping() end
 	end
