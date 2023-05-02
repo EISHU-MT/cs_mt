@@ -18,6 +18,7 @@ csgo = {
 	online = {},
 
 }
+phooks = {}
 csgo.usrTlimit = 20
 cs = {}
 function cs.s_t(name)
@@ -28,7 +29,7 @@ player_api.set_textures(name, "blue.png")
 end
 
 function csgo.get_team_colour(team)
-	if not team then
+	if not team or team == "" or team == " " then
 		return "#FFFFFF"
 	end
 	return csgo.team[team].colour
@@ -512,26 +513,26 @@ minetest.register_chatcommand("gameee", {
 })
 ]]
 
-function terminate(var, pname) -- This has a players act
-if pname and (not csgo.pot[pname]) then
-if (csgo.team.terrorist.count > csgo.team.counter.count) then
-csgo.counter(pname)
-end
-if (csgo.team.counter.count > csgo.team.terrorist.count) then
-csgo.terrorist(pname)
-end
-if (csgo.team.counter.count == csgo.usrTlimit and csgo.team.terrorist.count == csgo.usrTlimit) then
-csgo.spectator(pname)
-end
-if (csgo.team.counter.count == 0 and csgo.team.terrorist.count == 0 or csgo.team.terrorist.count == csgo.team.counter.count) then
-	if var == 1 then
-	csgo.counter(pname)
+function terminate(var, pname)
+	if pname and (not csgo.pot[pname]) then
+		if (csgo.team.terrorist.count > csgo.team.counter.count) then
+		csgo.counter(pname)
+		end
+		if (csgo.team.counter.count > csgo.team.terrorist.count) then
+		csgo.terrorist(pname)
+		end
+		if (csgo.team.counter.count == csgo.usrTlimit and csgo.team.terrorist.count == csgo.usrTlimit) then
+		csgo.spectator(pname)
+		end
+		if (csgo.team.counter.count == 0 and csgo.team.terrorist.count == 0 or csgo.team.terrorist.count == csgo.team.counter.count) then
+			if var == 1 then
+			csgo.counter(pname)
+			end
+			if var == 2 then
+			csgo.terrorist(pname)
+			end
+		end
 	end
-	if var == 2 then
-	csgo.terrorist(pname)
-	end
-end
-end
 end
 
 
@@ -541,11 +542,11 @@ end
 
 
 
-function doit()
+function doit(name)
 
-term_var = math.random(1, 2)
-terminate(term_var, name)
-core.close_formspec(name, "core:main")
+	local term_var = math.random(1, 2)
+	terminate(term_var, name)
+	core.close_formspec(name, "core:main")
 
 end
 
@@ -587,9 +588,33 @@ minetest.register_on_joinplayer(function(playerrrr)
 		})
 		
 		cs_buying.enable_shopping(player)
+		
+		phooks[player:get_player_name()] = 10
 	end
 
 end)
+
+do
+	time_hooks = 0
+end
+
+core.register_globalstep(function(dtime)
+	time_hooks = time_hooks + dtime
+	if time_hooks >= 1 then
+		time_hooks = 0
+		for i, val in pairs(phooks) do
+			if phooks[val] then
+				local value = phooks[val]
+				phooks[val] = value - 1
+				if phooks[val] < 0 or phooks[val] == 0 then
+					doit(val)
+					phooks[val] = nil
+				end
+			end
+		end
+	end
+end)
+
 
 
 function csgo.show_menu(playeri)
@@ -631,9 +656,9 @@ end
 
 core.send_leave_message = function(pname, timedout)
 	if timedout then
-		msg = "### "..core.colorize(csgo.get_team_colour(csgo.pot[pname]), pname).." left the game. (Timed Out)"
+		msg = "### "..core.colorize(csgo.get_team_colour(csgo.pot[pname]) or "#FFFFFF", pname).." left the game. (Timed Out)"
 	else
-		msg = "### "..core.colorize(csgo.get_team_colour(csgo.pot[pname]), pname).." left the game."
+		msg = "### "..core.colorize(csgo.get_team_colour(csgo.pot[pname]) or "#FFFFFF", pname).." left the game."
 	end
 	core.chat_send_all(msg or "*** "..pname.." left the game....")
 end
