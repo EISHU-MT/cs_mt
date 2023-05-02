@@ -5,6 +5,7 @@ cb = {
     registered_on_end_time = {},
     registered_on_new_matches = {},
     registered_on_kill = {},
+    registered_on_timer_commence = {},
 }
 call = {}
 --Register on new match
@@ -30,5 +31,9 @@ end
 --Register on kill players
 function call.register_on_kill_player(func)
 	table.insert(cb.registered_on_kill, func)
+end
+-- Register when the timer commences match
+function call.register_on_timer_commence(func)
+	table.insert(cb.registered_on_timer_commence, func)
 end
 csgoc = call
