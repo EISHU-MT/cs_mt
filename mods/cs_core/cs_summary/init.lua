@@ -24,7 +24,7 @@ function summary.calculate_players(players_table)
     for _, str in pairs(players_table) do
     	table.insert(players_table2, str:get_player_name())
     end
-    return players_table2, table2, table3, clua.new_table(clua.random_number())
+    return players_table2, table2, table3, {}
 end
 --[[
     players={
