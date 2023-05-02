@@ -88,7 +88,7 @@ cs_shop = {
 			["rangedweapons:g36"] =        "rangedweapons:556mm 160",
 			["rangedweapons:awp"] =        "rangedweapons:762mm 160",
 			["rangedweapons:m200"] =       "rangedweapons:408cheytac 50",
-			["rangedweapons:kriss_sv"] =   "rangedweapons:9mm",
+			--["rangedweapons:kriss_sv"] =   "rangedweapons:9mm",
 		},
 		shotgun = {
 			--Shotguns
@@ -107,6 +107,7 @@ cs_shop = {
 			["rangedweapons:tmp"] =        "rangedweapons:9mm",
 			["rangedweapons:tec9"] =       "rangedweapons:9mm",
 			["rangedweapons:uzi"] =        "rangedweapons:9mm",
+			["rangedweapons:kriss_sv"] =   "rangedweapons:9mm",
 		},
 		pistol = {
 			--Pistols
@@ -235,7 +236,10 @@ function RecognizeArm(arm)
 		if arm == "bomb" then -- Recognize the c4 bomb
 			return true, "c4_bomb"
 		end
+		
+		--error("non_existent arm: "..arm)
 		return false, "non_existent"
+		
 	end
 end
 
@@ -395,10 +399,11 @@ function cs_shop.buy_arm(arm, p)
 			end
 			if v then
 				--print("p")
-				inventory[pname]:add_item("main", ItemStack(cs_shop.arms_ammo[RecognizeType(arm)][arm]..v))
+				--print(RecognizeType(arm), arm)
+				inventory[pname]:add_item("main", ItemStack(cs_shop.arms_ammo[RecognizeType(arm)][arm].." "..v))
 			else
 				inventory[pname]:add_item("main", ItemStack(cs_shop.arms_ammo[RecognizeType(arm)][arm]))
-				print("q")
+				--print("q")
 			end
 			SendOnBuy(p, ItemStack(arm):get_short_description(), cs_shop.arms_values[arm])
 			bank.rm_player_value(player, money_value[pname] + cs_shop.ammo_val)
