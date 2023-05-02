@@ -516,13 +516,13 @@ minetest.register_chatcommand("gameee", {
 function terminate(var, pname)
 	if pname and (not csgo.pot[pname]) then
 		if (csgo.team.terrorist.count > csgo.team.counter.count) then
-		csgo.counter(pname)
+			csgo.counter(pname)
 		end
 		if (csgo.team.counter.count > csgo.team.terrorist.count) then
-		csgo.terrorist(pname)
+			csgo.terrorist(pname)
 		end
 		if (csgo.team.counter.count == csgo.usrTlimit and csgo.team.terrorist.count == csgo.usrTlimit) then
-		csgo.spectator(pname)
+			csgo.spectator(pname)
 		end
 		if (csgo.team.counter.count == 0 and csgo.team.terrorist.count == 0 or csgo.team.terrorist.count == csgo.team.counter.count) then
 			if var == 1 then
@@ -543,11 +543,11 @@ end
 
 
 function doit(name)
-
-	local term_var = math.random(1, 2)
-	terminate(term_var, name)
-	core.close_formspec(name, "core:main")
-
+	if name then
+		local term_var = math.random(1, 2)
+		terminate(term_var, name)
+		core.close_formspec(name, "core:main")
+	end
 end
 
 defuser_huds = {}
@@ -557,6 +557,12 @@ minetest.register_on_joinplayer(function(playerrrr)
 	
 	if not minetest.settings:get_bool("cs_map.mapmaking", false) then
 		player:set_hp(20)
+		
+		local n = math.random(800, 20000)
+		player:set_pos({x=0, y=n, z=0})
+		
+		phooks[playerrrr:get_player_name()] = 10
+		print(phooks[playerrrr:get_player_name()])
 		
 		player:set_armor_groups({immortal=1})
 		
@@ -589,7 +595,7 @@ minetest.register_on_joinplayer(function(playerrrr)
 		
 		cs_buying.enable_shopping(player)
 		
-		phooks[player:get_player_name()] = 10
+		
 	end
 
 end)
@@ -600,15 +606,30 @@ end
 
 core.register_globalstep(function(dtime)
 	time_hooks = time_hooks + dtime
+	local players = core.get_connected_players()
 	if time_hooks >= 1 then
 		time_hooks = 0
-		for i, val in pairs(phooks) do
-			if phooks[val] then
-				local value = phooks[val]
-				phooks[val] = value - 1
-				if phooks[val] < 0 or phooks[val] == 0 then
-					doit(val)
-					phooks[val] = nil
+		for i, val, NAME in pairs(phooks) do
+			--print(i, val)
+			for _, p in pairs(players) do
+			--	print("bbbbb")
+				if p:get_player_name() == i then
+				--	print("nashe")
+				--error(val)
+					if phooks[i] then
+						--print("a")
+						local value = phooks[i]
+						phooks[i] = value - 1
+						if phooks[i] < 4 or phooks[i] == 4 then
+							core.chat_send_player(i, core.colorize("#F66060", "Selecting autoselect in "..tostring(phooks[i])))
+						end
+						--print(phooks[i])
+						if phooks[i] < 0 or phooks[i] == 0  then
+							doit(i)
+							--print('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA')
+							phooks[i] = nil
+						end
+					end
 				end
 			end
 		end
