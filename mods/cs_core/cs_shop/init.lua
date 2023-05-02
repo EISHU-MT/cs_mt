@@ -369,7 +369,7 @@ function cs_shop.buy_arm(arm, p)
 					if cs_shop.arms_ammo[a1].exe_amount then
 						--print("j")
 						local amount = cs_shop.arms_ammo[a1].ammo_amount
-						local stack = ItemStack(tostring(cs_shop.arms_ammo[a1][str])..tostring(amount))
+						local stack = ItemStack(tostring(cs_shop.arms_ammo[a1][str]).." "..tostring(amount))
 						inventory[pname]:remove_item("main", stack)
 						minetest.item_drop(stack, player, player:get_pos())
 					else
