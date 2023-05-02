@@ -139,10 +139,19 @@ function cs_kh.add(killerr, victim, weapon_image, comment, v_team_a)
 	if type(discord) == "table" then
 		discord.send(killerr.." from "..k_team.." killed "..victim.." of "..v_team)
 	end
-
+	local weapon_image2
+	if weapon_image:find("rangedweapons") or weapon_image:find("rangedweapons") then
+		local imgt = weapon_image:split("_")
+		local part = imgt[2]:split(".")
+		local img1 = imgt[1].."_"..part[1].."_icon.png"
+		weapon_image2 = img1.."^[transformFX"
+	else
+		weapon_image2 = weapon_image
+	end
+	
 	add_kill(
 		{text = killerr, color = kt_color or 0xFFF},
-		weapon_image.."^[transformFXR90" or "cs_files_hand.png",
+		weapon_image2 or "cs_files_hand.png",
 		{text = victim .. (comment or ""), color = vt_color or 0xFFF}
 	)
 end
