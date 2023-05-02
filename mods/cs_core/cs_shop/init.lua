@@ -307,7 +307,7 @@ function cs_shop.buy_ammo(ammo, p)
 	local pname = p:get_player_name()
 	if cs_shop.ammo_values[ammo] then
 		his_money[pname] = bank.return_val(pname)
-		if (his_money >= cs_shop.ammo_values[ammo]) then
+		if (his_money[pname] >= cs_shop.ammo_values[ammo]) then
 			inventory[pname] = p:get_inventory()
 			local amount = cs_shop.ammo_drops[ammo] or 80
 			inventory[pname]:add_item("main", ItemStack("rangedweapons:"..ammo.." "..tostring(amount)))
