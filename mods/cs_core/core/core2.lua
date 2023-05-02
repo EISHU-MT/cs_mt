@@ -558,8 +558,8 @@ minetest.register_on_joinplayer(function(playerrrr)
 	if not minetest.settings:get_bool("cs_map.mapmaking", false) then
 		player:set_hp(20)
 		
-		local n = math.random(800, 20000)
-		player:set_pos({x=0, y=n, z=0})
+		--local n = math.random(800, 20000)
+		--player:set_pos({x=0, y=n, z=0})
 		
 		phooks[playerrrr:get_player_name()] = 10
 		print(phooks[playerrrr:get_player_name()])
@@ -618,6 +618,10 @@ core.register_globalstep(function(dtime)
 				--error(val)
 					if phooks[i] then
 						--print("a")
+						if csgo.pot[p:get_player_name()] then
+							phooks[i] = nil
+							return
+						end
 						local value = phooks[i]
 						phooks[i] = value - 1
 						if phooks[i] < 4 or phooks[i] == 4 then
