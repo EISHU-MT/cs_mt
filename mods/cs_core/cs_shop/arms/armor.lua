@@ -3,7 +3,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 	if formname ~= "cs_shop:armor" then
 		return
 	end
-	pname = player:get_player_name()
+	local pname = player:get_player_name()
 	local money = bank.return_val(pname)
 	if fields.alle then
 		if (money > 200) or (money == 200) then
