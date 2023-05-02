@@ -83,7 +83,7 @@ minetest.register_on_punchplayer(function(player, hitter, time_from_last_punch, 
 		
 		core.after(1.5, temporal)
 		local enable_it = minetest.settings:get_bool("cs_core.enable_friend_shot", false)
-		if enable_it then
+		if enable_it ~= true then
 			return false
 		else
 			return true
@@ -237,7 +237,7 @@ minetest.register_on_player_hpchange(function(player, hp_ch, reason)
 					player:set_armor_groups({immortal = 1})
 					--minetest.set_player_privs(victim, {fly=true, fast=true, noclip=true, teleport=true, shout=true}) -- Teleport Is a feature
 					end
-					core.after(3,function()
+					core.after(0.1,function()
 						csgo.spectator(victim)
 					end)
 				end
@@ -293,7 +293,7 @@ minetest.register_on_player_hpchange(function(player, hp_ch, reason)
 					player:set_armor_groups({immortal = 1})
 					--minetest.set_player_privs(victim, {fly=true, fast=true, noclip=true, teleport=true, shout=true}) -- Teleport Is a feature
 				end
-				core.after(3,function()
+				core.after(0.1,function()
 					csgo.spectator(victim)
 				end)
 			end
@@ -341,7 +341,7 @@ minetest.register_on_player_hpchange(function(player, hp_ch, reason)
 					player:set_armor_groups({immortal = 1})
 					--minetest.set_player_privs(victim, {fly=true, fast=true, noclip=true, teleport=true, shout=true}) -- Teleport Is a feature
 				end
-				core.after(3,function()
+				core.after(0.1,function()
 					csgo.spectator(victim)
 				end)
 			end
@@ -401,7 +401,7 @@ minetest.register_on_player_hpchange(function(player, hp_ch, reason)
 					player:set_armor_groups({immortal = 1})
 					--minetest.set_player_privs(victim, {fly=true, fast=true, noclip=true, teleport=true, shout=true}) -- Teleport Is a feature
 				end
-				core.after(3,function()
+				core.after(0.1,function()
 					csgo.spectator(victim)
 				end)
 			end
