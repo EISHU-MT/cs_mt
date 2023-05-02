@@ -162,12 +162,12 @@ end)
 
 local function make_everyone_dissapear()
 	for i, name in pairs(died_players) do
-		died_players[name]:remove()
+		died_players[i]:remove()
 	end
 end
 
 call.register_on_new_match(make_everyone_dissapear)
-
+call.register_on_timer_commence(make_everyone_dissapear)
 
 local dead_ent_init = {
 	initial_properties = {
