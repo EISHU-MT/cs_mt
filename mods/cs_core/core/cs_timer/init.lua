@@ -96,16 +96,16 @@ local function reg_glb(dtime)
 			end
 		end
 		if cs_match.commenced_match ~= false then
-			print("exec: if cs_match*")
+			--print("exec: if cs_match*")
 			if time then
-				print("exec: success")
+				--print("exec: success")
 				time = time - 1
 				if time < 60 then
 					color = 0xFF5454
 				end
 				if time == 0 then
 				--error()
-				core.chat_send_all("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-")
+				--core.chat_send_all("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-")
 					if to_end then
 						c4.bomb_now()
 						local user = c4.get_planter()
