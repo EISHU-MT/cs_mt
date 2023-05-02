@@ -25,7 +25,7 @@ minetest.register_node(":cs_core:terrorists", {
 	pointable = false,
 	walkable = false,
 	tiles = {
-		"core_terrorists.png",
+		"invisible.png",
 	},
 	groups = {oddly_breakable_by_hand=1,snappy=3},
 })
@@ -36,7 +36,7 @@ minetest.register_node(":cs_core:counters", {
 	walkable = false,
 	pointable = false,
 	tiles = {
-		"core_counters.png",
+		"invisible.png",
 	},
 	groups = {oddly_breakable_by_hand=1,snappy=3},
 })
