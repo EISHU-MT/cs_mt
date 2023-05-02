@@ -2,7 +2,7 @@
 -- See README.txt for licensing and other information.
 
 player_api = {}
-
+_G.died_players = {}
 -- Player animation blending
 -- Note: This is currently broken due to a bug in Irrlicht, leave at 0
 local animation_blend = 0
@@ -67,16 +67,16 @@ function player_api.set_model(player, model_name, name) -- name: Name of a playe
 	player_model[name] = model_name
 end
 
-function player_api.set_textures(player, textures) -- Modified By EISHU
+function player_api.set_textures(player, textures)
 	
 	
 	
 	if player then
-	local model = models[player_model[player]]
-	local model_textures = model and model.textures or nil
-	player_textures[player] = textures or model_textures
-	temp = minetest.get_player_by_name(player)
-	temp:set_properties({textures = textures,})
+		local model = models[player_model[player]]
+		local model_textures = model and model.textures or nil
+		player_textures[player] = textures or model_textures
+		local temp = minetest.get_player_by_name(player)
+		temp:set_properties({textures = textures,})
 	end
 	
 	
@@ -118,6 +118,9 @@ function minetest.calculate_knockback(player, ...)
 	return old_calculate_knockback(player, ...)
 end
 
+function empty() end
+
+
 -- Check each player and apply animations
 minetest.register_globalstep(function()
 	for _, player in pairs(minetest.get_connected_players()) do
@@ -135,7 +138,8 @@ minetest.register_globalstep(function()
 
 			-- Apply animations based on what the player is doing
 			if player:get_hp() == 0 then
-				player_set_animation(player, "lay")
+				empty()
+				--player_set_animation(player, "lay")
 			-- Determine if the player is walking
 			elseif controls.up or controls.down or controls.left or controls.right then
 				if player_sneak[name] ~= controls.sneak then
@@ -155,3 +159,78 @@ minetest.register_globalstep(function()
 		end
 	end
 end)
+
+local function make_everyone_dissapear()
+end
+
+call.register_on_new_match(func)
+
+
+local dead_ent_init = {
+	initial_properties = {
+		hp_max = 100,
+		physical = true,
+		collide_with_objects = true,
+		collisionbox = {-0.3, -0.3, -0.3, 0.3, 0.3, 0.3},
+		visual = "mesh",
+		mesh = "character.b3d",
+		visual_size = {x = 0.4, y = 0.4},
+		textures = {"character.png"},
+		is_visible = true,
+	},
+	on_rightclick = function(self, clicker)
+				core.chat_send_player(clicker:get_player_name(), "Rightclicked in a dead player....")
+			end,
+	on_punch = function(self, puncher, time_from_last_punch, tool_capabilities, dir, damage)
+			core.chat_send_player(puncher:get_player_name(), "Hurting a dead player.....")
+		end,
+}
+minetest.register_entity("cs_player:dead_ent", dead_ent_init)
+
+local dead_ent = {
+	hp_max = 100,
+	--eye_height = 1.625,
+	physical = false,
+	collide_with_objects = true,
+	collisionbox = { -0.5, -0.5, -0.5, 0.5, 0.5, 0.5 },  -- default
+	selectionbox = { -0.5, -0.5, -0.5, 0.5, 0.5, 0.5, rotate = false },
+	pointable = true,
+	visual = "mesh",
+	visual_size = {x = 1, y = 1, z = 1},
+	mesh = "empty.b3d",
+	textures = {},
+	colors = {},
+	use_texture_alpha = false,
+	spritediv = {x = 1, y = 1},
+	initial_sprite_basepos = {x = 0, y = 0},
+	is_visible = true,
+	makes_footstep_sound = false,
+	automatic_rotate = 0,
+	stepheight = 0,
+	automatic_face_movement_dir = 0.0,
+	automatic_face_movement_max_rotation_per_sec = -1,
+	backface_culling = true,
+	glow = 1,
+	nametag = "",
+	infotext = "(DIED)",
+	static_save = true,
+	damage_texture_modifier = "",
+	shaded = true,
+	show_on_minimap = false,
+}
+
+
+--{x = 162, y = 166},
+
+minetest.register_on_dieplayer(function(ObjectRef, reason)
+	died_players[ObjectRef:get_player_name()] = minetest.add_entity(ObjectRef:get_pos(), "cs_player:dead_ent")
+	local new_table = table.copy(dead_ent)
+	local textures = player_textures[ObjectRef:get_player_name()]
+	new_table.textures = {textures}
+	new_table.visual_size = {x = 1, y = 1, z = 1}
+	died_players[ObjectRef:get_player_name()]:set_properties(new_table)
+	died_players[ObjectRef:get_player_name()]:set_animation({x = 162, y = 166}, 15, 0)
+	--player_set_animation(player, "lay")
+end)
+
+
