@@ -1,4 +1,4 @@
-local maker = clua.get_bool("map_edit", clua.get_table_value("central_csgo"))
+local maker = minetest.settings:get_bool("cs_map.mapmaking", false)
 
 if maker then
 	map_maker = {}
