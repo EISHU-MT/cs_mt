@@ -93,6 +93,10 @@ local function reg_glb(dtime)
 				cs_match.commenced_match = true
 				
 				color = 0xFFFFFF
+				
+				for i = 1, #cb.registered_on_timer_commence do
+					cb.registered_on_timer_commence[i]()
+				end
 			end
 		end
 		if cs_match.commenced_match ~= false then
