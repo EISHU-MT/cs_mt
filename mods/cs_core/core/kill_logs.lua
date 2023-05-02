@@ -24,12 +24,14 @@ call.register_on_player_join_team(function(pname, team)
 end)
 
 call.register_on_kill_player(function(player, enemy, enemyt, playert)
-    if enemy ~= "reason:drown" and enemy ~= "reason:fall" and enemy ~= "reason:table" then
-        if player and enemy and enemyt and playert then
-            kills[enemyt][enemy].kills = kills[enemyt][enemy].kills + 1
-            kills[playert][player].kills = kills[playert][player].deaths + 1
-        end
-    else
-        kills[playert][player].kills = kills[playert][player].deaths + 1
-    end
+	if player and enemy and enemyt and playert then
+	    if enemy ~= "reason:drown" and enemy ~= "reason:fall" and enemy ~= "reason:table" then
+		if player and enemy and enemyt and playert then
+		    kills[enemyt][enemy].kills = kills[enemyt][enemy].kills + 1
+		    kills[playert][player].kills = kills[playert][player].deaths + 1
+		end
+	    else
+		kills[playert][player].kills = kills[playert][player].deaths + 1
+	    end
+	end
 end)
