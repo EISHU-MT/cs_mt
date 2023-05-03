@@ -287,6 +287,7 @@ function cs_shop.save_state(pn, _, arm)
 		elseif get_named[pn] == "pistol" or get_named[pn] == "smg" then
 			to_check[pn] = "arms_type_2"
 		end
+		local player = Player(pn)
 		for _, typed in pairs(player:get_inventory():get_list("main")) do
 			pnamee[pn] = typed:get_name()
 			for _, name in pairs(cs_shop.arms[to_check[pn]]) do
