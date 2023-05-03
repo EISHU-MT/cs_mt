@@ -17,11 +17,24 @@ function dropondie.drop_all(player)
 	local inv = player:get_inventory()
 
 	if csgo.pot[pname] == "terrorist" then
-		inv:remove_item("main", "rangedweapons:glock17")
-		inv:remove_item("main", "rangedweapons:9mm 200")
+		if type(temporalhud) ~= "table" then
+			temporalhud = {}
+			for pnamee in pairs(csgo.team.terrorist.players) do
+				temporalhud[pnamee] = Player(pnamee):hud_add({
+					hud_elem_type = "waypoint",
+					number = 0xFF6868,
+					name = "Dropped bomb is here! dropt by ".. player:get_player_name(),
+					text = "m",
+					world_pos = pos
+				})
+				hud_events.new(Player(pnamee), {
+					text = ("(!) The bomb is being dropped!"),
+					color = "warning",
+					quick = false,
+				})
+			end
+		end
 	elseif csgo.pot[pname] == "counter" then
-		inv:remove_item("main", "rangedweapons:m1991")
-		inv:remove_item("main", "rangedweapons:45acp 200")
 		if inv:contains_item("main", ItemStack("core:defuser")) then
 			inv:remove_item("main", "core:defuser")
 		end
