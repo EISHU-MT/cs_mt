@@ -15,7 +15,7 @@ function summary.calculate_players(players_table)
 	local table3 = {}
 	for i, player in pairs(players_table) do
 		if player then
-			table.insert(table1, player:get_player_name())
+			table.insert(table1, player)
 			table2[player:get_player_name()] = kills[player:get_player_name()].kills or 0
 			table3[player:get_player_name()] = kills[player:get_player_name()].deaths or 0
 		end
@@ -47,7 +47,7 @@ keystring[value]
 ]]
 function summary.show_formspec_to_all()
     --cc = summary.calculate_players(core.get_connected_players())
-    calced = summary.add_by_values(summary.calculate_players(core.get_connected_players()))
+    calced = summary.add_by_values(summary.calculate_players(transform(kills)))
     
     formspec = {
         "formspec_version[6]" ..
