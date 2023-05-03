@@ -5,8 +5,8 @@ function csgo.off_movement()
 		if not csgo.spect[pname] == true then
 		player:set_physics_override({
 			--gravity = 1090
-			speed = 0.5,
-			jump = 0.5
+			speed = 0.2,
+			jump = 0.2
 			
 		})
 		end
