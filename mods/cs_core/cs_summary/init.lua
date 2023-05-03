@@ -16,8 +16,8 @@ function summary.calculate_players(players_table)
 	for i, player in pairs(players_table) do
 		if player then
 			table.insert(table1, player)
-			table2[player:get_player_name()] = kills[player:get_player_name()].kills or 0
-			table3[player:get_player_name()] = kills[player:get_player_name()].deaths or 0
+			table2[player] = kills[player].kills or 0
+			table3[player] = kills[player].deaths or 0
 		end
 	end
     return table1, table2, table3, {}
