@@ -1,30 +1,26 @@
 summary = {
     
 }
+local function transform(ae)
+	local tabled1 = {}
+	for i, a in pairs(ae) do
+		table.insert(tabled1, i)
+	end
+	return tabled1
+end
+
 function summary.calculate_players(players_table)
-    local table1 = {}
-    local table2 = {}
-    local table3 = {}
-    for i, str in pairs(players_table) do
-        pname = str:get_player_name()
-        if csgo.spect[pname] ~= true then
-            table.insert(table1, str:get_player_name())
-            local doh = csgo.pot[pname]
-            if doh and pname then
-                    table2[pname] = kills[doh][pname].kills
-                    table3[pname] = kills[doh][pname].deaths
-            end
-            core.debug("green", "calculate_players(): added "..pname.." to the list for summary", "CS:GO Summary")
-        else
-            --i = i - 1
-            core.debug("red", "calculate_players(): Cannot add to the list an spectator `"..pname.."`", "CS:GO Summary")
-        end
-    end
-    players_table2 = {}
-    for _, str in pairs(players_table) do
-    	table.insert(players_table2, str:get_player_name())
-    end
-    return players_table2, table2, table3, {}
+	local table1 = {}
+	local table2 = {}
+	local table3 = {}
+	for i, player in pairs(players_table) do
+		if player then
+			table.insert(table1, player:get_player_name())
+			table2[player:get_player_name()] = kills[player:get_player_name()].kills or 0
+			table3[player:get_player_name()] = kills[player:get_player_name()].deaths or 0
+		end
+	end
+    return table1, table2, table3, {}
 end
 --[[
     players={
@@ -33,18 +29,18 @@ end
 
 ]]
 function summary.add_by_values(players, players_kills, players_deaths, inverse_kills)
-    --[[
-        this was the hardest thing i did.
-    ]]
-    table.sort(players, function (n1, n2) return players_kills[n1] > players_kills[n2] end)
-    --local splayers = players
-    uplayers = {}
-    for i, str in pairs(players) do
-        core.debug("green", "Creating list row: "..i.." for "..str, "CS:GO Summary")
-        local ea = csgo.pot[str]
-        table.insert(uplayers, "Player "..core.colorize(csgo.team[ea].colour, str).." kills: "..players_kills[str].."\\, deaths: "..players_deaths[str])
-    end
-    return uplayers
+	--[[
+		this was the hardest thing i did.
+	]]
+	table.sort(players, function (n1, n2) return players_kills[n1] > players_kills[n2] end)
+	--local splayers = players
+	uplayers = {}
+	for i, str in pairs(players) do
+		core.debug("green", "Creating list row: "..i.." for "..str, "CS:GO Summary")
+		local ea = csgo.pot[str]
+		table.insert(uplayers, "Player "..core.colorize(csgo.team[ea].colour, str).." kills: "..players_kills[str].."\\, deaths: "..players_deaths[str])
+	end
+	return uplayers
 end
 --[[
 keystring[value]
@@ -77,7 +73,7 @@ function summary.show_formspec_to_all()
     return true
 end
 function summary.return_formspec()
-    calced = summary.add_by_values(summary.calculate_players(core.get_connected_players()))
+    calced = summary.add_by_values(summary.calculate_players(transform(kills)))
     formspec = {
         "formspec_version[6]" ..
         "size[15,10]" ..
