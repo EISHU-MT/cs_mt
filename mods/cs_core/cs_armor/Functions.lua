@@ -25,9 +25,9 @@ function armor.set_value(p, r)
 			armor.refer[p:get_player_name()] = true
 		end
 	else
-		clua.throw("CS:GO Armor API: Cant find the specified player in armor.player, does that player exists")
+		error("CS:GO Armor API: Cant find the specified player in armor.player, does that player exists")
 	end
 end
 function armor.set_nil_to(p) -- just saves 2 letters written ` 0`
-	armor.set_value(clua.player(p), -1)
+	armor.set_value(Player(p), -1)
 end

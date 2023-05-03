@@ -1,6 +1,6 @@
 function armor.upgrade_hud_armor(player)
 	local value = armor.get_value(player)
-	local value2 = clua.get_number("maximum_armor_capacity", clua.get_table_value("central_csgo"))
+	local value2 = 100
 	--[[if value > 10 and value < 20 then
 		hb.change_hudbar(player, "armor", math.min(value, value2), value2, "cs_files_armor_iconHI.png")
 		return
@@ -222,7 +222,6 @@ function armor.upgrade_hud_armor(player)
 	hb.change_hudbar(player, "armor", val, value2)
 end
 
---value2 = clua.get_number("upgrade_hud_delay", clua.get_table_value("central_csgo"))
 
 upgrade = armor.upgrade_hud_armor
 --upgrade_all()
