@@ -160,7 +160,7 @@ function cs_shop.shotgun(name)
 end
 
 function cs_shop.armor(name, m)
-	player = clua.player(name)
+	local player = Player(name)
 	if player then
 		armor_value = armor.get_value(player)
 		if not m then
