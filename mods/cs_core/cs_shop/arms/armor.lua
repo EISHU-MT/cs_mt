@@ -11,9 +11,9 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 			if aval > 20 and aval < 130 then
 				armor.set_value(player, 20)
 				local cmmm = core.colorize("#9B9B9B", S('Armor Protection: helmet+armor'))
-				minetest.chat_send_player(pname, core.colorize("#eb8634", "-$200"..S("By Buying")..cmmm))
+				minetest.chat_send_player(pname, core.colorize("#eb8634", "-$200 "..S("By Buying")..cmmm))
 				bank.rm_player_value(pname, 200)
-				minetest.show_formspec(name, "cs_shop:armor", cs_shop.armor(pname))
+				minetest.show_formspec(pname, "cs_shop:armor", cs_shop.armor(pname))
 			end
 		else
 			minetest.chat_send_player(pname, core.colorize("#FF0000","Can't buy, no money available"))
@@ -35,9 +35,9 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 					end
 					armor.set_value(player, a2)
 					local cmmm = core.colorize("#9B9B9B", "Armor Protection: helmet")
-					minetest.chat_send_player(pname, core.colorize("#eb8634", "-$100"..S("By Buying")..cmmm))
+					minetest.chat_send_player(pname, core.colorize("#eb8634", "-$100 "..S("By Buying")..cmmm))
 					bank.rm_player_value(pname, 100)
-					minetest.show_formspec(name, "cs_shop:armor", cs_shop.armor(pname))
+					minetest.show_formspec(pname, "cs_shop:armor", cs_shop.armor(pname))
 				end
 			end
 		else
