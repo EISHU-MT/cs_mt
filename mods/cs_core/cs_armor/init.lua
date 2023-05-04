@@ -51,6 +51,8 @@ function armor.for_punch_to_fleshy(p,h,_,_,_,d)
 					local c = d + a
 					local d = c - b
 					armor.set_value(p, d)
+				else
+					armor.refer[p:get_player_name()] == false
 				end
 			end
 		end
