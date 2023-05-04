@@ -142,7 +142,7 @@ function cs_match.finished_match(teamare1)
 					size = {x = 1.5},
 					alignment = {x = 0, y = -1},
 					text = "Be Fast!! shop your arms before time reach!\n You Had 20 Seconds to shop.",
-					color = 0xFF9D00,
+					number = 0xFF9D00,
 				})
 				
 				if (csgo.pot[pname] == "terrorist") then
@@ -177,7 +177,7 @@ function cs_match.finished_match(teamare1)
 				core.after(1.3, function()
 					for _, Playerr in pairs(core.get_connected_players()) do
 						pname = Playerr:get_player_name()
-						if csgo.pot[pname] == "terrorist" then
+						if csgo.pot[pname] == "terrorist" and not has_bomb then
 							if not ItemFind(Player(Playerr)) then
 								InvRef = Playerr:get_inventory()
 								InvRef:add_item("main", "bomb")
@@ -297,13 +297,16 @@ end)
 
 
 minetest.register_on_leaveplayer(function(player)
-local playern = player:get_player_name()
-for teamn in pairs(ccore.teams) do
-if ccore.teams[teamn].players[playern] == true then
-	ccore.teams[teamn].players[playern] = nil
-	ccore.teams[teamn].count = ccore.teams[teamn].count - 1
-end
-end
+	local playern = player:get_player_name()
+	for teamn in pairs(ccore.teams) do
+		if ccore.teams[teamn].players[playern] == true then
+			ccore.teams[teamn].players[playern] = nil
+			ccore.teams[teamn].count = ccore.teams[teamn].count - 1
+		end
+	end
+	if has_bomb == playern then
+		has_bomb = nil
+	end
 end)
 
 
