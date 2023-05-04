@@ -43,6 +43,10 @@ minetest.register_craftitem(":bomb", {
 		if type(temporalhud) == "table" then
 			return
 		end
+		
+		if has_bomb then
+			return
+		end
 		temporalhud = {}
 		
 		for pnamee in pairs(csgo.team.terrorist.players) do
@@ -60,22 +64,26 @@ minetest.register_craftitem(":bomb", {
 				quick = false,
 			})
 		end
+		has_bomb = nil
 		core.item_drop(itm, drp, pos)
 		return "bomb -1"
 	end,
 	on_pickup = function(_, lname, table)
 		if type(temporalhud) == "table" then
-			for pnamee in pairs(temporalhud) do
-				player = Player(pnamee)
-				if player and not csgo.pot[pnamee] == "counter" then
-					if player:hud_get(temporalhud[pnamee]) then
-						player:hud_remove(temporalhud[pnamee])
-						temporalhud[pnamee] = nil
-						local inv = lname:get_inventory()
-						inv:add_item("main", ItemStack("bomb"))
-						core.debug("green", "On_Pickup(): Bomb: removing hud of the player "..pnamee.." hud: bomb_waypoint.", "C4 API")
+			if has_bomb == nil then
+				for pnamee in pairs(temporalhud) do
+					player = Player(pnamee)
+					if player and not csgo.pot[Name(lname)] == "counter" then
+						if player:hud_get(temporalhud[pnamee]) then
+							player:hud_remove(temporalhud[pnamee])
+							temporalhud[pnamee] = nil
+							core.debug("green", "On_Pickup(): Bomb: removing hud of the player "..pnamee.." hud: bomb_waypoint.", "C4 API")
+						end
 					end
 				end
+				local inv = lname:get_inventory()
+				inv:add_item("main", ItemStack("bomb"))
+				has_bomb = Name(lname)
 			end
 		end
 		temporalhud = nil
