@@ -1,5 +1,6 @@
 local S = minetest.get_translator("cs_shop")
 do
+enabled_to = {}
 cs_shop = {
 	ammo_val = 30,
 	arms = {
@@ -407,7 +408,8 @@ function cs_shop.buy_arm(arm, p)
 				--print("q")
 			end
 			SendOnBuy(p, ItemStack(arm):get_short_description(), cs_shop.arms_values[arm])
-			bank.rm_player_value(player, money_value[pname] + cs_shop.ammo_val)
+			bank.rm_player_value(pname, money_value[pname] + cs_shop.ammo_val)
+			--error()
 		else
 			SendOnFail(p, t)
 		end
@@ -464,27 +466,39 @@ do
 	if not minetest.settings:get_bool("cs_map.mapmaking", false) then
 		function cs_shop.enable_shopping(player)
 			if player then
-			player:set_inventory_formspec(cs_shop.main(player))
+			player:set_inventory_formspec(cs_shop.main(player:get_player_name()))
+			enabled_to[Name(player)] = true
 			else
 				for _, player in pairs(core.get_connected_players()) do
 				--local playerr = core.get_player_by_name(player)
-				player:set_inventory_formspec(cs_shop.main(player))
+				player:set_inventory_formspec(cs_shop.main(player:get_player_name()))
+				enabled_to[Name(player)] = true
 				end
 			end
 		end
 		function cs_shop.disable_shopping(player)
 			if player then
 			player:set_inventory_formspec(cs_shop.fmain(player))
+			enabled_to[Name(player)] = nil
 			else
 				for _, player in pairs(core.get_connected_players()) do
 				--local playerr = core.get_player_by_name(player)
 				player:set_inventory_formspec(cs_shop.fmain(player))
+				enabled_to[Name(player)] = nil
 				end
 			end
 		end
 	elseif minetest.settings:get_bool("cs_map.mapmaking", false) then
 		function cs_shop.disable_shopping() end
 		function cs_shop.enable_shopping() end
+	end
+end
+
+local function on_step()
+	for i, val in pairs(enabled_to) do
+		if val == true then
+			Player(i):set_inventory_formspec(cs_shop.main(i))
+		end
 	end
 end
 
@@ -508,5 +522,5 @@ minetest.register_on_joinplayer(function(player)
 	cs_shop.grenades.frag_sticky[p] = 0
 end)
 
-
+core.register_globalstep(on_step)
 

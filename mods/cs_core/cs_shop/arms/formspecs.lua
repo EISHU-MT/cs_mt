@@ -83,7 +83,7 @@ function cs_shop.ammo(name)
 end
 
 function cs_shop.main(name)
-	local moneyr = tostring(bank.return_val(name) or "Error: 1")
+	local moneyr = tostring(bank.return_val(name))
 	local formspec = {
 	"formspec_version[6]" ..
 	"size[10.2,11]" ..
