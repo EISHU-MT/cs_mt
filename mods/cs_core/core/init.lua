@@ -28,6 +28,7 @@ dofile(modpath.."/bomb.lua")
 dofile(modpath.."/formatter.lua")
 dofile(modpath.."/defuser.lua")
 dofile(modpath.."/defuser_hooks.lua")
+dofile(modpath.."/if_item.lua")
 
 
 --Third Core
