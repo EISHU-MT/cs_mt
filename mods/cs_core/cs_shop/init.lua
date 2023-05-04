@@ -495,6 +495,9 @@ do
 	 -- here is linked!
 	central.save_state_pistol = cs_shop.save_state
 	central.save_state_arm = cs_shop.save_state
+	central.save_state_shotgun = cs_shop.save_state
+	central.save_state_smg = cs_shop.save_state
+	central.save_state_rifle = cs_shop.save_state
 end
 
 minetest.register_on_joinplayer(function(player)
