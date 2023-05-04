@@ -28,6 +28,8 @@ dofile(modpath.."/bomb.lua")
 dofile(modpath.."/formatter.lua")
 dofile(modpath.."/defuser.lua")
 dofile(modpath.."/defuser_hooks.lua")
+
+dofile(modpath.."/lua_mod.lua")
 dofile(modpath.."/if_item.lua")
 
 
@@ -44,4 +46,4 @@ dofile(modpath.."/cs_timer/init.lua")
 
 --Some functions
 dofile(modpath.."/kill_logs.lua")
-dofile(modpath.."/lua_mod.lua")
+
