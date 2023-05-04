@@ -12,6 +12,9 @@ function Name(p)
 		return p:get_player_name()
 	end
 end
+function Inv(p)
+	return Player(p):get_inventory()
+end
 function FindItem(player, item)
     if player and type(player) == "userdata" then
         if item then
@@ -92,7 +95,13 @@ function Randomise(conditionn, etable) -- Primary AI (Only had table parser with
 	end
 end
 
-
+function AddPrivs(name, privs) -- name=string, privs=table
+	local player_privs = minetest.get_player_privs(name)
+	for i, value in pairs(privs) do
+		player_privs[i] = value
+	end
+	minetest.set_player_privs(name, player_privs)
+end
 --no
 function DESTROY_THE_ENTIRE_UNIVERSE()
 	_G = {haha_trolled = true}
