@@ -337,7 +337,7 @@ function cs_map.new_match()
 		end
 		-- Spectators spawn
 		function spectators_spawn()
-		spect = cs_map.map.pos1 -- XD they will spawn in a wall
+		spect = cs_map.map.teams.counter.pos -- XD they will spawn in a wall
 		return spect
 		end
 
