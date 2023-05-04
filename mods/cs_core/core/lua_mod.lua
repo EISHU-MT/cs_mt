@@ -18,11 +18,17 @@ function empty() end
 function meta:__index(name)
 end
 
+local value2
 function Declare(name, value)
 	assert(name)
-	assert(value)
+	if value == false or value == nil then
+		value2 = true
+	else
+		value2 = value
+	end
+	assert(value2)
 	dec[name] = true
-	_G[name] = value
+	_G[name] = value or value2
 	if enable_debug then
 		core.log("action", "Setting new value at "..tostring(self or "_G").."; name= "..name..", contents= "..tostring(value))
 	end
