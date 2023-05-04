@@ -59,8 +59,6 @@ end
 
 
 
-
-
 local function reg_glb(dtime)
 	timed = timed + dtime
 	if type(time) ~= "number" then
@@ -79,11 +77,11 @@ local function reg_glb(dtime)
 					ctimer.reset()
 				end)
 				csgo.on_movement()
-				remove_hsa()
+				--remove_hsa()
 				
-				if type(temp999) == "function" then
-					temp999()
-				end
+				--if type(temp999) == "function" then
+				--	temp999()
+				--end
 				
 				ccore.teams.terrorist.players = {}
 				ccore.teams.counter.players = {}
@@ -114,7 +112,7 @@ local function reg_glb(dtime)
 						c4.bomb_now()
 						local user = c4.get_planter()
 						annouce.winner("terrorist", "Congrats to "..user.." for planting the c4!")
-						core.after(0.6, cs_match.finished_match, "terrorist")
+						core.after(0.6, cs_match.finish_match, "terrorist")
 						c4.remove_bomb()
 						c4.remove_bomb2()
 						to_end = nil
@@ -133,10 +131,10 @@ local function reg_glb(dtime)
 						if opts then
 							if opts.n == 1 then
 								annouce.winner("terrorist", opts.r)
-								core.after(0.2, cs_match.finished_match, "terrorist")
+								core.after(0.2, cs_match.finish_match, "terrorist")
 							elseif opts.n == 2 then
-								annouce.winner("terrorist", opts.r)
-								core.after(0.2, cs_match.finished_match, "terrorist")
+								annouce.winner("counter", opts.r)
+								core.after(0.2, cs_match.finish_match, "counter")
 							end
 						end
 					end
