@@ -195,7 +195,7 @@ minetest.register_on_player_hpchange(function(player, hp_ch, reason)
 				for i = 1, #cb.registered_on_kill do
 					cb.registered_on_kill[i](victim, pname, csgo.pot[pname], csgo.pot[victim])
 				end
-			elseif csgo.team[csgo.pot[victim]].count - 1 == 0 then
+			elseif csgo.team[csgo.pot[victim]].count - 1 == 0 and victim and csgo.pot[pname] then
 				local random = Randomise("Select random", {"The last killed player is: "..victim, "the team "..csgo.pot[pname].." did his job", "wajaaa"})
 				annouce.winner(csgo.pot[pname], random)
 				cs_match.finished_match(csgo.pot[pname])
