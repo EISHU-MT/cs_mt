@@ -31,20 +31,27 @@ function armor.for_punch_to_fleshy(p,h,_,_,_,d)
 	if p:get_player_name() then
 		if armor.refer then -- *Strokes* *ACHOOO*
 			if armor.refer[p:get_player_name()] == true then -- Fix bug: -** fleshy
+				if type(armor.get_value) == "function" then
+					empty()
+				else
+					return false
+				end
 				pn = p:get_player_name()
 				hn = h:get_player_name()
-				if pn == hn then 
-					return
+				if armor.get_value() > 20 and not (armor.get_value() < 20 or armor.get_value() == 20) then
+					if pn == hn then 
+						return
+					end
+					local a = math.random(1, 6)
+					if type(armor.get_value) == "function" then
+						b = armor.get_value(p)
+					else
+						return
+					end
+					local c = d + a
+					local d = c - b
+					armor.set_value(p, d)
 				end
-				local a = math.random(1, 6)
-				if type(armor.get_value) == "function" then
-					b = armor.get_value(p)
-				else
-					return
-				end
-				local c = d + a
-				local d = c - b
-				armor.set_value(p, d)
 			end
 		end
 	end
