@@ -2,7 +2,7 @@ cs_match = {
 	registered_matches = {},
 	available_matches = {},
 }
-
+phud = {}
 -- *C* CORE
 ccore = { -- New table for a bug fix
 	teams = {
@@ -38,116 +38,74 @@ end
 end
 end
 
+function cs_match.finish_match(team)
+	assert(team, "cs_core error, mods/cs_core/core/cs_match/init.lua Line 42.: No team have been found!")
+	for i = 1, #cb.registered_on_end_match do
+		cb.registered_on_end_match[i](team)
+	end
+	cs_match.finished_match(team)
+end
 
+local function print_names()
+	local tabled1 = {}
+	for i, a in pairs(core.get_connected_players()) do
+		table.insert(tabled1, i:get_player_name())
+	end
+	return tabled1
+end
+
+call.register_on_timer_commence(function()
+	local list = print_names()
+	for i, value in pairs(phud) do
+		if list[i] then
+			local player = core.get_player_by_name(i)
+			player:hud_remove(phud[i])
+		end
+	end
+end)
 
 function cs_match.finished_match(teamare1)
-	assert(teamare1, "cs_core error, mods/cs_core/core/cs_match/init.lua Line 44.: No team have been found!")
 	if cs_match.available_matches == 0 then
 		cs_match.commenced_match = false
 		ctimer.pause()
 		function finishedmatch() return false end
-		for i = 1, #cb.registered_on_end_match do
-			cb.registered_on_end_match[i](teamare1)
-		end
-		core.after(20, function()
-			function finishedmatch() return true end
-		end)
-		cs_core.log("action", "Starting new match, {Maps,ResetSettings.}")
+		core.log("action", "Starting new match, {ResetMaps,ResetSettings.}")
 		for i = 1, #cb.registered_on_new_matches do
 			cb.registered_on_new_matches[i](teamare1)
 		end
 		cs_map.new_match()
-		cs_death.register_spawn("all", counters_spawn()) -- ALL: terrorists and counters, spectators_spawn(): where the spectators spawn
 		
 		cs_match.register_matches(cs_match.registered_matches) -- Register again all matchs to be default, to change limit, see cs-core/core/core1.lua
 		
-		csgo.switch("frosen", true)
-		
 		csgo.off_movement()
 		
-		
-		for _, player in pairs(core.get_connected_players()) do
-		if player and not hud:exists(player, "temp000x1") then
-			playeree = player:get_player_name()
-			core.chat_send_player(playeree, "New Match. Remember there are " .. cs_match.available_matches .. " rounds")
-			hud:add(player, "temp000x1", {
-			hud_elem_type = "text",
-			--texture = "",
-			scale = {x = 1.5, y = 1.5},
-			position = {x = 0.800, y = 0.10},
-			offset = {x = 30, y = 100},
-			size = {x = 1.5},
-			alignment = {x = 0, y = -1},
-			text = "Be Fast!! shop your arms before time reach!\n You Had 20 Seconds to shop.",
-			color = 0xFF9D00,
-			})
-		if hud:exists(player, "timerrrr") then
-		hud:remove(player, "timerrrr")
-		end
-		player:get_inventory():set_list("main", {})
-		
-		playerr = player:get_player_name()
-		if (csgo.online[playerr]) then
-		--print("DEBUGN1")
-		he_team = csgo.pot[playerr]
-		csgo.op[playerr] = nil
-		csgo.pt[playerr] = nil
-		csgo.online[playerr] = nil
-		csgo.pot[playerr] = nil
-		hud:remove(playerr)
-		csgo.team[he_team].count = csgo.team[he_team].count - 1
-		if he_team == "terrorist" then
-		main_hud.set_main_terrorist(csgo.team[he_team].count)
-		end
-		if he_team == "counter" then
-		main_hud.set_main_counter(csgo.team[he_team].count)
-		end
-		csgo.team[he_team].players[playerr] = nil
-		end	
-		
-		
-		
-		
-		
-		
-		
-		
-		csgo.show_menu(player)
-		
-		
-		
-		
-		end
-		end
-		
-		
-		
-		
 		if not minetest.settings:get_bool("cs_map.mapmaking", false) then
-		
-		cs_buying.enable_shopping()
-		--[[
-		core.after(1, ctimer.reset)
-		core.after(20, cs_buying.disable_shopping)
-		core.after(20, remove_hsa)
-		
-		core.after(20, temp999)
-		core.after(20, csgo.on_movement)
-		core.after(20, ctimer.set_timer)
-		--]]
-		function temp999() csgo.switch("frosen", false) end
-		
-		for i = 1, #cb.registered_on_new_match do
-			cb.registered_on_new_match[i]()
+			for i, player in pairs(core.get_connected_players()) do
+				local pname = player:get_player_name()
+				core.chat_send_player(pname, "New Match. Remember there are " .. cs_match.available_matches .. " rounds")
+				phud[pname] = player:hud_add({
+					hud_elem_type = "text",
+					--texture = "",
+					scale = {x = 1.5, y = 1.5},
+					position = {x = 0.800, y = 0.10},
+					offset = {x = 30, y = 100},
+					size = {x = 1.5},
+					alignment = {x = 0, y = -1},
+					text = "Be Fast!! shop your arms before time reach!\n You Had 20 Seconds to shop.",
+					color = 0xFF9D00,
+				})
+			end
+			cs_buying.enable_shopping()
+			for i = 1, #cb.registered_on_new_match do
+				cb.registered_on_new_match[i]()
+			end
+			do
+				ccore.teams.terrorist.players = {}
+				ccore.teams.counter.players = {}
+			end
+			
+			
 		end
-		
-		core.after(3, function()
-		ccore.teams.terrorist.players = {} -- Fixed bug #5
-		ccore.teams.counter.players = {} -- Fixed bug #6
-		end)
-		
-		end
-		startednewmatch =  true
 	
 	end
 	if (cs_match.available_matches ~= 0)  then
@@ -155,12 +113,11 @@ function cs_match.finished_match(teamare1)
 		ctimer.pause()
 		cs_match.commenced_match = false
 		function finishedmatch() return false end
-		for i = 1, #cb.registered_on_end_match do
-			cb.registered_on_end_match[i](teamare1)
+		
+		for i = 1, #cb.registered_on_new_match do
+			cb.registered_on_new_match[i]()
 		end
-		core.after(20, function()
-		function finishedmatch() return true end
-		end)
+		
 		cs_core.log("action", "Normal match commenced, available: " .. cs_match.available_matches)
 		
 		for people in pairs(csgo.team[teamare1].players) do
@@ -170,91 +127,70 @@ function cs_match.finished_match(teamare1)
 			bank.player_add_value(people, 50)
 		end
 		
-		--cs_map.new_match()
-		--cs_death.register_spawn("all", spectators_spawn()) -- ALL: terrorists and counters, spectators_spawn(): where the spectators spawn
-		
 		csgo.off_movement()
 		
-		for i = 1, #cb.registered_on_new_match do
-			cb.registered_on_new_match[i]()
-		end
-		
-		for _, player in pairs(core.get_connected_players()) do
-		if player and not hud:exists(player, "temp000x1") then
-			playeree = player:get_player_name()
-			core.chat_send_player(playeree, "New Match. Remember there are " .. cs_match.available_matches .. " rounds")
-			hud:add(player, "temp000x1", {
-			hud_elem_type = "text",
-			--texture = "",
-			scale = {x = 1.5, y = 1.5},
-			position = {x = 0.800, y = 0.10},
-			offset = {x = 30, y = 100},
-			size = {x = 1.5},
-			alignment = {x = 0, y = -1},
-			text = "Be Fast!! shop your arms before time reach!\n You Had 20 Seconds to shop.",
-			color = 0xFF9D00,
-			})
-			--player:get_inventory():set_list("main", {})
-			if hud:exists(player, "timerrrr") then
-				hud:remove(player, "timerrrr")
-			end
-
-
-
-			if (csgo.pot[playeree] == "terrorist") then
-				
-				if terrorists_spawn() then
-					poss = terrorists_spawn()
-					player:setpos(poss)
-				else
-					cs_core.log("error", "By-Core: No position for terrorists found!")
-				end
-			
-			elseif csgo.pot[playeree] == "counter" then
-				
-				
-				if counters_spawn() then
-					poss = counters_spawn()
-					player:setpos(poss)
-				else
-					cs_core.log("error", "By-Core: No position for counters found!")
-				end
-			elseif csgo.pot[playeree] == "spectator" then
-				
-			end
-		end
-		end
 		if not minetest.settings:get_bool("cs_map.mapmaking", false) then
-		cs_buying.enable_shopping()
-		--core.after(1, ctimer.reset)
-		if ask_for_bomb() then
-			core.after(1.3, function()
-				for _, Playerr in pairs(core.get_connected_players()) do
-					pname = Playerr:get_player_name()
-					if csgo.pot[pname] == "terrorist" then
-						if not ItemFind(Player(Playerr)) then
-							InvRef = Playerr:get_inventory()
-							InvRef:add_item("main", "bomb")
-							core.debug("green", "Giving the bomb to a random player ("..pname..")", "C4 API")
-							return
+			for i, player in pairs(core.get_connected_players()) do
+				local pname = player:get_player_name()
+				core.chat_send_player(pname, "New Match. Remember there are " .. cs_match.available_matches .. " rounds")
+				phud[pname] = player:hud_add({
+					hud_elem_type = "text",
+					--texture = "",
+					scale = {x = 1.5, y = 1.5},
+					position = {x = 0.800, y = 0.10},
+					offset = {x = 30, y = 100},
+					size = {x = 1.5},
+					alignment = {x = 0, y = -1},
+					text = "Be Fast!! shop your arms before time reach!\n You Had 20 Seconds to shop.",
+					color = 0xFF9D00,
+				})
+				
+				if (csgo.pot[pname] == "terrorist") then
+					if terrorists_spawn() then
+						poss = terrorists_spawn()
+						player:setpos(poss)
+					else
+						cs_core.log("error", "By-Core: No position for terrorists found!")
+					end
+				elseif csgo.pot[pname] == "counter" then
+					if counters_spawn() then
+						poss = counters_spawn()
+						player:setpos(poss)
+					else
+						cs_core.log("error", "By-Core: No position for counters found!")
+					end
+				elseif csgo.pot[pname] == "spectator" then
+					empty()
+				end
+			end
+			
+			cs_buying.enable_shopping()
+			for i = 1, #cb.registered_on_new_match do
+				cb.registered_on_new_match[i]()
+			end
+			do
+				ccore.teams.terrorist.players = {}
+				ccore.teams.counter.players = {}
+			end
+			
+			if ask_for_bomb() then
+				core.after(1.3, function()
+					for _, Playerr in pairs(core.get_connected_players()) do
+						pname = Playerr:get_player_name()
+						if csgo.pot[pname] == "terrorist" then
+							if not ItemFind(Player(Playerr)) then
+								InvRef = Playerr:get_inventory()
+								InvRef:add_item("main", "bomb")
+								core.debug("green", "Giving the bomb to a random player ("..pname..")", "C4 API")
+								has_bomb = pname
+								return
+							end
 						end
 					end
-				end
-			end)
-		end
-		--[[
-		core.after(20, cs_buying.disable_shopping)
-		core.after(20, ctimer.set_timer)
-		core.after(20, csgo.on_movement)
-		core.after(20, remove_hsa)
-		core.after(3, function()
-		ccore.teams.terrorist.players = {} -- Fixed bug #5
-		ccore.teams.counter.players = {} -- Fixed bug #6
-		end)
-		core.after(20, function()
-			function finishedmatch() return true end
-		end)
-		--]]
+				end)
+			end
+			
+			
 		end
 	end
 
@@ -316,7 +252,7 @@ local function empty() end
 
 call.register_on_new_match(function()
 --error("test")
-core.after(0.6, function()
+core.after(0.1, function()
 	for team in pairs(ccore.teams) do -- New method
 			--counters
 			--error(team) -- debug
