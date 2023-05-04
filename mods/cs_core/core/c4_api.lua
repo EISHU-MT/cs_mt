@@ -37,6 +37,7 @@ function c4.plant_bomb_at(pos, player)
         end, pos)
         time = 120
         ctimer.on_end_type("c4")
+        has_bomb = nil
         c4.planter = player
         bank.player_add_value(player, 50)
         c4.pos = pos
