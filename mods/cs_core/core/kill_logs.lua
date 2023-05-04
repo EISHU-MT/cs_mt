@@ -4,11 +4,7 @@ kills = {
 
 call.register_on_new_matches(function()
     core.after(5, function()
-        for pname, stats in pairs(kills.terrorist) do
-            stats.kills = 0
-            stats.deaths = 0
-        end
-        for pname, stats in pairs(kills.counter) do
+        for pname, stats in pairs(kills) do
             stats.kills = 0
             stats.deaths = 0
         end
