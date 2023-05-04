@@ -14,7 +14,7 @@ csgo = {
 	pot = {}, -- Name of team in a player ENV
 	teams = {}, -- DEF:::={inf=nil}
 	spect = {}, -- Spectators from menu
-	
+	teamed = {}, -- if player enter in a team
 	online = {},
 
 }
@@ -68,6 +68,10 @@ function csgo.enemy_team(team)
 	end
 end
 
+function csgo.check_team(player)
+	return csgo.pot[player]
+end
+
 function csgo.send_message(message, team, player) -- Send a message to every player in the specified team.
 	if (csgo.team[team].inf == true) then -- Verify team before continue.
 		for aplayer, def in pairs(csgo.team[team].players) do
@@ -79,297 +83,115 @@ function csgo.send_message(message, team, player) -- Send a message to every pla
 		end
 	end
 end
-function csgo.spectator(player, reason) -- Called when he died or directly turns into a spectator from menu
-	local ttt = "spectator"
-	playerr = minetest.get_player_by_name(player)
-	csgo.op[player] = nil -- Disable him
-	csgo.pt[player] = nil -- Disable him
+function csgo.spectator(player, reason)
+	local team = "spectator"
+	csgo.op[player] = nil
+	csgo.pt[player] = nil
 	csgo.online[player] = true
 	csgo.spect[player] = true
-	csgo.team[ttt].players[player] = true
-	minetest.set_player_privs(player, {fly=true, fast=true, noclip=true, teleport=true, interact=nil, shout=true}) -- shout is nil because the spectator will tell to the players where the enemy stands.
-	if csgo.pot[player] == "terrorist" then -- BUG FIX #1
-		local tea = "terrorist"
-		csgo.team[tea].count = csgo.team[tea].count - 1
-		main_hud.set_main_terrorist(csgo.team[tea].count)
-		csgo.team[tea].players[player] = nil
-	elseif csgo.pot[player] == "counter" then
-		local tea = "counter"
-		csgo.team[tea].count = csgo.team[tea].count - 1
-		main_hud.set_main_counter(csgo.team[tea].count)
-		csgo.team[tea].players[player] = nil
+	csgo.team[team].players[player] = true
+	csgo.team[team].count = csgo.team[team].count + 1
+	AddPrivs(player, {fly=true, noclip=true, shout=true, fast=true})
+	if csgo.check_team(player) then
+		csgo.team[csgo.check_team(player)].count = csgo.team[csgo.check_team(player)].count - 1
+		csgo.team[csgo.check_team(player)].players[player] = nil
 	end
-	if playerr then
-	playerr:set_armor_groups({immortal = 1, })
-	--playerr:set_player_privs({fly = true, shout = true, fast = true, noclip = true, interact = nil})
-	minetest.set_player_privs(player, {fly = true, shout = true, fast = true, noclip = true, interact = false})
-	local invvv = playerr:get_inventory()
-	core.after(1, function(invvv)
-		invvv:set_list("main", {}) -- Dropondie now is the eraser...
-	end, invvv)
-	end
+	csgo.pot[player] = team
 	
+	local pobj = Player(player)
+	pobj:set_armor_groups({immortal = 1})
+	Inv(player):set_list("main", {})
+	core.after(1, function(playe) playe:set_list("main", {}) end, Inv(player))
 	player_core.upgrade_to_mode(player, "empty.b3d")
+	cs_core.can_do_damage(player, "no")
 
-	csgo.pot[player] = ttt
-
-	csgo.team[ttt].count = csgo.team[ttt].count + 1
-	cs_core.can_do_damage(player, "no") -- Cant put damage to playing players
-	csgo.team[ttt].players[player] = true -- Put that plater in spectator-mode team. DEF:::={inf="L48", search="spectator"}
-	if (reason) then
-	csgo.send_message(player .. " " .. reason, ttt) -- No building auto-reasons by machine!
-	end
-	if cs_death.team.spectator.pos then
-		poss = cs_death.team.spectator.pos
-		if playerr then
-		playerr:set_pos(poss)
-		end
-		else
-		core.log("error", "By-Core: No position for spectators found!")
 	
+	if (reason) then
+		csgo.send_message(player .. " " .. reason, team) -- No building auto-reasons by machine!
+	end
+	if spectators_spawn() then
+		Player(player):set_pos(spectators_spawn())
+	else
+		core.log("error", "By-Core: No position for spectators found!")
 	end
 end
 --print(csgo.usrTlimit)
 function csgo.terrorist(player, force)
-local ttt = "terrorist"
-	if ccc(player) then
-		empty()
-	else
+	if not player then
 		return
 	end
-if player then
-	if (csgo.op[player] ~= true ) then
-		if csgo.spect[player] == true then
-			--csgo.spectator(player, "joined spectators, reason: Teams Limit has reached or other things....")
-			--error('no')
-			empty()
-			if csgo.team[ttt].count == 20 then
-			empty() -- Ignore if teams limit is reached.
-			minetest.log("warning", "Unavailable space for team counters. Ignoring for this time....")
-			else
-			if force then
-			playerr = minetest.get_player_by_name(player)
-			
-			csgo.spect[player] = nil
-			csgo.op[player] = true
-			csgo.pt[player] = true
-			csgo.online[player] = true
-			csgo.pot[player] = "terrorist"
-			csgo.team[ttt].count = csgo.team[ttt].count + 1
-
-			for i = 1, #cb.registered_on_join_team do
-				cb.registered_on_join_team[i](player, "terrorist")
-			end
-			
-			local inventorytouse = minetest.get_inventory({ type="player", name=player })
-			
-			--Feature
-			if inventorytouse and not FindItem(Player(player), "rangedweapons:glock17") then
-    			inventorytouse:add_item("main", "rangedweapons:glock17")
-        		inventorytouse:add_item("main", "rangedweapons:9mm 200")
-			end
-			main_hud.set_main_terrorist(csgo.team[ttt].count)
-			
-			player_core.upgrade_to_mode(player, "terrorist.b3d")
-			
-			playerr:set_armor_groups({fleshy = 120, })
-			minetest.set_player_privs(player, {fly=nil, fast=nil, noclip=nil, teleport=nil, interact=true, shout=true})
-			
-			
-			cs_core.can_do_damage(player, "yes") -- Can do damage to every player
-			csgo.team[ttt].players[player] = true -- Put that plater in terrorist team. DEF:::={inf="L22", search="terrorist"}
-			
-			--cs_kill.var.alive_players[ttt] = cs_kill.var.alive_players[ttt] + 1
-			
-			csgo.send_message(player .. " Joins the Terrorist forces", ttt)
-				if terrorists_spawn() then
-					poss = terrorists_spawn()
-						if playerr then
-							playerr:set_pos(RandomPos(poss, 1))
-						end
-				else
-					minetest.log("error", "By-Core: No position for terrorists found!")
-				end
-			end
-			end
-			
-		else
-			playerr = minetest.get_player_by_name(player)
-			
-			csgo.op[player] = true
-			csgo.pt[player] = true
-			csgo.online[player] = true
-			csgo.pot[player] = "terrorist"
-			if csgo.team[ttt].count == 0 then
-				uplayer = Player(player)
-				InvRef = uplayer:get_inventory()
-				InvRef:add_item("main", "bomb")
-			end
-			csgo.team[ttt].count = csgo.team[ttt].count + 1
-			csgo.spect[player] = nil
-			
-			for i = 1, #cb.registered_on_join_team do
-				cb.registered_on_join_team[i](player, "terrorist")
-			end
-
-			main_hud.set_main_terrorist(csgo.team[ttt].count)
-			
-			player_core.upgrade_to_mode(player, "terrorist.b3d")
-			
-			local inventorytouse = minetest.get_inventory({ type="player", name=player })
-			
-			--Feature
-			if inventorytouse and not FindItem(Player(player), "rangedweaopons:glock17") then
-    			inventorytouse:add_item("main", "rangedweapons:glock17")
-        		inventorytouse:add_item("main", "rangedweapons:9mm 200")
-			end
-			if playerr then
-			playerr:set_armor_groups({fleshy = 120, })
-			minetest.set_player_privs(player, {fly=nil, fast=nil, noclip=nil, teleport=nil, interact=true, shout=true})
-			end
-			
-			cs_core.can_do_damage(player, "yes") -- Can do damage to every player
-			csgo.team[ttt].players[player] = true -- Put that plater in terrorist team. DEF:::={inf="L22", search="terrorist"}
-			
-			--cs_kill.var.alive_players[ttt] = cs_kill.var.alive_players[ttt] + 1
-			
-			csgo.send_message(player .. " Joins the Terrorist forces", ttt)
-			if terrorists_spawn() then
-			poss = terrorists_spawn()
-			if playerr then
-					playerr:set_pos(RandomPos(poss, 0.5))
-			end
-			else
-			minetest.log("error", "By-Core: No position for terrorists found!")
-			end
+	if csgo.team.terrorist.count == csgo.usrTlimit or force then
+		csgo.spectator(player, "has joined spectators, no space for terrorist team")
+		minetest.log("warning", "Unavailable space for team counters. Ignoring for this time....")
+	else
+		if csgo.check_team(player) then
+			csgo.team[csgo.check_team(player)].count = csgo.team[csgo.check_team(player)].count - 1
+			csgo.team[csgo.check_team(player)].players[player] = nil
 		end
-	
-	
+		csgo.spect[player] = nil
+		csgo.op[player] = true
+		csgo.pt[player] = true
+		csgo.online[player] = true
+		csgo.pot[player] = "terrorist"
+		csgo.team.terrorist.count = csgo.team.terrorist.count + 1
+		csgo.team.terrorist.players[player] = true
+		if not FindItem(Player(player), "rangedweapons:glock17") then
+			Inv(player):add_item("main", "rangedweapons:glock17")
+			Inv(player):add_item("main", "rangedweapons:9mm 200")
+		end
+		for i = 1, #cb.registered_on_join_team do
+			cb.registered_on_join_team[i](player, "terrorist")
+		end
+		AddPrivs(player, {fly=nil, fast=nil, noclip=nil, teleport=nil, interact=true, shout=true})
+		Player(player):set_armor_groups({fleshy = 120})
+		player_core.upgrade_to_mode(player, "terrorist.b3d")
+		cs_core.can_do_damage(player, "yes")
+		csgo.send_message(player .. " Joins the Terrorist forces", "terrorist")
+		if terrorists_spawn() then
+			Player(player):set_pos(RandomPos(terrorists_spawn(), 1))
+		else
+			minetest.log("error", "By-Core: No position for terrorists found!")
+		end
 	end
-end
 end
 
 function csgo.counter(player, force)
-local ttt = "counter"
-	if ccc(player) then
-		empty()
-	else
+	if not player then
 		return
 	end
-if player then
-	if (csgo.op[player] ~= true) then
-		if csgo.spect[player] == true then
-			--csgo.spectator(player, "joined spectators, reason: Teams Limit has reached or other things....")
-			empty()
-			--print("debug__#@")
-			if csgo.team[ttt].count == 20 then
-			empty()
-			minetest.log("warning", "Unavailable space for team counters. Ignoring for this time....")
-			else
-			if force then
-			playerr = minetest.get_player_by_name(player)
-			
-			csgo.spect[player] = nil
-			csgo.op[player] = true
-			csgo.pt[player] = true
-			csgo.online[player] = true
-			csgo.pot[player] = "counter"
-			
-			for i = 1, #cb.registered_on_join_team do
-				cb.registered_on_join_team[i](player, "counter")
-			end
-			
-			local inventorytouse = minetest.get_inventory({ type="player", name=player })
-			if inventorytouse and not FindItem(Player(player), "rangedweapons:m1991") then
-    			inventorytouse:add_item("main", "rangedweapons:m1991")
-        		inventorytouse:add_item("main", "rangedweapons:45acp 200")
-			end
-			
-			csgo.team[ttt].count = csgo.team[ttt].count + 1
-			
-			main_hud.set_main_counter(csgo.team[ttt].count)
-			
-			player_core.upgrade_to_mode(player, "counter.b3d")
-			
-			if playerr then
-			playerr:set_armor_groups({fleshy = 120, })
-			minetest.set_player_privs(player, {fly=nil, fast=nil, noclip=nil, teleport=nil, interact=true, shout=true})
-			end
-			
-			cs_core.can_do_damage(player, "yes") -- Can do damage to every player.
-			csgo.team[ttt].players[player] = true -- Put that plater in counter team. DEF:::={inf="L48", search="counter"}
-			
-			--cs_kill.var.alive_players[ttt] = cs_kill.var.alive_players[ttt] + 1
-			
-			--core.chat_send_player(player, "E2") -- debug
-			csgo.send_message(player .. " Joins the Counter-Terrorist forces", ttt)
-				if counters_spawn() then
-					poss = counters_spawn()
-					if playerr then
-						playerr:set_pos(RandomPos(poss, 1))
-					end
-				else
-					core.log("error", "By-Core: No position for counters found!")
-				end
-			end
-			end
-			
-		else
-			playerr = minetest.get_player_by_name(player)
-			local ttt = "counter"
-			
-			csgo.spect[player] = nil
-			csgo.op[player] = true
-			csgo.pt[player] = true
-			csgo.online[player] = true
-			csgo.pot[player] = "counter"
-			
-			for i = 1, #cb.registered_on_join_team do
-				cb.registered_on_join_team[i](player, "counter")
-			end
-
-			csgo.team[ttt].count = csgo.team[ttt].count + 1
-			
-			local inventorytouse = minetest.get_inventory({ type="player", name=player })
-			if inventorytouse and not FindItem(Player(player), "rangedweapons:m1991") then
-    			inventorytouse:add_item("main", "rangedweapons:m1991")
-        		inventorytouse:add_item("main", "rangedweapons:45acp 200")
-			end
-			
-			main_hud.set_main_counter(csgo.team[ttt].count)
-			
-			player_core.upgrade_to_mode(player, "counter.b3d")
-			
-			if playerr then
-			playerr:set_armor_groups({fleshy = 120, })
-			minetest.set_player_privs(player, {fly=nil, fast=nil, noclip=nil, teleport=nil, interact=true, shout=true})
-			end
-			
-			cs_core.can_do_damage(player, "yes") -- Can do damage to every player.
-			csgo.team[ttt].players[player] = true -- Put that plater in counter team. DEF:::={inf="L48", search="counter"}
-			
-			--cs_kill is obsolete.
-			--cs_kill.var.alive_players[ttt] = cs_kill.var.alive_players[ttt] + 1
-			
-			--core.chat_send_player(player, "E2") -- debug
-			csgo.send_message(player .. " Joins the Counter-Terrorist forces", ttt)
-			if counters_spawn() then
-				poss = counters_spawn()
-				if playerr then
-					playerr:set_pos(RandomPos(poss, 1))
-					--error(dump(poss))
-				end
-			else
-				core.log("error", "By-Core: No position for counters found!")
-			end
+	if csgo.team.counter.count == csgo.usrTlimit or force then
+		csgo.spectator(player, "has joined spectators, no space for counter team")
+		minetest.log("warning", "Unavailable space for team counters. Ignoring for this time....")
+	else
+		if csgo.check_team(player) then
+			csgo.team[csgo.check_team(player)].count = csgo.team[csgo.check_team(player)].count - 1
+			csgo.team[csgo.check_team(player)].players[player] = nil
 		end
-	--elseif force then  -- Force method
-		
+		csgo.spect[player] = nil
+		csgo.op[player] = true
+		csgo.pt[player] = true
+		csgo.online[player] = true
+		csgo.pot[player] = "counter"
+		csgo.team.counter.count = csgo.team.counter.count + 1
+		csgo.team.counter.players[player] = true
+		if not FindItem(Player(player), "rangedweapons:m1991") then
+			Inv(player):add_item("main", "rangedweapons:m1991")
+        		Inv(player):add_item("main", "rangedweapons:45acp 200")
+		end
+		for i = 1, #cb.registered_on_join_team do
+			cb.registered_on_join_team[i](player, "counter")
+		end
+		AddPrivs(player, {fly=nil, fast=nil, noclip=nil, teleport=nil, interact=true, shout=true})
+		Player(player):set_armor_groups({fleshy = 120})
+		player_core.upgrade_to_mode(player, "counter.b3d")
+		cs_core.can_do_damage(player, "yes")
+		csgo.send_message(player .. " Joins the Terrorist forces", "counter")
+		if counters_spawn() then
+			Player(player):set_pos(RandomPos(counters_spawn(), 1))
+		else
+			minetest.log("error", "By-Core: No position for counters found!")
+		end
 	end
-	
-	
-	
-end
 end
 
 
@@ -433,7 +255,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 		
 	if fields.terrorist then
         local pname = player:get_player_name()
-        if not csgo.team.terrorist.count == 20 then
+        if not csgo.team.terrorist.count == csgo.usrTlimit then
         var = "no teams had to join. Because teams limit reached"
         csgo.spectator(pname, var)
         else
@@ -445,7 +267,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
     
     if fields.counterr then
         local pname = player:get_player_name()
-        if not csgo.team.counter.count == 20 then
+        if not csgo.team.counter.count == csgo.usrTlimit then
         var = "no teams had to join. Because teams limit reached"
         csgo.spectator(pname, var)
         else
