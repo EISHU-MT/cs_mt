@@ -25,6 +25,7 @@ dofile(modpath.."/central_memory.lua") -- Auto fixer
 dofile(modpath.."/hand.lua")
 dofile(modpath.."/c4_api.lua")
 dofile(modpath.."/bomb.lua")
+dofile(modpath.."/on_join_player_hooks.lua")
 dofile(modpath.."/formatter.lua")
 dofile(modpath.."/defuser.lua")
 dofile(modpath.."/defuser_hooks.lua")
