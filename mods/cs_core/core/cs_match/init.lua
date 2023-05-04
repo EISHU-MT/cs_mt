@@ -49,7 +49,7 @@ end
 local function print_names()
 	local tabled1 = {}
 	for i, a in pairs(core.get_connected_players()) do
-		table.insert(tabled1, i:get_player_name())
+		table.insert(tabled1, a:get_player_name())
 	end
 	return tabled1
 end
