@@ -9,10 +9,10 @@ local function on_step()
 		end
 	end
 	for pname in pairs(csgo.team.terrorist.players) do
-		if Inv(pname):contains_item("main", ItemStack("bomb")) and not if_it and (not if_it2 == pname) then
+		if Inv(pname):contains_item("main", ItemStack("bomb")) and has_bomb == pname then
 			if_it = true
 			if_it2 = pname
-		elseif if_it and pname ~= if_it2 then
+		elseif has_bomb ~= pname and Inv(pname):contains_item("main", ItemStack("bomb")) then
 			Inv(pname):remove_item("main", ItemStack("bomb 65535"))
 			core.item_drop(ItemStack("bomb"), Player(pname), Player(pname):get_pos())
 		end
