@@ -47,6 +47,7 @@ minetest.register_on_leaveplayer(function(player)
 		csgo.pot[pname] = nil
 		csgo.team[he_team].count = csgo.team[he_team].count - 1
 		csgo.team[he_team].players[pname] = nil
+		csgo.pot2[pname] = nil
 		
 	end
 end)

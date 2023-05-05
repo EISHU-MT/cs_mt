@@ -95,6 +95,7 @@ function csgo.spectator(player, reason)
 	csgo.pt[player] = nil
 	csgo.online[player] = true
 	csgo.spect[player] = true
+	csgo.pot2[player] = "spectator"
 	csgo.team[team].players[player] = true
 	csgo.team[team].count = csgo.team[team].count + 1
 	AddPrivs(player, {fly=true, noclip=true, shout=true, fast=true})
@@ -144,6 +145,7 @@ function csgo.terrorist(player, force)
 		csgo.spect[player] = nil
 		csgo.op[player] = true
 		csgo.pt[player] = true
+		csgo.pot2[player] = "terrorist"
 		csgo.online[player] = true
 		csgo.pot[player] = "terrorist"
 		csgo.team.terrorist.count = csgo.team.terrorist.count + 1
@@ -190,6 +192,7 @@ function csgo.counter(player, force)
 		csgo.spect[player] = nil
 		csgo.op[player] = true
 		csgo.pt[player] = true
+		csgo.pot2[player] = "counter"
 		csgo.online[player] = true
 		csgo.pot[player] = "counter"
 		csgo.team.counter.count = csgo.team.counter.count + 1
