@@ -104,6 +104,13 @@ function csgo.spectator(player, reason)
 	end
 	csgo.pot[player] = team
 	
+	local properties = Player(player):get_properties()
+	
+	properties.pointable = false
+	properties.show_on_minimap = false
+	properties.is_visible = false
+	Player(player):set_properties(properties)
+	
 	local pobj = Player(player)
 	pobj:set_armor_groups({immortal = 1})
 	Inv(player):set_list("main", {})
@@ -148,6 +155,13 @@ function csgo.terrorist(player, force)
 		for i = 1, #cb.registered_on_join_team do
 			cb.registered_on_join_team[i](player, "terrorist")
 		end
+		
+		local properties = Player(player):get_properties()
+		properties.pointable = true
+		properties.show_on_minimap = false
+		properties.is_visible = true
+		Player(player):set_properties(properties)
+		
 		AddPrivs(player, {fly=nil, fast=nil, noclip=nil, teleport=nil, interact=true, shout=true})
 		Player(player):set_armor_groups({fleshy = 120})
 		player_core.upgrade_to_mode(player, "terrorist.b3d")
@@ -187,6 +201,13 @@ function csgo.counter(player, force)
 		for i = 1, #cb.registered_on_join_team do
 			cb.registered_on_join_team[i](player, "counter")
 		end
+		
+		local properties = Player(player):get_properties()
+		properties.pointable = true
+		properties.show_on_minimap = false
+		properties.is_visible = true
+		Player(player):set_properties(properties)
+		
 		AddPrivs(player, {fly=nil, fast=nil, noclip=nil, teleport=nil, interact=true, shout=true})
 		Player(player):set_armor_groups({fleshy = 120})
 		player_core.upgrade_to_mode(player, "counter.b3d")
@@ -428,7 +449,7 @@ minetest.register_on_joinplayer(function(playerrrr)
 		player:set_physics_override({
 			sneak_glitch = true,
 		})
-		
+		player:hud_set_flags({minimap=false, basic_debug=false})
 		--cs_buying.enable_shopping(player)
 		
 		
