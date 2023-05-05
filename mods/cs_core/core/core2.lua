@@ -61,11 +61,17 @@ function csgo.enemy_team(team)
 		elseif team == "terrorist" then
 			return "counter"
 		elseif team == "spectator" then
-						error("Cant get an enemy team for spectator!")
-			return false
+			return "spectator"
 		end
 		return false, "nothing"
 	end
+end
+
+function csgo.random_player(team)
+	if not team then
+		return nil
+	end
+	return csgo.team[team].players[math.random(#csgo.team[team].players)]
 end
 
 function csgo.check_team(player)

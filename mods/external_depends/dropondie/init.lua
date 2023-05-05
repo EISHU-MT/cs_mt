@@ -33,6 +33,28 @@ function dropondie.drop_all(player)
 					quick = false,
 				})
 			end
+			has_bomb = nil
+		end
+	elseif csgo.pot[pname] == "counter" then
+		if inv:contains_item("main", ItemStack("core:defuser")) then
+			inv:remove_item("main", "core:defuser")
+		end
+	end
+
+	local pos = player:get_pos()
+	pos.y = math.floor(pos.y + 0.5)
+
+	drop_list(pos, player:get_inventory(), "main")
+end
+
+function dropondie.drop_all2(player)
+	local pname = player:get_player_name()
+	local inv = player:get_inventory()
+
+	if csgo.pot[pname] == "terrorist" then
+		if inv:contains_item("main", ItemStack("bomb")) then
+			inv:remove_item("main", "bomb 65535")
+			has_bomb = nil
 		end
 	elseif csgo.pot[pname] == "counter" then
 		if inv:contains_item("main", ItemStack("core:defuser")) then
@@ -48,6 +70,6 @@ end
 
 	core.after(0, function()
 		minetest.register_on_dieplayer(dropondie.drop_all)
-		minetest.register_on_leaveplayer(dropondie.drop_all)
+		minetest.register_on_leaveplayer(dropondie.drop_all2)
 	end)
 
