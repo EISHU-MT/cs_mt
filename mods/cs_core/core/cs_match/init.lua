@@ -50,7 +50,9 @@ call.register_on_timer_commence(function()
 	for i, value in pairs(phud) do
 		if value and minetest.player_exists(i) then
 			local player = core.get_player_by_name(i)
-			player:hud_remove(value)
+			if player then
+				player:hud_remove(value)
+			end
 		end
 	end
 end)
@@ -299,6 +301,7 @@ minetest.register_on_leaveplayer(function(player)
 	if has_bomb == playern then
 		has_bomb = nil
 	end
+	phud[playern] = nil
 end)
 
 
