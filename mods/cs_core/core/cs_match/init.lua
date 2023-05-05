@@ -46,20 +46,11 @@ function cs_match.finish_match(team)
 	cs_match.finished_match(team)
 end
 
-local function print_names()
-	local tabled1 = {}
-	for i, a in pairs(core.get_connected_players()) do
-		table.insert(tabled1, a:get_player_name())
-	end
-	return tabled1
-end
-
 call.register_on_timer_commence(function()
-	local list = print_names()
 	for i, value in pairs(phud) do
-		if list[i] then
+		if value and minetest.player_exists(i) then
 			local player = core.get_player_by_name(i)
-			player:hud_remove(phud[i])
+			player:hud_remove(value)
 		end
 	end
 end)
