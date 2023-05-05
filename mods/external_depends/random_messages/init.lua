@@ -27,6 +27,8 @@ randomMSG = {
 "This game is inspired by CS:GO Game",
 "To chat only with ur teammates use this command: /m",
 "To defuse a bomb maintain pressed the punch/dig button/touchpad and wait the seconds that require",
+"To report an bug or crash, use the command: /report <bug> <description>",
+"To report an player that is breaking the rules, use command: /report <name> <description>"
 }
 time_to_say = 90
 rmtime = 0
