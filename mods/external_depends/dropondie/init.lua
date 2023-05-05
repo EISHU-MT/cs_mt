@@ -53,8 +53,32 @@ function dropondie.drop_all2(player)
 
 	if csgo.pot[pname] == "terrorist" then
 		if inv:contains_item("main", ItemStack("bomb")) then
-			inv:remove_item("main", "bomb 65535")
 			has_bomb = nil
+			if csgo.team.terrorist.count - 1 >= 1 then
+				if type(temporalhud) ~= "table" then
+					temporalhud = {}
+					for pnamee in pairs(csgo.team.terrorist.players) do
+						temporalhud[pnamee] = Player(pnamee):hud_add({
+							hud_elem_type = "waypoint",
+							number = 0xFF6868,
+							name = "Dropped bomb is here! dropt by ".. player:get_player_name(),
+							text = "m",
+							world_pos = pos
+						})
+						hud_events.new(Player(pnamee), {
+							text = ("(!) The bomb is being dropped!"),
+							color = "warning",
+							quick = false,
+						})
+					end
+					has_bomb = nil
+				end
+			elseif csgo.team.terrorist.count - 1 <= 1 then
+				if minetest.settings:get_bool("cs_core.enable_env_debug", false) then
+					core.log("warning", "None playing! The bomb will be removed and will not be recovered again! Until a terrorist player comes.")
+				end
+				inv:remove_item("main", "bomb 65535")
+			end
 		end
 	elseif csgo.pot[pname] == "counter" then
 		if inv:contains_item("main", ItemStack("core:defuser")) then
