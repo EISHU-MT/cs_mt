@@ -215,6 +215,7 @@ dofile(modpath.."/arms/grenades.lua")
 dofile(modpath.."/arms/rifles.lua")
 dofile(modpath.."/arms/pistol_smg.lua")
 dofile(modpath.."/arms/armor.lua")
+dofile(modpath.."/arms/ammo.lua")
 dofile(modpath.."/arms/shotgun.lua")
 
 function RecognizeArm(arm)
@@ -303,11 +304,12 @@ function cs_shop.save_state(pn, _, arm)
 	end
 end
 
-function cs_shop.buy_ammo(ammo, p)
+function cs_shop.buy_ammo(ammo, pl)
 	assert(ammo, "No ammo presense found")
-	assert(type(p) ~= "userdata", "Player UserData not found or a string....")
+	p = Player(pl)
 	local pname = p:get_player_name()
 	if cs_shop.ammo_values[ammo] then
+		--error()
 		his_money[pname] = bank.return_val(pname)
 		if (his_money[pname] >= cs_shop.ammo_values[ammo]) then
 			inventory[pname] = p:get_inventory()
@@ -455,12 +457,74 @@ minetest.register_on_player_receive_fields(function(player, formname, field)
 		local name = player:get_player_name()
 		minetest.show_formspec(name, "cs_shop:smg", cs_shop.smg(name))
 	end
+	if field.buy_rammo then
+		cs_shop.buy_ammo_for_hard_arm(player)
+	end
+	if field.buy_pammo then
+		cs_shop.buy_ammo_for_soft_arm(player)
+	end
 	if field.exit then
 		local name = player:get_player_name()
 		minetest.disconnect_player(name, "Disconnected from gui (CsShop MSG)")
 	end
 end)
 
+function cs_shop.buy_ammo_for_hard_arm(p)
+	local player = Player(p)
+	local pname = Name(p)
+	for _, typed in pairs(player:get_inventory():get_list("main")) do
+		if RecognizeType(typed:get_name()) == "rifle" or RecognizeType(typed:get_name()) == "shotgun" then
+			his_money[pname] = bank.return_val(pname)
+			if his_money[pname] >= cs_shop.ammo_val then
+				local v
+				if cs_shop.arms_ammo[RecognizeType(typed:get_name())].exe_amount then
+					--print("m")
+					v = cs_shop.arms_ammo[RecognizeType(typed:get_name())].ammo_amount
+				end
+				inventory[pname] = Inv(player)
+				if v then
+					inventory[pname]:add_item("main", ItemStack(cs_shop.arms_ammo[RecognizeType(typed:get_name())][typed:get_name()].." "..v))
+					SendOnBuy(p, ItemStack(cs_shop.arms_ammo[RecognizeType(typed:get_name())][typed:get_name()]):get_short_description(), cs_shop.ammo_val)
+					bank.rm_player_value(pname, cs_shop.ammo_val)
+				else
+					inventory[pname]:add_item("main", ItemStack(cs_shop.arms_ammo[RecognizeType(typed:get_name())][typed:get_name()]))
+					SendOnBuy(p, ItemStack(cs_shop.arms_ammo[RecognizeType(typed:get_name())][typed:get_name()]):get_short_description(), cs_shop.ammo_val)
+					bank.rm_player_value(pname, cs_shop.ammo_val)
+				end
+			end
+		end
+	end
+	his_money[pname] = nil
+	inventory[pname] = nil
+end
+
+function cs_shop.buy_ammo_for_soft_arm(p)
+	local player = Player(p)
+	local pname = Name(p)
+	for _, typed in pairs(player:get_inventory():get_list("main")) do
+		if RecognizeType(typed:get_name()) == "smg" or RecognizeType(typed:get_name()) == "pistol" then
+			his_money[pname] = bank.return_val(pname)
+			if his_money[pname] >= cs_shop.ammo_val then
+				local v
+				if cs_shop.arms_ammo[RecognizeType(typed:get_name())].exe_amount then
+					--print("m")
+					v = cs_shop.arms_ammo[RecognizeType(typed:get_name())].ammo_amount
+				end
+				inventory[pname] = Inv(player)
+				if v then
+					inventory[pname]:add_item("main", ItemStack(cs_shop.arms_ammo[RecognizeType(typed:get_name())][typed:get_name()].." "..v))
+					SendOnBuy(p, ItemStack(cs_shop.arms_ammo[RecognizeType(typed:get_name())][typed:get_name()]):get_short_description(), cs_shop.ammo_val)
+					bank.rm_player_value(pname, cs_shop.ammo_val)
+				else
+					inventory[pname]:add_item("main", ItemStack(cs_shop.arms_ammo[RecognizeType(typed:get_name())][typed:get_name()]))
+					SendOnBuy(p, ItemStack(cs_shop.arms_ammo[RecognizeType(typed:get_name())][typed:get_name()]):get_short_description(), cs_shop.ammo_val)
+					bank.rm_player_value(pname, cs_shop.ammo_val)
+				end
+			end
+		end
+	end
+	inventory[pname] = nil
+end
 
 do
 	if not minetest.settings:get_bool("cs_map.mapmaking", false) then

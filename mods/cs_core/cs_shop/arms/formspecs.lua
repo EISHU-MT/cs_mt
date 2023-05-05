@@ -85,26 +85,28 @@ end
 function cs_shop.main(name)
 	local moneyr = tostring(bank.return_val(name))
 	local formspec = {
-	"formspec_version[6]" ..
-	"size[10.2,11]" ..
-	"box[0,0;6.2,1;#00bfff]" ..
-	"box[6.2,0;5.2,1;#00cc00]" ..
-	"button[0.2,1.3;3,1.6;rifle;Rifles]" ..
-	"button[3.2,1.3;3,1.6;pistol;"..S('Pistols').."]" ..
-	"button[0.2,2.9;3,1.6;grenade;"..S('Grenades').."]" ..
-	"button[0.2,6.1;3,1.6;sniper;"..S('Snipers').."]" ..
-	"button[0.2,4.5;3,1.6;armor;"..S('Armor').."]" ..
-	"button[3.2,2.9;3,1.6;shotgun;"..S('Shotguns').."]" ..
-	"button[3.2,4.5;3,1.6;smg;Smgs]" ..
-	"button[3.2,6.1;3,1.6;ammo;"..S('Ammo').."]" ..
-	"list[current_player;main;0.2,8.5;8,2;0]" ..
-	"label[4.4,8.1;Inventory]" ..
-	"label[2.3,0.5;"..S('Shop & Menu').."]" ..
-	"label[6.3,0.5;"..S('Total money:').."]" ..
-	"label[8.7,0.5;  " .. moneyr .. "]" ..
-	"box[6.5,1.3;3.4,1.4;#800000]" ..
-	"button[6.7,1.6;3,0.8;exit;"..S('Exit of the game').."]" ..
-	"button_exit[6.7,6.1;3,1.6;eee;"..S('Exit').." (ESC)]"
+		"formspec_version[6]",
+		"size[10.2,11]",
+		"box[0,0;6.2,1;#00bfff]",
+		"box[6.2,0;5.2,1;#00cc00]",
+		"button[0.2,1.3;3,1.6;rifle;Rifles]",
+		"button[3.2,1.3;3,1.6;pistol;"..S('Pistols').."]",
+		"button[0.2,2.9;3,1.6;grenade;"..S('Grenades').."]",
+		"button[0.2,6.1;3,1.6;sniper;"..S('Snipers').."]",
+		"button[0.2,4.5;3,1.6;armor;"..S('Armor').."]",
+		"button[3.2,2.9;3,1.6;shotgun;"..S('Shotguns').."]",
+		"button[3.2,4.5;3,1.6;smg;Smgs]",
+		"button[3.2,6.1;3,1.6;ammo;"..S('Ammo').."]",
+		"list[current_player;main;0.2,8.5;8,2;0]",
+		"label[4.4,8.1;Inventory]",
+		"label[2.3,0.5;"..S('Shop & Menu').."]",
+		"label[6.3,0.5;"..S('Total money:').."]",
+		"label[8.7,0.5;  " .. moneyr .. "]",
+		"box[6.5,1.3;3.4,1.4;#800000]",
+		"button[6.7,1.6;3,0.8;exit;"..S('Exit of the game').."]",
+		"button[6.25,2.9;3.7,1.6;buy_rammo;"..S('Buy Ammo for rifle\nsniper\nshotgun').."]",
+		"button[6.25,4.5;3.7,1.6;buy_pammo;"..S('Buy Ammo for pistol\nsmg').."]",
+		"button_exit[6.7,6.1;3,1.6;eee;"..S('Exit').." (ESC)]",
 	}
 	return table.concat(formspec, "")
 end
