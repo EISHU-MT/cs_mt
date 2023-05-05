@@ -300,17 +300,17 @@ core.register_chatcommand("helper_hud", {
 	description = "Enables/Disables helper hud",
 	params = "<No params!>",
 	func = function(name)
-		if disabled_hud[clua.pname(name)] == false then
-			clua.player(name):hud_set_flags({
+		if disabled_hud[Name(name)] == false then
+			Player(name):hud_set_flags({
 				hotbar = true,
 			})
-			disable_hud(clua.player(name))
+			disable_hud(Player(name))
 			return "-!- Disabled: Desktop Helper Hud"
-		elseif disabled_hud[clua.pname(name)] == true then
-			clua.player(name):hud_set_flags({
+		elseif disabled_hud[Name(name)] == true then
+			Player(name):hud_set_flags({
 				hotbar = false,
 			})
-			disabled_hud[clua.pname(name)] = false
+			disabled_hud[Name(name)] = false
 			return "-!- Enabled: Desktop Helper Hud"
 		end
 	end,
