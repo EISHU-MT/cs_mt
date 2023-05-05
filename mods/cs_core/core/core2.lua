@@ -495,6 +495,9 @@ core.register_globalstep(function(dtime)
 			end
 		end
 	end
+	for _, player in pairs(players) do
+		player:set_eye_offset({x=0, y=0, z=0})
+	end
 end)
 
 
