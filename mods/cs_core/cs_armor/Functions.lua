@@ -1,4 +1,7 @@
 function armor.get_value(p)
+	if not p then
+		return 0
+	end
 	return armor.player[p:get_player_name()].avalue or 0
 end
 function armor.set_value(p, r)
@@ -29,5 +32,8 @@ function armor.set_value(p, r)
 	end
 end
 function armor.set_nil_to(p) -- just saves 2 letters written ` 0`
+	if not p then
+		return
+	end
 	armor.set_value(Player(p), -1)
 end
