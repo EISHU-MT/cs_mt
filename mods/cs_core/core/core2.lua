@@ -12,6 +12,7 @@ csgo = {
 	op = {}, -- Online Players, DEF_L1:::=If a player are in those three teams {c,t,s}
 	pt = {}, -- Player team
 	pot = {}, -- Name of team in a player ENV
+	pot2 = {},
 	teams = {}, -- DEF:::={inf=nil}
 	spect = {}, -- Spectators from menu
 	teamed = {}, -- if player enter in a team
