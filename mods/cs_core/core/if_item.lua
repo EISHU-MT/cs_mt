@@ -17,5 +17,24 @@ local function on_step()
 			core.item_drop(ItemStack("bomb"), Player(pname), Player(pname):get_pos())
 		end
 	end
+	for _, player in pairs(core.get_connected_players()) do
+		if cs_match.commenced_match ~= false then
+			local usrd = player:get_wielded_item()
+			local thing = usrd:get_name()
+			if thing == ":" or thing == " " or thing == "" or thing == nil then
+				player:set_physics_override({
+					--gravity = 1090
+					speed = 1.4,
+					jump = 1.2
+				})
+			else
+				player:set_physics_override({
+					--gravity = 1090
+					speed = 1,
+					jump = 1
+				})
+			end
+		end
+	end
 end
 core.register_globalstep(on_step)
