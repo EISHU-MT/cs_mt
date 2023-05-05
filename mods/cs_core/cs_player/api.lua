@@ -228,8 +228,15 @@ local dead_ent = {
 minetest.register_on_dieplayer(function(ObjectRef, reason)
 	died_players[ObjectRef:get_player_name()] = minetest.add_entity(ObjectRef:get_pos(), "cs_player:dead_ent")
 	local new_table = table.copy(dead_ent)
-	local textures = player_textures[ObjectRef:get_player_name()]
-	new_table.textures = {textures}
+	local tex
+	if csgo.pot2[Name(ObjectRef)] == "terrorist" then
+		tex = "red.png"
+	elseif csgo.pot2[Name(ObjectRef)] == "counter" then
+		tex = "blue.png"
+	else
+		tex = "character.png"
+	end
+	new_table.textures = {tex}
 	new_table.visual_size = {x = 1, y = 1, z = 1}
 	died_players[ObjectRef:get_player_name()]:set_properties(new_table)
 	died_players[ObjectRef:get_player_name()]:set_animation({x = 162, y = 166}, 15, 0)
