@@ -423,7 +423,7 @@ minetest.register_on_joinplayer(function(playerrrr)
 			sneak_glitch = true,
 		})
 		
-		cs_buying.enable_shopping(player)
+		--cs_buying.enable_shopping(player)
 		
 		
 	end
