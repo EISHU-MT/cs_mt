@@ -159,10 +159,11 @@ function cs_match.finished_match(teamare1)
 			for i = 1, #cb.registered_on_new_match do
 				cb.registered_on_new_match[i]()
 			end
-			do
+			
+			core.after(1, function()
 				ccore.teams.terrorist.players = {}
 				ccore.teams.counter.players = {}
-			end
+			end)
 			
 			if ask_for_bomb() then
 				core.after(1.3, function()
