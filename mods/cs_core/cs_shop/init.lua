@@ -497,7 +497,9 @@ end
 local function on_step()
 	for i, val in pairs(enabled_to) do
 		if val == true then
-			Player(i):set_inventory_formspec(cs_shop.main(i))
+			if Player(i) then
+				Player(i):set_inventory_formspec(cs_shop.main(i))
+			end
 		end
 	end
 end
