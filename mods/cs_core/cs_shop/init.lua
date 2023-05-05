@@ -1,7 +1,10 @@
 local S = minetest.get_translator("cs_shop")
 do
 enabled_to = {}
+disabled_to = {}
 cs_shop = {
+	queued = {},
+	time = 0,
 	ammo_val = 30,
 	arms = {
 		arms_type_1 = {
@@ -491,6 +494,8 @@ function cs_shop.buy_ammo_for_hard_arm(p)
 					SendOnBuy(p, ItemStack(cs_shop.arms_ammo[RecognizeType(typed:get_name())][typed:get_name()]):get_short_description(), cs_shop.ammo_val)
 					bank.rm_player_value(pname, cs_shop.ammo_val)
 				end
+			else
+				SendOnFail(player, "ammo")
 			end
 		end
 	end
@@ -520,6 +525,8 @@ function cs_shop.buy_ammo_for_soft_arm(p)
 					SendOnBuy(p, ItemStack(cs_shop.arms_ammo[RecognizeType(typed:get_name())][typed:get_name()]):get_short_description(), cs_shop.ammo_val)
 					bank.rm_player_value(pname, cs_shop.ammo_val)
 				end
+			else
+				SendOnFail(player, "ammo")
 			end
 		end
 	end
@@ -532,11 +539,13 @@ do
 			if player then
 			player:set_inventory_formspec(cs_shop.main(player:get_player_name()))
 			enabled_to[Name(player)] = true
+			disabled_to[Name(player)] = nil
 			else
 				for _, player in pairs(core.get_connected_players()) do
 				--local playerr = core.get_player_by_name(player)
 				player:set_inventory_formspec(cs_shop.main(player:get_player_name()))
 				enabled_to[Name(player)] = true
+				disabled_to[Name(player)] = nil
 				end
 			end
 		end
@@ -544,11 +553,13 @@ do
 			if player then
 			player:set_inventory_formspec(cs_shop.fmain(player))
 			enabled_to[Name(player)] = nil
+			disabled_to[Name(player)] = true
 			else
 				for _, player in pairs(core.get_connected_players()) do
 				--local playerr = core.get_player_by_name(player)
 				player:set_inventory_formspec(cs_shop.fmain(player))
 				enabled_to[Name(player)] = nil
+				disabled_to[Name(player)] = true
 				end
 			end
 		end
@@ -558,13 +569,47 @@ do
 	end
 end
 
-local function on_step()
-	for i, val in pairs(enabled_to) do
-		if val == true then
-			if Player(i) then
-				Player(i):set_inventory_formspec(cs_shop.main(i))
+local function on_joinp(player)
+	
+end
+
+local function on_step(dtime)
+	cs_shop.time = cs_shop.time + dtime
+	if cs_shop.time >= 1 then
+		for i, val in pairs(enabled_to) do
+			if val == true and i and (not cs_shop.queued[i]) then
+				if Player(i) then
+					Player(i):set_inventory_formspec(cs_shop.main(i))
+				end
 			end
 		end
+		for i, val in pairs(disabled_to) do
+			if val == true and i and (not cs_shop.queued[i]) then
+				if Player(i) then
+					Player(i):set_inventory_formspec(cs_shop.fmain())
+				end
+			end
+		end
+		
+		local list = core.get_connected_players()
+		for i, val in pairs(cs_shop.queued) do
+			for _, player in pairs(list) do
+				if Name(player) == i then
+					if val == 0 then
+						Player(i):set_inventory_formspec(cs_shop.fmain())
+						disabled_to[Name(player)] = true
+						enabled_to[Name(player)] = nil
+						cs_shop.queued[Name(player)] = nil
+					else
+						cs_shop.queued[i] = cs_shop.queued[i] - 1
+						Player(i):set_inventory_formspec(cs_shop.main(i))
+						disabled_to[Name(player)] = nil
+						enabled_to[Name(player)] = true
+					end
+				end
+			end
+		end
+		cs_shop.time = 0
 	end
 end
 
@@ -586,7 +631,19 @@ minetest.register_on_joinplayer(function(player)
 	cs_shop.grenades.flashbang[p] = 0
 	cs_shop.grenades.smoke[p] = 0
 	cs_shop.grenades.frag_sticky[p] = 0
+	core.after(0.2, function(player)
+		cs_shop.enable_shopping(player)
+		cs_shop.queued[p] = 20
+	end)
 end)
 
 core.register_globalstep(on_step)
+
+--minetest.register_on_joinplayer(on_joinp)
+
+
+
+
+
+
 
