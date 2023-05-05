@@ -41,11 +41,11 @@ minetest.register_craftitem(":bomb", {
 	on_drop = function(itm, drp, pos)
 		--pname = clua.pname(drp)
 		if type(temporalhud) == "table" then
-			return
+			return "bomb -1"
 		end
 		
 		if has_bomb then
-			return
+			return "bomb -1"
 		end
 		temporalhud = {}
 		
