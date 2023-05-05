@@ -16,7 +16,17 @@ randomMSG = {
 "Trolling your teammates is strictly not allowed here",
 "Camping at the roof of a house is more good than being in the bright to be seen for enemis",
 "To get more money just shoot at the enemy with best bounty",
-"To do math here just say in chat \"CLUA math 4 + 4\" and then it will say 8."
+"To do math here just say in chat \"CLUA math 4 + 4\" and then it will say 8.",
+"Hading nothing in hand increases speed and jump",
+"To had the hotbar and not items hud just do: /helper_hud",
+"Remember if you afk, the game kicks you out",
+"Only One player can had the bomb and is need to be terrorist too",
+"When finished a match, remember to buy things befores it times out!",
+"To contribute maps, Get involved here!: github.com/EISHU92/cs_maps",
+"This game are in dev state, expect bugs and report it to help us!",
+"This game is inspired by CS:GO Game",
+"To chat only with ur teammates use this command: /m",
+"To defuse a bomb maintain pressed the punch/dig button/touchpad and wait the seconds that require",
 }
 time_to_say = 90
 rmtime = 0
