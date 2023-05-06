@@ -245,44 +245,21 @@ end
 local function empty() end
 
 call.register_on_new_match(function()
---error("test")
-core.after(0.1, function()
-	for team in pairs(ccore.teams) do -- New method
-			--counters
-			--error(team) -- debug
-			--error(team)
-			if team == "counter" then
-				for player in pairs(ccore.teams[team].players) do
-					if csgo.team.counter.count == 10 then
-						cs_core.log("error", "Can't put player " .. player .. " in counter-terrorist forces... Ignoring this time")
-					else
-						cs_core.log("action", "Placing again the died player "..player.." into counter-terrorist forces")
-						csgo.counter(player, true)
-						ccore.teams[team].players[player] = nil
-						--minetest.set_player_privs(aplayer, {fly=nil, fast=nil, noclip=nil, teleport=nil, interact=true, shout=true})
-					end
-				end
+	for player, team in pairs(ccore) do
+		if player and team and csgo.team[team].count ~= csgo.usrTlimit then
+			if minetest.settings:get_bool("cs_core.enable_env_debug", false) then
+				core.log("error", "Can't put player " .. player .. " in "..team.." team, its full!")
 			end
-			--terrorists
-			if team == "terrorist" then
-				for player in pairs(ccore.teams[team].players) do
-					if csgo.team.counter.count == 10 then
-						cs_core.log("error", "Can't put player " .. player .. " in terrorist forces... Ignoring this time")
-					else
-						cs_core.log("action", "Placing again the died player "..player.." into terrorist forces")
-						csgo.terrorist(player, true)
-						ccore.teams[team].players[player] = nil
-						--minetest.set_player_privs(aplayer, {fly=nil, fast=nil, noclip=nil, teleport=nil, interact=true, shout=true})
-					end
-				end
+			csgo.spectator(player, "Joined spectator team! because: Cannot join "..team)
+		else
+			if minetest.settings:get_bool("cs_core.enable_env_debug", false) then
+				core.log("action", "Placing again the died player "..player.." into terrorist forces")
 			end
-		
+			csgo[team](player)
+			ccore[player] = nil
+		end
+		died[player] = nil
 	end
-	for playername in pairs(died) do
-		died[playername] = nil
-	end
-
-end)
 end)
 
 
