@@ -97,8 +97,8 @@ function c4.bomb_now()
 				local blast_pos = {x=pos.x, y=pos.y + 4, z=pos.z}
 						--minetest.line_of_sight(obj_pos, blast_pos, 1)
 						--print(obj)
-						if type(obj) ~= "string" and obj:get_player_name() then
-							obj:punch(core.get_player_by_name(c4.planter), nil, { damage_groups = {fleshy=damage}, }, nil)
+						if type(obj) ~= "string" and obj:get_player_name() and if Player(c4.planter) then
+							obj:punch(Player(c4.planter), nil, { damage_groups = {fleshy=damage}, }, nil)
 						end
 			end
 	end
