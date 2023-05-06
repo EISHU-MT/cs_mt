@@ -105,316 +105,171 @@ function cs_kill.translate_to_real_damage(damage)
 
 	return a3
 end
+function cs_kill.run_callbacks(...)
+	for i = 1, #cb.registered_on_kill do
+		cb.registered_on_kill[i](...)
+	end
+end
 minetest.register_on_player_hpchange(function(player, hp_ch, reason)
 	local hp_change = cs_kill.translate_to_real_damage(hp_ch)
 	if not hp_change then
 		return true
 	end
-	if reason.type == "punch" and reason.object then
+	local pname
+	if reason.object then
 		pname = reason.object:get_player_name()
-		victim = player:get_player_name()
-		if not victim then
-			victim = "nil"
-		end
-		if player:get_hp() > 0 and player:get_hp() - hp_change <= 0 and reason.object then
-		
-		
-		if csgo.pot[victim] == csgo.pot[pname] then -- They suicide and win, this is not ok >:(
-			if csgo.team[csgo.pot[victim]].count - 1 < 0 and csgo.team[csgo.pot[pname]] == 0 then
-				--print(csgo.pot[pname])
-				if csgo.pot[victim] == "counter" then
-					t = "terrorist"
-				elseif csgo.pot[victim] == "terrorist" then
-					t = "counter"
-				end
-				local random = Randomise("Select random", {"The last alive player is: "..victim, "the team "..csgo.pot[pname].." had only 1 player!", "wajaaaa"})
-				
-				annouce.winner(t, random)
-				cs_match.finished_match(csgo.pot[pname])
-				for i = 1, #cb.registered_on_kill do
-					cb.registered_on_kill[i](victim, pname, csgo.pot[pname], csgo.pot[victim])
-				end
-			elseif csgo.team[csgo.pot[victim]].count - 1 < 1  then
-				if csgo.pot[victim] == "counter" then
-					t = "terrorist"
-				elseif csgo.pot[victim] == "terrorist" then
-					t = "counter"
-				end
-				local random = Randomise("Select random", {"The last player that suicided is: "..victim, "the team "..t.." did his job", "wajaaa"})
-				annouce.winner(t, random)
-				cs_match.finished_match(csgo.pot[pname])
-				for i = 1, #cb.registered_on_kill do
-					cb.registered_on_kill[i](victim, pname, csgo.pot[pname], csgo.pot[victim])
-				end
-			else
-				if died[victim] ~= true then 
-					
-					local a1 = reason.object:get_wielded_item()
-					local image = a1:get_definition().inventory_image
-					
-					cs_kh.add(reason.object:get_player_name(), player:get_player_name(), image, "", csgo.pot[victim])
-					
-					
-					--core.debug("green", "Player "..victim.." died. register_ondie player is in core2.", "CS:GO Core")
-					--return nil
-					local he_team = csgo.pot[victim]
-					died[victim] = true
-					he_team = csgo.pot[victim]
-					csgo.op[victim] = nil
-					csgo.pt[victim] = nil
-					csgo.online[victim] = nil
-					csgo.pot[victim] = nil
-					csgo.team[he_team].players[victim] = nil
-					csgo.team[he_team].count = csgo.team[he_team].count - 1
-					
-					
-					for i = 1, #cb.registered_on_kill do
-						cb.registered_on_kill[i](victim, pname, csgo.pot[pname], csgo.pot[victim])
-					end
-					
-					
-					if finishedmatch() == true then
-					core.debug("green", "Putting player "..victim.." into dead players to be respawned again later...", "CS:GO Core")
-					ccore.teams[he_team].players[victim] = true
-					csgo.send_message(victim .. " will be a spectator. because he died. ", "spectator")
-					player:set_armor_groups({immortal = 1})
-					--minetest.set_player_privs(victim, {fly=true, fast=true, noclip=true, teleport=true, shout=true}) -- Teleport Is a feature
-					end
-					core.after(0.2,function()
-						csgo.spectator(victim)
-					end)
-				end
-			end
+	end
+	local victim = player:get_player_name()
+	if reason.type == "punch" and reason.object then
+		if not victim or not pname then
 			return
 		end
-			if csgo.team[csgo.pot[victim]].count - 1 == 0 and csgo.team[csgo.pot[pname]] == 1 then
-				--print(csgo.pot[pname])
-				local random = Randomise("Select random", {"The last alive player is: "..victim, "the team "..csgo.pot[pname].." had only 1 player!", "wajaaaa"})
-				annouce.winner(csgo.pot[pname], random)
-				cs_match.finished_match(csgo.pot[pname])
-				for i = 1, #cb.registered_on_kill do
-					cb.registered_on_kill[i](victim, pname, csgo.pot[pname], csgo.pot[victim])
+		if player:get_hp() > 0 and player:get_hp() - hp_change <= 0 and reason.object then
+			if csgo.pot[victim] == csgo.pot[pname] then -- They suicide and win, this is not ok >:(
+				if csgo.team[csgo.pot[victim]].count - 1 < 0 and csgo.team[csgo.enemy_team(csgo.pot[victim])].count == 1 then
+					local t = csgo.enemy_team(csgo.pot[victim])
+					
+					local random = Randomise("Select random", {"The last alive player is: "..victim, "The team "..csgo.enemy_team(csgo.pot[victim]).." had only 1 player!"})
+					
+					annouce.winner(t, random)
+					cs_match.finish_match(csgo.pot[pname])
+					cs_kill.run_callbacks(victim, pname, csgo.pot[pname], csgo.pot[victim])
+					
+				elseif csgo.team[csgo.pot[victim]].count - 1 < 0 then
+					local t = csgo.enemy_team(csgo.pot[victim])
+					local random = Randomise("Select random", {"The last player that do suicide is: "..victim, "The team "..t.." did his job"})
+					annouce.winner(t, random)
+					cs_match.finish_match(csgo.pot[pname])
+					cs_kill.run_callbacks(victim, nil, nil, csgo.pot[victim])
+				else
+					if died[victim] ~= true then 
+						if cs_match.commenced_match ~= false then
+							local a1 = reason.object:get_wielded_item()
+							local image = a1:get_definition().inventory_image
+							cs_kh.add(reason.object:get_player_name(), player:get_player_name(), image, "", csgo.pot[victim])
+							
+							died[victim] = true
+							cs_kill.run_callbacks(victim, nil, nil, csgo.pot[victim])
+							
+							ccore[victim] = csgo.pot[victim]
+							csgo.blank(victim, csgo.pot[victim])
+							csgo.spectator(victim)
+							csgo.send_message(victim .. " will be a spectator. because he died. ", "spectator")
+						end
+					end
 				end
-			elseif csgo.team[csgo.pot[victim]].count - 1 == 0 and victim and csgo.pot[pname] then
-				local random = Randomise("Select random", {"The last killed player is: "..victim, "the team "..csgo.pot[pname].." did his job", "wajaaa"})
-				annouce.winner(csgo.pot[pname], random)
-				cs_match.finished_match(csgo.pot[pname])
-				for i = 1, #cb.registered_on_kill do
-					cb.registered_on_kill[i](victim, pname, csgo.pot[pname], csgo.pot[victim])
-				end
+				return
 			else
-				if died[victim] ~= true then 
-					
-					local a1 = reason.object:get_wielded_item()
-					local image = a1:get_definition().inventory_image
-					
-					cs_kh.add(reason.object:get_player_name(), player:get_player_name(), image, "", csgo.pot[victim])
-					
-					bank.player_add_value(reason.object:get_player_name(), 50) 
-					
-					--core.debug("green", "Player "..victim.." died. register_ondie player is in core2.", "CS:GO Core")
-					--return nil
-					local he_team = csgo.pot[victim]
-					died[victim] = true
-					he_team = csgo.pot[victim]
-					csgo.op[victim] = nil
-					csgo.pt[victim] = nil
-					csgo.online[victim] = nil
-					csgo.pot[victim] = nil
-					csgo.team[he_team].players[victim] = nil
-					csgo.team[he_team].count = csgo.team[he_team].count - 1
-					
-					
-					for i = 1, #cb.registered_on_kill do
-						cb.registered_on_kill[i](victim, pname, csgo.pot[pname], csgo.pot[victim])
+				if csgo.team[csgo.pot[victim]].count - 1 == 0 and csgo.team[csgo.pot[pname]].count == 1 then
+					local random = Randomise("Select random", {"The last alive player is: "..pname, "the team "..csgo.pot[pname].." had only 1 player!", "wajaaaa"})
+					annouce.winner(csgo.pot[pname], random)
+					cs_match.finish_match(csgo.pot[pname])
+					cs_kill.run_callbacks(victim, pname, csgo.pot[pname], csgo.pot[victim])
+				elseif csgo.team[csgo.pot[victim]].count - 1 == 0 and victim and csgo.pot[pname] then
+					local random = Randomise("Select random", {"The last killed player is: "..victim, "the team "..csgo.pot[pname].." did his job", "wajaaa"})
+					annouce.winner(csgo.pot[pname], random)
+					cs_match.finish_match(csgo.pot[pname])
+					cs_kill.run_callbacks(victim, pname, csgo.pot[pname], csgo.pot[victim])
+				else
+					if died[victim] ~= true then 
+						if cs_match.commenced_match ~= false then
+							local a1 = reason.object:get_wielded_item()
+							local image = a1:get_definition().inventory_image
+							cs_kh.add(reason.object:get_player_name(), player:get_player_name(), image, "", csgo.pot[victim])
+							
+							died[victim] = true
+							cs_kill.run_callbacks(victim, pname, csgo.pot[pname], csgo.pot[victim])
+							
+							ccore[victim] = csgo.pot[victim]
+							csgo.blank(victim, csgo.pot[victim])
+							csgo.spectator(victim)
+							csgo.send_message(victim .. " will be a spectator. because he died. ", "spectator")
+						end
 					end
-					
-					
-					if finishedmatch() == true then
-					core.debug("green", "Putting player "..victim.." into dead players to be respawned again later...", "CS:GO Core")
-					ccore.teams[he_team].players[victim] = true
-					csgo.send_message(victim .. " will be a spectator. because he died. ", "spectator")
-					player:set_armor_groups({immortal = 1})
-					--minetest.set_player_privs(victim, {fly=true, fast=true, noclip=true, teleport=true, shout=true}) -- Teleport Is a feature
-					end
-					core.after(0.1,function()
-						csgo.spectator(victim)
-					end)
 				end
 			end
-			
-			
-			
 		end
 	elseif reason.type == "fall" then --
 		if player:get_hp() > 0 and player:get_hp() - hp_change <= 0 then
-			local pname = player:get_player_name()
-			local playerr = player:get_player_name()
+			local calcs = csgo.team[csgo.pot[victim]].count - 1
 			
-			--print(pname, csgo.pot[pname])
-			
-			victim = pname
-			
-			local var4 = csgo.pot[victim]
-			local tokc_TEMP = csgo.team[var4].count - 1
-			local tokc = csgo.team[var4].count
-			
-			local no = csgo.team[var4].count - 1
-			
-			if csgo.pot[pname] and no == 0 then
-				mess = "The last player " .. playerr .. " fell!" -- LOL
-				cs_match.finished_match(csgo.enemy_team(var4))
-				annouce.winner(csgo.enemy_team(var4), mess)
+			if calcs == 0 or calcs <= 1 then
+				local mess = "The last player " .. victim .. " fell!"
+				cs_match.finish_match(csgo.enemy_team(csgo.pot[victim]))
+				annouce.winner(csgo.enemy_team(csgo.pot[victim]), mess)
 			else
-				if died[pname] == false or died[pname] == true then
-					empty()
-				else
-					died[pname] = true
-				end
-				victim = pname or playerr
-				died[pname] = true
-				he_team = csgo.pot[victim]
-				cs_kh.add(pname, pname, "cs_files_bone.png", "(Suicide?)")
-				csgo.op[victim] = nil
-				csgo.pt[victim] = nil
-				csgo.online[victim] = nil
-				csgo.pot[victim] = nil
-				csgo.team[he_team].players[victim] = nil
-				csgo.team[he_team].count = csgo.team[he_team].count - 1
-				
-				for i = 1, #cb.registered_on_kill do
-						cb.registered_on_kill[i](victim, "reason:fall", "none", csgo.pot[victim])
-				end
-				
-				if finishedmatch() == true then
-					core.debug("green", "Putting player "..victim.." into dead players to be respawned again later...", "CS:GO Core")
-					ccore.teams[he_team].players[victim] = true
-					csgo.send_message(victim .. " will be a spectator. because he died. ", "spectator")
-					player:set_armor_groups({immortal = 1})
-					--minetest.set_player_privs(victim, {fly=true, fast=true, noclip=true, teleport=true, shout=true}) -- Teleport Is a feature
-				end
-				core.after(0.1,function()
+				if cs_match.commenced_match ~= false and died[victim] ~= true then
+					cs_kh.add("", player:get_player_name(), "cs_files_suicide.png", "Suicide", csgo.pot[victim])
+					
+					died[victim] = true
+					cs_kill.run_callbacks(victim, nil, nil, csgo.pot[victim])
+					
+					ccore[victim] = csgo.pot[victim]
+					csgo.blank(victim, csgo.pot[victim])
 					csgo.spectator(victim)
-				end)
+					csgo.send_message(victim .. " will be a spectator. because he died. ", "spectator")
+				end
 			end
 		end
 	elseif reason.type == "drown" then
 		if player:get_hp() > 0 and player:get_hp() - hp_change <= 0 then
-			local pname = player:get_player_name()
-			local playerr = pname
+			local calcs = csgo.team[csgo.pot[victim]].count - 1
 			
-			
-			local var4 = csgo.pot[pname]
-			
-			local no = csgo.team[var4].count - 1
-			
-			if csgo.pot[pname] and no == 0 then
-				mess = "The last player " .. playerr .. " did die by being drowned!.." -- LOL
-				cs_match.finished_match(csgo.enemy_team(var4))
-				annouce.winner(csgo.enemy_team(var4), mess)
-				cs_kh.add(Randomise("Select random", {"MrBubble", "bubdle", "bubble", "b0bble"}), pname, "bubble.png", "drown")
+			if calcs == 0 or calcs <= 1 then
+				local mess = "The last player " .. playerr .. " did die by being drowned!.."
+				cs_match.finish_match(csgo.enemy_team(var4))
+				annouce.winner(csgo.enemy_team(csgo.pot[victim]), mess)
+				cs_kh.add("", pname, "cs_files_drown.png", "Drown", csgo.pot[victim])
 			else
-				if died[pname] == false or died[pname] == true then
-					empty()
-				else
-					died[pname] = true
-				end
-				victim = pname or playerr
-				died[pname] = true
-				he_team = csgo.pot[victim]
-				cs_kh.add(Randomise("Select random", {"MrBubble", "bubdle", "bubble", "b0bble"}), pname, "bubble.png", "drown")
-				csgo.op[victim] = nil
-				csgo.pt[victim] = nil
-				csgo.online[victim] = nil
-				csgo.pot[victim] = nil
-				csgo.team[he_team].players[victim] = nil
-				csgo.team[he_team].count = csgo.team[he_team].count - 1
-				
-				for i = 1, #cb.registered_on_kill do
-						cb.registered_on_kill[i](victim, "reason:drown", "none", csgo.pot[victim])
-				end
-				
-				if finishedmatch() == true then
-					core.debug("green", "Putting player "..victim.." into dead players to be respawned again later...", "CS:GO Core")
-					ccore.teams[he_team].players[victim] = true
-					csgo.send_message(victim .. " will be a spectator. because he died. ", "spectator")
-					player:set_armor_groups({immortal = 1})
-					--minetest.set_player_privs(victim, {fly=true, fast=true, noclip=true, teleport=true, shout=true}) -- Teleport Is a feature
-				end
-				core.after(0.1,function()
+				if cs_match.commenced_match ~= false and died[victim] ~= true then
+					cs_kh.add("", player:get_player_name(), "cs_drown.png", "Drown", csgo.pot[victim])
+					
+					died[victim] = true
+					cs_kill.run_callbacks(victim, nil, nil, csgo.pot[victim])
+					
+					ccore[victim] = csgo.pot[victim]
+					csgo.blank(victim, csgo.pot[victim])
 					csgo.spectator(victim)
-				end)
+					csgo.send_message(victim .. " will be a spectator. because he died. ", "spectator")
+				end
 			end
 		end
 	elseif reason.type == "node_damage" then
 		if player:get_hp() > 0 and player:get_hp() - hp_change <= 0 then
-			local pname = player:get_player_name()
-			local playerr = player:get_player_name()
+			local calcs = csgo.team[csgo.pot[victim]].count - 1
 			
-			
-			local var4 = csgo.pot[pname]
-			local tokc_TEMP = csgo.team[var4].count - 1
-			local tokc = csgo.team[var4].count
-			
-			local no = csgo.team[var4].count - 1
-			
-			if csgo.pot[pname] and no == 0 then
-				mess = "The last player " .. playerr .. " did die by being sus (from a block)!.." -- LOL
-				cs_match.finished_match(var4)
-				annouce.winner("counter", mess)
+			if calcs == 0 or calcs <= 1 then
+				local mess = "The last player " .. victim .. " did die by being sus (from a block)!.."
+				cs_match.finish_match(csgo.enemy_team(csgo.pot[victim]))
+				annouce.winner(csgo.enemy_team(csgo.pot[victim]), mess)
 				local a1 = ItemStack(reason.node)
 				local a2 = (a1:get_definition().tiles[1]) or a1:get_definition().textures
 				local a3 = a1:get_definition().description
 				local a4 = a3:split("\n") --no
 				
-				cs_kh.add(a4[1], victim, a2)
-			else
-				if died[pname] == false or died[pname] == true then
-					empty()
-				else
-					died[pname] = true
-				end
-				victim = pname or playerr
-				died[pname] = true
-				he_team = csgo.pot[victim]
-				local a1 = ItemStack(reason.node)
-				local a2 = a1:get_definition().description
-				local a3 = a2:split("\n")
-				local a4 = (a1:get_definition().tiles[1]) or a1:get_definition().textures
-				cs_kh.add(a3[1], victim, a4)
-				csgo.op[victim] = nil
-				csgo.pt[victim] = nil
-				csgo.online[victim] = nil
-				csgo.pot[victim] = nil
-				
-				for i = 1, #cb.registered_on_kill do
-						cb.registered_on_kill[i](victim, "reason:table", "none", csgo.pot[victim], {node_name = a1:get_name(), reason = "node"})
-				end
-				
-				csgo.team[he_team].players[victim] = nil
-				csgo.team[he_team].count = csgo.team[he_team].count - 1
-				
-				if finishedmatch() == true then
-					core.debug("green", "Putting player "..victim.." into dead players to be respawned again later...", "CS:GO Core")
-					ccore.teams[he_team].players[victim] = true
-					csgo.send_message(victim .. " will be a spectator. because he died. ", "spectator")
-					player:set_armor_groups({immortal = 1})
-					--minetest.set_player_privs(victim, {fly=true, fast=true, noclip=true, teleport=true, shout=true}) -- Teleport Is a feature
-				end
-				core.after(0.1,function()
+				cs_kh.add(a4[1], victim, a2, "Suicide", csgo.pot[victim])
+			else --cb.registered_on_kill[i](victim, "reason:table", "none", csgo.pot[victim], {node_name = a1:get_name(), reason = "node"})
+				if cs_match.commenced_match ~= false and died[victim] ~= true then
+					local a1 = ItemStack(reason.node)
+					local a2 = (a1:get_definition().tiles[1]) or a1:get_definition().textures
+					local a3 = a1:get_definition().description
+					local a4 = a3:split("\n") --no
+					
+					cs_kh.add("", player:get_player_name(), a2, "Suicide", csgo.pot[victim])
+					
+					died[victim] = true
+					cs_kill.run_callbacks(victim, "reason:table", nil, csgo.pot[victim], {node_name = a1:get_name(), reason = "node"})
+					
+					ccore[victim] = csgo.pot[victim]
+					csgo.blank(victim, csgo.pot[victim])
 					csgo.spectator(victim)
-				end)
+					csgo.send_message(victim .. " will be a spectator. because he died. ", "spectator")
+				end
 			end
 		end
 	end
 	
 end)
-
-
-
-
-
-
 
 
 
