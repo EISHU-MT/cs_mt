@@ -146,7 +146,7 @@ function cs_kh.add(killerr, victim, weapon_image, comment, v_team_a)
 		local img1 = imgt[1].."_"..part[1].."_icon.png"
 		weapon_image2 = img1.."^[transformFX"
 	else
-		weapon_image2 = weapon_image
+		weapon_image2 = weapon_image or "cs_files_hand.png"
 	end
 	
 	add_kill(
