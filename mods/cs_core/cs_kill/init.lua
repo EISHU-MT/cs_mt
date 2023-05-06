@@ -110,6 +110,40 @@ function cs_kill.run_callbacks(...)
 		cb.registered_on_kill[i](...)
 	end
 end
+
+local dead_ent = {
+	hp_max = 100,
+	--eye_height = 1.625,
+	physical = false,
+	collide_with_objects = true,
+	collisionbox = { -0.5, -0.5, -0.5, 0.5, 0.5, 0.5 },  -- default
+	selectionbox = { -0.5, -0.5, -0.5, 0.5, 0.5, 0.5, rotate = false },
+	pointable = true,
+	visual = "mesh",
+	visual_size = {x = 1, y = 1, z = 1},
+	mesh = "empty.b3d",
+	textures = {},
+	colors = {},
+	use_texture_alpha = false,
+	spritediv = {x = 1, y = 1},
+	initial_sprite_basepos = {x = 0, y = 0},
+	is_visible = true,
+	makes_footstep_sound = false,
+	automatic_rotate = 0,
+	stepheight = 0,
+	automatic_face_movement_dir = 0.0,
+	automatic_face_movement_max_rotation_per_sec = -1,
+	backface_culling = true,
+	glow = 1,
+	nametag = "",
+	infotext = "(DIED)",
+	static_save = true,
+	damage_texture_modifier = "",
+	shaded = true,
+	show_on_minimap = false,
+}
+
+
 minetest.register_on_player_hpchange(function(player, hp_ch, reason)
 	local hp_change = cs_kill.translate_to_real_damage(hp_ch)
 	if not hp_change then
@@ -119,6 +153,32 @@ minetest.register_on_player_hpchange(function(player, hp_ch, reason)
 	if reason.object then
 		pname = reason.object:get_player_name()
 	end
+	
+	
+	
+	
+	if player:get_hp() > 0 and player:get_hp() - hp_change <= 0 then
+		died_players[player:get_player_name()] = minetest.add_entity(player:get_pos(), "cs_player:dead_ent")
+		local new_table = table.copy(dead_ent)
+		local tex
+		if csgo.pot2[Name(player)] == "terrorist" then
+			tex = "red.png"
+		elseif csgo.pot2[Name(player)] == "counter" then
+			tex = "blue.png"
+		else
+			tex = "character.png"
+		end
+		new_table.textures = {tex}
+		new_table.visual_size = {x = 1, y = 1, z = 1}
+		died_players[player:get_player_name()]:set_properties(new_table)
+		died_players[player:get_player_name()]:set_animation({x = 162, y = 166}, 15, 0)
+		--player_set_animation(player, "lay")
+	end
+	
+	
+	
+	
+	
 	local victim = player:get_player_name()
 	if reason.type == "punch" and reason.object then
 		if not victim or not pname then
