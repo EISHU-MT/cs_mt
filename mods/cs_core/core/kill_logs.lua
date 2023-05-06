@@ -17,16 +17,18 @@ end)
 
 call.register_on_kill_player(function(player, enemy, enemyt, playert)
 	if player and enemy and enemyt and playert then
-	    if enemy ~= "reason:drown" and enemy ~= "reason:fall" and enemy ~= "reason:table" then
-		if player and enemy and enemyt and playert then
-		    kills[enemy].kills = kills[enemy].kills + 1
-		    kills[player].deaths = kills[player].deaths + 1
+		if enemy ~= "reason:drown" and enemy ~= "reason:fall" and enemy ~= "reason:table" then
+			if player and enemy and enemyt and playert then
+				kills[enemy].kills = kills[enemy].kills + 1
+				kills[player].deaths = kills[player].deaths + 1
+			end
+		else
+			if player then
+				kills[player].deaths = kills[player].deaths + 1
+			end
 		end
-	    else
-		if player then
-			kills[player].deaths = kills[player].deaths + 1
-		end
-	    end
+	elseif player then
+		kills[player].deaths = kills[player].deaths + 1
 	end
 end)
 
