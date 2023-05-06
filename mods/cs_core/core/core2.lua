@@ -1,5 +1,5 @@
 -- Only API and Menu
-
+local storage = minetest.get_mod_storage("core")
 cs_core.main_seconds = 10
 csgo = {}
 csgo = {
@@ -27,6 +27,17 @@ player_api.set_textures(name, "red.png")
 end
 function cs.s_c(name)
 player_api.set_textures(name, "blue.png")
+end
+
+do
+	local strs = storage:get_string("players")
+	if strs == "" or strs == " " or strs == nil then
+		local newtable = {
+					__null = true
+				}
+		local sr = core.serialize(newtable)
+		storage:set_string("players", sr)
+	end
 end
 
 function csgo.get_team_colour(team)
@@ -73,6 +84,42 @@ function csgo.random_player(team)
 		return nil
 	end
 	return csgo.team[team].players[math.random(#csgo.team[team].players)]
+end
+
+function csgo.uncompress_players()
+	local strs = storage:get_string("players")
+	if strs ~= "" or strs ~= " " or strs ~= nil then
+		local data = core.deserialize(strs)
+		return data
+	end
+end
+
+function csgo.compress_player(player) -- Name, not userdata
+	local strs = storage:get_string("players")
+	if strs ~= "" or strs ~= " " or strs ~= nil then
+		local data = core.deserialize(strs)
+		data[player] = true
+		local sr = core.serialize(data)
+		storage:set_string("players", sr)
+	end
+end
+
+function csgo.delete_compressed_player(player) -- Name, not userdata
+	local strs = storage:get_string("players")
+	if strs ~= "" or strs ~= " " or strs ~= nil then
+		local data = core.deserialize(strs)
+		data[player] = nil
+		local sr = core.serialize(data)
+		storage:set_string("players", sr)
+	end
+end
+
+function csgo.check_compressed_player(player)
+	local strs = storage:get_string("players")
+	if strs ~= "" or strs ~= " " or strs ~= nil then
+		local data = core.deserialize(strs)
+		return data[player]
+	end
 end
 
 function csgo.check_team(player)
@@ -416,14 +463,14 @@ defuser_huds = {}
 minetest.register_on_joinplayer(function(playerrrr)
 	local player = playerrrr
 	
-	if not minetest.settings:get_bool("cs_map.mapmaking", false) then
+	if (not minetest.settings:get_bool("cs_map.mapmaking", false)) and csgo.check_compressed_player(playerrrr:get_player_name()) then
 		player:set_hp(20)
 		
 		--local n = math.random(800, 20000)
 		--player:set_pos({x=0, y=n, z=0})
 		
 		phooks[playerrrr:get_player_name()] = 10
-		print(phooks[playerrrr:get_player_name()])
+		--print(phooks[playerrrr:get_player_name()])
 		
 		player:set_armor_groups({immortal=1})
 		
@@ -507,40 +554,44 @@ end)
 
 
 function csgo.show_menu(playeri)
-	if not playeri then
-		return
-	else
+	if (not minetest.settings:get_bool("cs_map.mapmaking", false)) then
+		if not playeri then
+			return
+		end
+		
+		playeri:set_hp(20)
+		
+		playeri:set_armor_groups({immortal=1})
+		
+		if csgo.team.terrorist.count ~= csgo.usrTlimit and csgo.team.counter.count ~= csgo.usrTlimit then
+			core.show_formspec(playeri:get_player_name(), "core:main", csgo.main())
+		elseif csgo.team.terrorist.count == csgo.usrTlimit then
+			csgo.counter(playeri:get_player_name())
+		elseif csgo.team.counter.count == csgo.usrTlimit then
+			csgo.terrorist(playeri:get_player_name())
+		else
+			csgo.spectator(playeri:get_player_name())
+			core.chat_send_player(playeri:get_player_name(), core.colorize("#FF3100", "We're sorry but the teams limit got reached... "))
+		end
+		
+		defuser_huds[playeri:get_player_name()] = playeri:hud_add({
+			hud_elem_type = "text",
+			name = "defuser_timer",
+			scale = {x = 1.5, y = 1.5},
+			position = {x = 0.5, y = 0.5},
+			offset = {x = 0, y = 20},
+			--size = {x = 2},
+			alignment = {x = "center", y = "down"},
+			--alignment = {x = 0, y = -1},
+			text = " ",
+			number = 0xCECECE,
+		}) -- hehe, here must be an error but its solved a long time ago in top of this file
+		playeri:set_physics_override({
+			sneak_glitch = true,
+		})
+		playeri:hud_set_flags({minimap=false, basic_debug=false})
+		phooks[playeri:get_player_name()] = 10
 	end
-	
-	playeri = playerrrr
-	
-	playeri:set_hp(20)
-	
-	playeri:set_armor_groups({immortal=1})
-	
-	if csgo.team.terrorist.count ~= csgo.usrTlimit and csgo.team.counter.count ~= csgo.usrTlimit then
-		core.show_formspec(playeri:get_player_name(), "core:main", csgo.main())
-	elseif csgo.team.terrorist.count == csgo.usrTlimit then
-		csgo.counter(playeri:get_player_name())
-	elseif csgo.team.counter.count == csgo.usrTlimit then
-		csgo.terrorist(playeri:get_player_name())
-	else
-		csgo.spectator(playeri:get_player_name())
-		core.chat_send_player(playeri:get_player_name(), core.colorize("#FF3100", "We're sorry but the teams limit got reached... "))
-	end
-	
-	defuser_huds[playerrrr:get_player_name()] = playerrrr:hud_add({
-		hud_elem_type = "text",
-		name = "defuser_timer",
-		scale = {x = 1.5, y = 1.5},
-		position = {x = 0.5, y = 0.5},
-		offset = {x = 0, y = 20},
-		--size = {x = 2},
-		alignment = {x = "center", y = "down"},
-		--alignment = {x = 0, y = -1},
-		text = " ",
-		number = 0xCECECE,
-	}) -- hehe, here must be an error but its solved a long time ago in top of this file
 end
 
 core.send_leave_message = function(pname, timedout)
