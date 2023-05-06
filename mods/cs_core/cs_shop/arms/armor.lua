@@ -55,7 +55,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 				local cmmm = core.colorize("#9B9B9B", "Defuser")
 				minetest.chat_send_player(pname, core.colorize("#eb8634","-$70 By Buying " .. cmmm .. ""))
 				bank.rm_player_value(pname, 70)
-				minetest.show_formspec(name, "cs_shop:armor", cs_shop.armor(pname))
+				minetest.show_formspec(pname, "cs_shop:armor", cs_shop.armor(pname))
 		else
 			minetest.chat_send_player(pname, core.colorize("#FF0000","Can't buy, no money available"))
 		end
