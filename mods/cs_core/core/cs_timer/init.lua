@@ -83,8 +83,7 @@ local function reg_glb(dtime)
 				--	temp999()
 				--end
 				
-				ccore.teams.terrorist.players = {}
-				ccore.teams.counter.players = {}
+				ccore = {}
 				
 				function finishedmatch() return true end
 				

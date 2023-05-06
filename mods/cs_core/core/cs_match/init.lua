@@ -4,16 +4,7 @@ cs_match = {
 }
 phud = {}
 -- *C* CORE
-ccore = { -- New table for a bug fix
-	teams = {
-	terrorist = {},
-	counter = {},
-	},
-}
-
-for cteam, _ in pairs(ccore.teams) do
-	ccore.teams[cteam] = {players = {}, count = 0}
-end
+ccore = { }
 
 
 cs_match.default_matches = 15
@@ -93,8 +84,7 @@ function cs_match.finished_match(teamare1)
 				cb.registered_on_new_match[i]()
 			end
 			do
-				ccore.teams.terrorist.players = {}
-				ccore.teams.counter.players = {}
+				ccore = {}
 			end
 			
 			
@@ -163,8 +153,7 @@ function cs_match.finished_match(teamare1)
 			end
 			
 			core.after(1, function()
-				ccore.teams.terrorist.players = {}
-				ccore.teams.counter.players = {}
+				ccore = {}
 			end)
 			
 			if ask_for_bomb() then
@@ -246,7 +235,7 @@ local function empty() end
 
 call.register_on_new_match(function()
 	for player, team in pairs(ccore) do
-		if player and team and csgo.team[team].count ~= csgo.usrTlimit then
+		if player and team and csgo.team[team] and csgo.team[team].count ~= csgo.usrTlimit then
 			if minetest.settings:get_bool("cs_core.enable_env_debug", false) then
 				core.log("error", "Can't put player " .. player .. " in "..team.." team, its full!")
 			end
@@ -255,6 +244,7 @@ call.register_on_new_match(function()
 			if minetest.settings:get_bool("cs_core.enable_env_debug", false) then
 				core.log("action", "Placing again the died player "..player.." into terrorist forces")
 			end
+			error(player .. team)
 			csgo[team](player)
 			ccore[player] = nil
 		end
