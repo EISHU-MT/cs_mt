@@ -123,7 +123,7 @@ function csgo.check_compressed_player(player)
 end
 
 function csgo.check_team(player)
-	return csgo.pot[player]
+	return csgo.pot[player] or "spectator"
 end
 
 function csgo.send_message(message, team, player) -- Send a message to every player in the specified team.
@@ -136,6 +136,18 @@ function csgo.send_message(message, team, player) -- Send a message to every pla
 			end
 		end
 	end
+end
+function csgo.blank(player, team)
+	csgo.op[player] = nil
+	csgo.pt[player] = nil
+	csgo.online[player] = nil
+	csgo.spect[player] = nil
+	csgo.pot2[player] = nil
+	if team or csgo.check_team(player) then
+		csgo.team[team or csgo.check_team(player)].count = csgo.team[team or csgo.check_team(player)].count - 1
+		csgo.team[team or csgo.check_team(player)].players[player] = nil
+	end
+	csgo.pot[player] = nil
 end
 function csgo.spectator(player, reason)
 	local team = "spectator"
