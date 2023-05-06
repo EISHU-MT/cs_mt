@@ -112,69 +112,72 @@ function cs_match.finished_match(teamare1)
 		
 		csgo.off_movement()
 		
-		if not minetest.settings:get_bool("cs_map.mapmaking", false) then
-			for i, player in pairs(core.get_connected_players()) do
-				local pname = player:get_player_name()
-				core.chat_send_player(pname, "New Match. Remember there are " .. cs_match.available_matches .. " rounds")
-				phud[pname] = player:hud_add({
-					hud_elem_type = "text",
-					--texture = "",
-					scale = {x = 1.5, y = 1.5},
-					position = {x = 0.800, y = 0.10},
-					offset = {x = 30, y = 100},
-					size = {x = 1.5},
-					alignment = {x = 0, y = -1},
-					text = "Be Fast!! shop your arms before time reach!\n You Had 20 Seconds to shop.",
-					number = 0xFF9D00,
-				})
-				
-				if (csgo.pot[pname] == "terrorist") then
-					if terrorists_spawn() then
-						poss = terrorists_spawn()
-						player:setpos(poss)
-					else
-						cs_core.log("error", "By-Core: No position for terrorists found!")
+		core.after(1, function()
+			if not minetest.settings:get_bool("cs_map.mapmaking", false) then
+				for i, player in pairs(core.get_connected_players()) do
+					local pname = player:get_player_name()
+					core.chat_send_player(pname, "New Match. Remember there are " .. cs_match.available_matches .. " rounds")
+					phud[pname] = player:hud_add({
+						hud_elem_type = "text",
+						--texture = "",
+						scale = {x = 1.5, y = 1.5},
+						position = {x = 0.800, y = 0.10},
+						offset = {x = 30, y = 100},
+						size = {x = 1.5},
+						alignment = {x = 0, y = -1},
+						text = "Be Fast!! shop your arms before time reach!\n You Had 20 Seconds to shop.",
+						number = 0xFF9D00,
+					})
+					
+					if (csgo.pot[pname] == "terrorist") then
+						if terrorists_spawn() then
+							poss = terrorists_spawn()
+							player:set_pos(poss)
+						else
+							cs_core.log("error", "By-Core: No position for terrorists found!")
+						end
+					elseif csgo.pot[pname] == "counter" then
+						if counters_spawn() then
+							poss = counters_spawn()
+							player:set_pos(poss)
+						else
+							cs_core.log("error", "By-Core: No position for counters found!")
+						end
+					elseif csgo.pot[pname] == "spectator" then
+						empty()
 					end
-				elseif csgo.pot[pname] == "counter" then
-					if counters_spawn() then
-						poss = counters_spawn()
-						player:setpos(poss)
-					else
-						cs_core.log("error", "By-Core: No position for counters found!")
-					end
-				elseif csgo.pot[pname] == "spectator" then
-					empty()
 				end
-			end
-			
-			cs_buying.enable_shopping()
-			for i = 1, #cb.registered_on_new_match do
-				cb.registered_on_new_match[i]()
-			end
-			
-			core.after(1, function()
-				ccore = {}
-			end)
-			
-			if ask_for_bomb() then
-				core.after(1.3, function()
-					for _, Playerr in pairs(core.get_connected_players()) do
-						pname = Playerr:get_player_name()
-						if csgo.pot[pname] == "terrorist" and not has_bomb then
-							if not ItemFind(Player(Playerr)) then
-								InvRef = Playerr:get_inventory()
-								InvRef:add_item("main", "bomb")
-								core.debug("green", "Giving the bomb to a random player ("..pname..")", "C4 API")
-								has_bomb = pname
-								return
+				
+				cs_buying.enable_shopping()
+				for i = 1, #cb.registered_on_new_match do
+					cb.registered_on_new_match[i]()
+				end
+				
+				core.after(1, function()
+					ccore = {}
+				end)
+				
+				if ask_for_bomb() then
+					core.after(1.3, function()
+						for _, Playerr in pairs(core.get_connected_players()) do
+							pname = Playerr:get_player_name()
+							if csgo.pot[pname] == "terrorist" and not has_bomb then
+								if not ItemFind(Player(Playerr)) then
+									InvRef = Playerr:get_inventory()
+									InvRef:add_item("main", "bomb")
+									core.debug("green", "Giving the bomb to a random player ("..pname..")", "C4 API")
+									has_bomb = pname
+									return
+								end
 							end
 						end
-					end
-				end)
+					end)
+				end
+				
+				
 			end
 			
-			
-		end
+		end)
 	end
 
 end
