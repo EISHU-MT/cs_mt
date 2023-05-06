@@ -303,26 +303,12 @@ end
 
 function empty() end
 
-
-
-
-
-
-
-function regdie() 
-
-for _, player in pairs(minetest.get_connected_players()) do
-if player then
-		core.after(1, function(player)
-			player:set_hp(20)
-		end, player)
-end
-end
-end
-
 call.register_on_end_match(function()
-regdie()
-
+	for _, player in pairs(minetest.get_connected_players()) do
+		if player then
+			player:set_hp(20)
+		end
+	end
 end)
 
 
