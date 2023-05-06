@@ -145,7 +145,7 @@ minetest.register_on_player_hpchange(function(player, hp_ch, reason)
 					if died[victim] ~= true then 
 						if cs_match.commenced_match ~= false then
 							local a1 = reason.object:get_wielded_item()
-							local image = a1:get_definition().inventory_image
+							local image = a1:get_definition().inventory_image or "cs_files_hand.png"
 							cs_kh.add(reason.object:get_player_name(), player:get_player_name(), image, "", csgo.pot[victim])
 							
 							died[victim] = true
@@ -174,7 +174,7 @@ minetest.register_on_player_hpchange(function(player, hp_ch, reason)
 					if died[victim] ~= true then 
 						if cs_match.commenced_match ~= false then
 							local a1 = reason.object:get_wielded_item()
-							local image = a1:get_definition().inventory_image
+							local image = a1:get_definition().inventory_image or "cs_files_hand.png"
 							cs_kh.add(reason.object:get_player_name(), player:get_player_name(), image, "", csgo.pot[victim])
 							
 							died[victim] = true
