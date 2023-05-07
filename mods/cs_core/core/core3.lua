@@ -125,7 +125,7 @@ core.register_chatcommand("show_reports", {
 	func = function(name, param)
 		local storage_of_reports = storage:get_string("reports")
 		if storage_of_reports ~= "" or storage_of_reports ~= nil then
-			local data = core.deserialize(storage_of_reports)
+			local data = core.deserialize(storage_of_reports) or {"Empty."}
 			local concat = table.concat(data, "\n")
 			core.chat_send_player(name, concat)
 			storage:set_string("reports", nil)
