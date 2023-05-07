@@ -97,7 +97,7 @@ function c4.bomb_now()
 				local blast_pos = {x=pos.x, y=pos.y + 4, z=pos.z}
 						--minetest.line_of_sight(obj_pos, blast_pos, 1)
 						--print(obj)
-						if type(obj) ~= "string" and obj:get_player_name() and Player(c4.planter) then
+						if type(obj) ~= "string" and obj:get_player_name() ~= "" and Player(c4.planter) then
 							obj:punch(Player(c4.planter), nil, { damage_groups = {fleshy=damage}, }, nil)
 						end
 			end
@@ -137,8 +137,21 @@ function hooks(dtime)
 		end
 		
 		if c4.timer >= time_to then
-			minetest.sound_play("cs_files_beep", {pos = c4.pos, gain = 0.2, max_hear_distance = 40})
+			play_sound()
 			c4.timer = 0
+			--minetest.sound_fade(handle, 1, 0.1)
+		end
+	end
+end
+function play_sound()
+	for _, player in pairs(minetest.get_objects_inside_radius(c4.pos, 32)) do
+		if player:get_player_name() ~= "" or  player:get_player_name() ~= " " then
+			local dist = vector.distance(Player(player):get_pos(), c4.pos)
+			local gain = (32 - dist) / 32
+			local gain_value = gain * 1.0
+			if not (gain <= 0) then
+				minetest.sound_play({name = "cs_files_beep"}, {to_player = Name(player), gain = gain_value})
+			end
 		end
 	end
 end
