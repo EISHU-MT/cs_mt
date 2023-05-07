@@ -109,6 +109,8 @@ local function load_map_meta(idx, dirname, meta)
 		
 		act_dir       = cs_map.mapdir .. dirname .. "/on_activate.lua",
 		
+		status        = core.deserialize(meta:get("status")),
+		
 		teams         = {},
 		bareas        = {},
 	}
@@ -117,7 +119,7 @@ local function load_map_meta(idx, dirname, meta)
 
 	map.pos1 = vector.add(offset, { x = -map.r, y = -map.h / 2, z = -map.r })
 	map.pos2 = vector.add(offset, { x =  map.r, y =  map.h / 2, z =  map.r })
-
+	
 	
 	if map.onload then
 		dofile(cs_map.mapdir..dirname.."/init.lua")
@@ -147,7 +149,18 @@ local function load_map_meta(idx, dirname, meta)
 		}
 		i2 = i2 + 1
 	end
-	
+	if type(map.status) == "table" then
+		map.area_status = {}
+		for name, value in pairs(map.status) do
+			if name and type(value) == "table" then
+				if minetest.settings:get_bool("cs_core.enable_env_debug", false) then
+					core.log("action", "Registering "..name.." for Area status....")
+				end
+				map.area_status[name].pos = value.pos
+				map.area_status[name].str = value.str
+			end
+		end
+	end
 	local response = meta:get("enable_bomb") or "no"
 	if response == "no" then
 		map.enable_bomb = false
@@ -162,6 +175,21 @@ local function load_map_meta(idx, dirname, meta)
 
 
 	return map
+end
+function cs_map.get_status_of_areas()
+	return type(cs_map.map.area_status) == "table"
+end
+function cs_map.get_name_of_pos(pos)
+	if cs_map.get_status_of_areas() then
+		for i, val in pairs(cs_map.map.area_status) do
+			local spos = val.pos
+			if pos.x < spos.x + 7 and pos.x > spos.x - 7 and pos.y < spos.y + 7  and pos.y > spos.y - 7 and pos.z < spos.z + 7 and pos.z > spos.z - 7 then
+				return val.str or "--", val
+			end
+		end
+	else
+		return "--"
+	end
 end
 
 -- List of shuffled map indices, used in conjunction with random map selection
