@@ -262,12 +262,7 @@ end)
 
 minetest.register_on_leaveplayer(function(player)
 	local playern = player:get_player_name()
-	for teamn in pairs(ccore.teams) do
-		if ccore.teams[teamn].players[playern] == true then
-			ccore.teams[teamn].players[playern] = nil
-			ccore.teams[teamn].count = ccore.teams[teamn].count - 1
-		end
-	end
+	ccore[playern] = nil
 	if has_bomb == playern then
 		has_bomb = nil
 	end
