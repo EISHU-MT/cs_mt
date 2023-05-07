@@ -1,5 +1,6 @@
 local storage = minetest.get_mod_storage()
 local randint = math.random(100)
+area_status = {}
 local defaults = {
 	mapname = "cs_" .. randint,
 	mapauthor = nil,
@@ -9,9 +10,29 @@ local defaults = {
 	barrier_rot = 0,
 	center = { x = 0, y = 0, z = 0, r = 115, h = 140 },
 	nodes = {},
-	areas = {}
+	areas = {},
+	status = {}
 }
+function return_formspec()
+	local form = {
+	"formspec_version[6]" ..
+	"size[10.5,5]" ..
+	"box[0,0;12.4,0.8;#009200]" ..
+	"label[4.9,0.4;Areas.]" ..
+	"field[0.2,1.3;10.1,1.7;str;Please set a name to this area.;Eg: Sector A]" ..
+	"button_exit[0.1,4;10.3,0.8;decline;Cancel]" ..
+	"button_exit[0.1,3.1;10.3,0.8;accept;Accept]"
+	}
+	return table.concat(form, "")
+end
 
+function replace_spaces(strings)
+	if not strings then
+		return
+	end
+	local tabled = strings:split(" ")
+	return table.concat(tabled, "_")
+end
 -- Reload mapmaker context from mod_storage if it exists
 local context = {
 	mapname = storage:get_string("mapname"),
@@ -21,6 +42,7 @@ local context = {
 	center = storage:get_string("center"),
 	areas = storage:get_string("areas"),
 	nodes = storage:get_string("nodes"),
+	status = core.deserialize(storage:get_string("areas")) or {},
 	barrier_r = storage:get_int("barrier_r"),
 	barrier_rot = storage:get_string("barrier_rot"),
 	barriers_placed = storage:get_int("barriers_placed") == 1
@@ -52,6 +74,11 @@ if context.areas == "" then
 	context.areas = defaults.areas
 else
 	context.areas = minetest.parse_json(storage:get_string("areas"))
+end
+if context.status == "" then
+	context.status = defaults.status
+else
+	context.status = core.deserialize(storage:get_string("status")) or {}
 end
 --------------------------------------------------------------------------------
 
@@ -112,6 +139,44 @@ minetest.register_node(":cs_core:terrorists", {
 		end
 	end,
 })
+
+minetest.register_node("map_maker:area", {
+	description = "Area node.", 
+	drawtype = "nodebox",
+	tiles = {"cs_files_area.png"},
+	paramtype = "light",
+	sunlight_propagates = true,
+	walkable     = true,
+	pointable    = false,
+	diggable     = true,
+	buildable_to = false,
+	air_equivalent = true,
+	after_place_node = function(pos, placer)
+		area_status[Name(placer)] = {position = pos, usrd = placer}
+		core.show_formspec(Name(placer), "mm:areas", return_formspec())
+	end,
+	groups = {immortal = 1},
+})
+
+minetest.register_on_player_receive_fields(function(player, formname, fields)
+	if formname ~= "mm:areas" then
+		return
+	end
+	if fields.accept and (fields.str ~= "Eg: Sector A" or fields.str ~= " " or fields.str ~= "") then
+		local pos = area_status[Name(player)].position
+		local name = replace_spaces(fields.str)
+		context.status[name] = {position = vector.new(pos), name = fields.str}
+		storage:set_string("status", core.serialize(context.status))
+		area_status[Name(player)] = nil
+		core.set_node(pos, {name="air"})
+	elseif fields.decline then
+		core.chat_send_player(Name(player), core.colorize("#FF0000", "Declined."))
+		local pos = area_status[Name(player)].position
+		core.set_node(pos, {name="air"})
+		area_status[Name(player)] = nil
+	end
+end)
+
 minetest.register_node(":cs_core:counters", {
 	description = "node\n Used for Counters Spawn.",
 	drawtype="nodebox",
@@ -371,6 +436,28 @@ function map_maker.export(name)
 		--meta:set("areas." .. idx .. ".color", pos.z > 0 and "terrorist" or "counter")
 		meta:set("areas." .. idx .. ".pos", minetest.pos_to_string(pos))
 	end
+	local status_table = {}
+	for name, tabled in pairs(context.status) do
+		local pos = vector.subtract(tabled.position, context.center)
+		if context.barrier_rot == 0 then
+			local old = vector.new(pos)
+			pos.x = old.z
+			pos.z = -old.x
+		end
+		
+		status_table[name] = {
+			pos = minetest.pos_to_string(pos),
+			str = tabled.name
+		}
+		
+		--table.insert(status_table, {})
+		--[[
+		meta:set("status." .. name, tabled.name)
+		meta:set("status." .. name .. ".pos", minetest.pos_to_string(pos))
+		meta:set("status." .. name .. ".str", tabled.name)--]]
+	end
+	
+	meta:set("status", core.serialize(status_table))
 	meta:write()
 
 	minetest.after(0.1, function()
