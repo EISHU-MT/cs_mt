@@ -700,11 +700,12 @@ end
 	projectiles = projNum or 1
 	for i=1,projectiles do
 		rndacc = (100 - accuracy) or 0
-local spawnpos_x = pos.x + (math.random(-rndacc,rndacc)/100)
-local spawnpos_y = pos.y + (math.random(-rndacc,rndacc)/100)
-local spawnpos_z = pos.z + (math.random(-rndacc,rndacc)/100)
+local spawnpos_x = pos.x
+local spawnpos_y = pos.y
+local spawnpos_z = pos.z
 
 			local obj = minetest.add_entity({x=spawnpos_x,y=spawnpos_y,z=spawnpos_z}, projEnt)
+			obj:set_pos(pos)
 			local ent = obj:get_luaentity()
 
 obj:set_properties(
@@ -731,6 +732,7 @@ glow = proj_glow,}
 			ent.size = size
 			ent.timer = 0 + (combined_velocity/2000)
 			ent.wear = proj_wear
+				obj:set_pos(pos)
 				obj:set_velocity({x=dir.x * combined_velocity, y=dir.y * combined_velocity, z=dir.z * combined_velocity})
 				acc = 0
 				obj:set_acceleration({x=0, y=0, z=0})
