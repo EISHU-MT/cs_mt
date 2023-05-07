@@ -94,6 +94,8 @@ local function reg_glb(dtime)
 				for i = 1, #cb.registered_on_timer_commence do
 					cb.registered_on_timer_commence[i]()
 				end
+				annouce.publish_to_players("Match Start!", 0xFFFFFF)
+				core.after(1.5, make_dissapear_mess)
 			end
 		end
 		if cs_match.commenced_match ~= false then
@@ -153,8 +155,9 @@ local function reg_glb(dtime)
 	timed = 0
 	end
 end
-
-minetest.register_globalstep(reg_glb)
+if mapeditor ~= true then
+	minetest.register_globalstep(reg_glb)
+end
 
 
 
