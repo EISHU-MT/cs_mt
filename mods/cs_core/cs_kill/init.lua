@@ -14,84 +14,35 @@ cs_kill = {
 --]]
 
 local S = minetest.get_translator("cs_kill")
-
-for cs_coret, def in pairs(csgo.team) do -- Insert
-
-	if cs_coret ~= "spectator" then
-		cs_kill[cs_coret] = {count = 0,}
-	end
-end
 minetest.register_on_punchplayer(function(player, hitter, time_from_last_punch, tool_capabilities, dir, damage)
 	pname = hitter:get_player_name()
 	victim = player:get_player_name()
-	if not pname then
+	if not pname and not victim then
 		return
 	end
+	
 	if (cs_core.ask_can_do_damage(pname) == false) then
-
-		if not hud:exists(pname, "kill") then
-			hud:add(pname, "kill", {
-				hud_elem_type = "text",
-				position = {x = 0.5, y = 0.5},
-				offset = {x = 0, y = 45},
-				alignment = {x = "center", y = "down"},
-				text = S("You can't damage others players!!"),
-				color = 0xFFC107,
-			})
-		else
-		if hud:exists(pname, "kill") then
-			hud:change(pname, "kill", {text = S("You can't damage others players!!"), color = 0xFFC107})
-			end
-		end
-		
-		function temporal()
-			if hud:exists(pname, "kill") then
-				hud:remove(pname, "kill")
-			end
-		end
-		
-		core.after(1.5, temporal)
-
+		hud_events.new(hitter, {
+			text = S("You can't damage others players!!"),
+			color = "warning",
+			quick = true,
+		})
 		return true
 	end
 	
-	if (csgo.pot[pname] == csgo.pot[victim]) then
-
-		if not hud:exists(pname, "kill") then
-			hud:add(pname, "kill", {
-				hud_elem_type = "text",
-				position = {x = 0.5, y = 0.5},
-				offset = {x = 0, y = 45},
-				alignment = {x = "center", y = "down"},
-				text = S("@1 its your teammate! ( ! )", victim),
-				color = 0xDC3545,
-			})
-		else
-			if hud:exists(pname, "kill") then
-				hud:change(pname, "kill", {text = S("@1 its your teammate! ( ! )", victim), color = 0xDC3545})
-			end
-		
-		end
-	
-	
-		function temporal()
-			if hud:exists(pname, "kill") then
-				hud:remove(pname, "kill")
-			end
-		end
-		
-		
-		core.after(1.5, temporal)
+	if (csgo.pot[pname] == csgo.pot[victim]) and not (pname == victim) then
+		hud_events.new(hitter, {
+			text = S("@1 its your teammate! ( ! )", victim),
+			color = "warning",
+			quick = true,
+		})
 		local enable_it = minetest.settings:get_bool("cs_core.enable_friend_shot", false)
 		if enable_it ~= true then
 			return false
 		else
 			return true
 		end
-
 	end
-	-- delete that. this callback will dont be more the kill manager.
-	
 end)
 function cs_kill.translate_to_real_damage(damage)
 	if not damage then
