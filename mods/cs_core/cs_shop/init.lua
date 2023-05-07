@@ -636,9 +636,9 @@ minetest.register_on_joinplayer(function(player)
 		cs_shop.queued[p] = 20
 	end)
 end)
-
-core.register_globalstep(on_step)
-
+if minetest.settings:get_bool("cs_map.mapmaking", false) ~= true then
+	core.register_globalstep(on_step)
+end
 --minetest.register_on_joinplayer(on_joinp)
 
 
