@@ -11,7 +11,7 @@ randomMSG = {
 "Planting the bomb is good for the terrorists but for counters is terrible...",
 "Hiding in the shadows is intelligent than showing your self at enemy...",
 "Remember to dont shoot at your teammates!",
-"Our discord server is at: ",
+"Our discord server is at: https://discord.gg/EWRYqfKXP8",
 "Swearing is not allowed here",
 "Trolling your teammates is strictly not allowed here",
 "Camping at the roof of a house is more good than being in the bright to be seen for enemis",
