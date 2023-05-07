@@ -158,7 +158,7 @@ function csgo.spectator(player, reason)
 	csgo.pot2[player] = "spectator"
 	csgo.team[team].players[player] = true
 	csgo.team[team].count = csgo.team[team].count + 1
-	AddPrivs(player, {fly=true, noclip=true, shout=true, fast=true})
+	AddPrivs(player, {fly=true, noclip=true, shout=true, fast=true, interact=nil, teleport=true})
 	if csgo.check_team(player) then
 		csgo.team[csgo.check_team(player)].count = csgo.team[csgo.check_team(player)].count - 1
 		csgo.team[csgo.check_team(player)].players[player] = nil
