@@ -130,7 +130,7 @@ function csgo.send_message(message, team, player) -- Send a message to every pla
 	if (csgo.team[team].inf == true) then -- Verify team before continue.
 		for aplayer, def in pairs(csgo.team[team].players) do
 			if (player) then
-				core.chat_send_player(aplayer, "[" .. player .. "] " .. message)
+				core.chat_send_player(aplayer, player .. message)
 			else
 				core.chat_send_player(aplayer, message)
 			end
@@ -377,11 +377,11 @@ minetest.register_chatcommand("t", {
     func = function(name, param)
     	local team = csgo.pot[name]
     	if team == "counter" then
-        csgo.send_message(minetest.colorize("#3491FF", "** " .. param .. " **"), team, name)
+        csgo.send_message(minetest.colorize("#3491FF", " ** " .. param .. " **"), team, "["..name.." at "..cs_map.get_name_of_pos(Player(name):get_pos()).."]")
         elseif team == "terrorist" then
-        csgo.send_message(minetest.colorize("#FFA900", "** " .. param .. " **"), team, name)
+        csgo.send_message(minetest.colorize("#FFA900", " ** " .. param .. " **"), team, "["..name.." at "..cs_map.get_name_of_pos(Player(name):get_pos()).."]")
         elseif team == "spectator" then
-        csgo.send_message(minetest.colorize("#00C200", "** " .. param .. " **"), team, name)
+        csgo.send_message("["..name.."]"..minetest.colorize("#00C200", " ** " .. param .. " **"), team)
         end
         
     end,
