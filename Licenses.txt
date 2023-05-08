@@ -1,0 +1,13 @@
+All In cs_core mods: Licensed with CC-BY-SA 4.0
+All Textures in cs_core mods: Licensed with MIT
+
+All mods in external_depends: (Every mod had his own License)
+
+All mods in mt: (Every mod had his own License except hud_events and random_messages) (Extracted from MinetestGame)
+random_messages licence: CC-BY-SA 4.0
+hud_events: LGPLv2.1+ (From Capture The Flag)
+
+All mods in mt_core_modifier: Creative=MIT
+
+Files in root: Menu=CC-BY-SA 4.0
+Files in root: Configs = ^^
