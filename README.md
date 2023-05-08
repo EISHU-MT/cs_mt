@@ -22,7 +22,7 @@ These options must be set using the **GUI**:
  - Port: When making a _local or global_ server this is needed, must be a number, after done, save the port number.
  - If **Host Server** is marked, players can join there, lan or global. using your specified IP address and the saved port number.
 ## Licenses
-In: Licenses.txt file.
+In: [Licenses.txt](Licenses.txt/) file.
 ## Mods
 All mods stands in [⇒ mods](mods/)
 ## Joining us
