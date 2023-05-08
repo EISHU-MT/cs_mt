@@ -10,4 +10,4 @@ hud_events: LGPLv2.1+ (From Capture The Flag)
 All mods in mt_core_modifier: Creative=MIT
 
 Files in root: Menu=CC-BY-SA 4.0
-Files in root: Configs = ^^
+Files in root: Configs = CC-BY-SA 4.0
