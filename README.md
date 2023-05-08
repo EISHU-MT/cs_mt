@@ -27,6 +27,7 @@ In: [Licenses.txt](Licenses.txt/) file.
 All mods stands in [⇒ mods](mods/)
 ## Joining us
  On **Discord**: [Link Is Here!](https://discord.gg/EWRYqfKXP8)
+ On **MineTest**: Address: ei1.minetest.land:54700
 
 ## Images
 ![A dead player](https://github.com/EISHU92/csgo_minetest/blob/bbad1191b52c151a6aad1dab64eb1f8012572ae2/screenshots/screenshot1.png)
