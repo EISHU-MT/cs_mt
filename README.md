@@ -27,6 +27,7 @@ In: [Licenses.txt](Licenses.txt/) file.
 All mods stands in [⇒ mods](mods/)
 ## Joining us
  On **Discord**: [Link Is Here!](https://discord.gg/EWRYqfKXP8)
+ 
  On **MineTest**: Address: ei1.minetest.land:54700
 
 ## Images
