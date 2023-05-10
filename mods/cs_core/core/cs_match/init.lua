@@ -245,7 +245,7 @@ call.register_on_new_match(function()
 			if minetest.settings:get_bool("cs_core.enable_env_debug", false) then
 				core.log("action", "Placing again the died player "..player.." into terrorist forces")
 			end
-			error(player .. team)
+			--error(player .. team)
 			csgo[team](player)
 			ccore[player] = nil
 		end
