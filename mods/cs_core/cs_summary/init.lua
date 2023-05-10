@@ -37,7 +37,7 @@ function summary.add_by_values(players, players_kills, players_deaths, inverse_k
 	uplayers = {}
 	for i, str in pairs(players) do
 		core.debug("green", "Creating list row: "..i.." for "..str, "CS:GO Summary")
-		local ea = csgo.pot[str] or "spectator"
+		local ea = kills[str].team or "spectator"
 		local color
 		if ea then
 			color = csgo.team[ea].colour or "#00FF00"
