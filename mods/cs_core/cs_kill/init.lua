@@ -21,7 +21,7 @@ minetest.register_on_punchplayer(function(player, hitter, time_from_last_punch, 
 		return
 	end
 	
-	if (cs_core.ask_can_do_damage(pname) == false) then
+	if (cs_core.ask_can_do_damage(pname) == false) or csgo.spect[pname] then
 		hud_events.new(hitter, {
 			text = S("You can't damage others players!!"),
 			color = "warning",
