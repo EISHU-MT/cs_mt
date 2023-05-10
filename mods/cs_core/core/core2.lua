@@ -167,6 +167,10 @@ function csgo.spectator(player, reason)
 	
 	local properties = Player(player):get_properties()
 	
+	Player(player):hud_set_flags({
+		wielditem = false,
+	})
+	
 	properties.pointable = false
 	properties.show_on_minimap = false
 	properties.is_visible = false
@@ -219,6 +223,10 @@ function csgo.terrorist(player, force)
 			cb.registered_on_join_team[i](player, "terrorist")
 		end
 		
+		Player(player):hud_set_flags({
+			wielditem = true,
+		})
+		
 		local properties = Player(player):get_properties()
 		properties.pointable = true
 		properties.show_on_minimap = false
@@ -268,6 +276,11 @@ function csgo.counter(player, force)
 		end
 		
 		local properties = Player(player):get_properties()
+		
+		Player(player):hud_set_flags({
+			wielditem = true,
+		})
+		
 		properties.pointable = true
 		properties.show_on_minimap = false
 		properties.is_visible = true
