@@ -105,7 +105,7 @@ minetest.register_on_player_hpchange(function(player, hp_ch, reason)
 		pname = reason.object:get_player_name()
 	end
 	
-	
+	local victim = player:get_player_name()
 	
 	
 	if player:get_hp() > 0 and player:get_hp() - hp_change <= 0 then
@@ -126,11 +126,10 @@ minetest.register_on_player_hpchange(function(player, hp_ch, reason)
 		--player_set_animation(player, "lay")
 	end
 	
+	if victim and csgo.pot[victim] and csgo.pot[victim] ~= "spectator" and not (csgo.team[csgo.pot[victim]].count - 1) <= 0 then
+		ccore[victim] = csgo.pot2[victim]
+	end
 	
-	
-	
-	
-	local victim = player:get_player_name()
 	if reason.type == "punch" and reason.object then
 		if not victim or not pname then
 			return
