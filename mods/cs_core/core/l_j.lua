@@ -49,6 +49,7 @@ minetest.register_on_leaveplayer(function(player)
 		csgo.team[he_team].players[pname] = nil
 		csgo.pot2[pname] = nil
 		died[pname] = nil
+		ccore[pname] = nil -- Fix possible crash
 	end
 end)
 
