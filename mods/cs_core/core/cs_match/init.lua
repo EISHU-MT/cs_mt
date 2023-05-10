@@ -89,9 +89,7 @@ function cs_match.finished_match(teamare1)
 			
 			
 		end
-	
-	end
-	if (cs_match.available_matches ~= 0)  then
+	elseif (cs_match.available_matches ~= 0)  then
 		cs_match.available_matches = cs_match.available_matches - 1
 		ctimer.pause()
 		cs_match.commenced_match = false
@@ -243,7 +241,7 @@ call.register_on_new_match(function()
 				core.log("error", "Can't put player " .. player .. " in "..team.." team, its full!")
 			end
 			csgo.spectator(player, "Joined spectator team! because: Cannot join "..team)
-		else
+		elseif player and team and csgo.team[team] then
 			if minetest.settings:get_bool("cs_core.enable_env_debug", false) then
 				core.log("action", "Placing again the died player "..player.." into terrorist forces")
 			end
