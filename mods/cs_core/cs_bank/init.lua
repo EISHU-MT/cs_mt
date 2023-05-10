@@ -117,8 +117,8 @@ minetest.register_chatcommand("add_value", {
 	params = "<amount>",
 	privs = {bank = true},
 	func = function(name, param)
-	bank.player_add_value(name, param)
-	minetest.chat_send_player(name, "Added $" .. param .. " to your account.")
+	bank.player_add_value(name, tonumber(param or 1))
+	minetest.chat_send_player(name, "Added $" .. param or 1 .. " to your account.")
 	end,
 })
 minetest.register_chatcommand("rm_value", {
@@ -126,7 +126,7 @@ minetest.register_chatcommand("rm_value", {
 	params = "<amount>",
 	privs = {bank = true},
 	func = function(name, param)
-	bank.rm_player_value(name, param)
+	bank.rm_player_value(name, param or 1)
 	end,
 })
 
