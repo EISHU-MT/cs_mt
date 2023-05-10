@@ -69,7 +69,7 @@ local dead_ent = {
 	collide_with_objects = true,
 	collisionbox = { -0.5, -0.5, -0.5, 0.5, 0.5, 0.5 },  -- default
 	selectionbox = { -0.5, -0.5, -0.5, 0.5, 0.5, 0.5, rotate = false },
-	pointable = true,
+	pointable = false,
 	visual = "mesh",
 	visual_size = {x = 1, y = 1, z = 1},
 	mesh = "empty.b3d",
@@ -126,8 +126,14 @@ minetest.register_on_player_hpchange(function(player, hp_ch, reason)
 		--player_set_animation(player, "lay")
 	end
 	
-	if victim and csgo.pot[victim] and csgo.pot[victim] ~= "spectator" and not (csgo.team[csgo.pot[victim]].count - 1) <= 0 then
-		ccore[victim] = csgo.pot2[victim]
+	local value5 = csgo.team[csgo.pot[victim]].count - 1
+	
+	if victim and csgo.pot[victim] and csgo.pot[victim] ~= "spectator" then
+		if value5 <= 0 then
+			emtpy()
+		else
+			ccore[victim] = csgo.pot2[victim]
+		end
 	end
 	
 	if reason.type == "punch" and reason.object then
