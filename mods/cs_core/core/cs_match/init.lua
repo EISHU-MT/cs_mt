@@ -79,7 +79,7 @@ function cs_match.finished_match(teamare1)
 					color = 0xFF9D00,
 				})
 			end
-			cs_buying.enable_shopping()
+				cs_buying.enable_shopping()
 			for i = 1, #cb.registered_on_new_match do
 				cb.registered_on_new_match[i]()
 			end
@@ -151,7 +151,7 @@ function cs_match.finished_match(teamare1)
 					cb.registered_on_new_match[i]()
 				end
 				
-				core.after(1, function()
+				core.after(3, function()
 					ccore = {}
 				end)
 				
