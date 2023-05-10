@@ -3,16 +3,16 @@ kills = {
 }
 
 call.register_on_new_matches(function()
-    core.after(5, function()
-        for pname, stats in pairs(kills) do
-            stats.kills = 0
-            stats.deaths = 0
-        end
-    end)
+	core.after(5, function()
+		for pname, stats in pairs(kills) do
+			stats.kills = 0
+			stats.deaths = 0
+		end
+	end)
 end)
 
 call.register_on_player_join_team(function(pname, team)
-    kills[pname] = {kills = 0, deaths = 0}
+    kills[pname] = {kills = 0, deaths = 0, team = team}
 end)
 
 call.register_on_kill_player(function(player, enemy, enemyt, playert)
