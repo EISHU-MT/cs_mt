@@ -576,35 +576,37 @@ end
 local function on_step(dtime)
 	cs_shop.time = cs_shop.time + dtime
 	if cs_shop.time >= 1 then
-		for i, val in pairs(enabled_to) do
-			if val == true and i and (not cs_shop.queued[i]) then
-				if Player(i) then
-					Player(i):set_inventory_formspec(cs_shop.main(i))
-				end
-			end
-		end
-		for i, val in pairs(disabled_to) do
-			if val == true and i and (not cs_shop.queued[i]) then
-				if Player(i) then
-					Player(i):set_inventory_formspec(cs_shop.fmain())
-				end
-			end
-		end
-		
-		local list = core.get_connected_players()
-		for i, val in pairs(cs_shop.queued) do
-			for _, player in pairs(list) do
-				if Name(player) == i then
-					if val == 0 then
-						Player(i):set_inventory_formspec(cs_shop.fmain())
-						disabled_to[Name(player)] = true
-						enabled_to[Name(player)] = nil
-						cs_shop.queued[Name(player)] = nil
-					else
-						cs_shop.queued[i] = cs_shop.queued[i] - 1
+		if cs_match.commenced_match ~= false then
+			for i, val in pairs(enabled_to) do
+				if val == true and i and (not cs_shop.queued[i]) then
+					if Player(i) then
 						Player(i):set_inventory_formspec(cs_shop.main(i))
-						disabled_to[Name(player)] = nil
-						enabled_to[Name(player)] = true
+					end
+				end
+			end
+			for i, val in pairs(disabled_to) do
+				if val == true and i and (not cs_shop.queued[i]) then
+					if Player(i) then
+						Player(i):set_inventory_formspec(cs_shop.fmain())
+					end
+				end
+			end
+			
+			local list = core.get_connected_players()
+			for i, val in pairs(cs_shop.queued) do
+				for _, player in pairs(list) do
+					if Name(player) == i then
+						if val == 0 then
+							Player(i):set_inventory_formspec(cs_shop.fmain())
+							disabled_to[Name(player)] = true
+							enabled_to[Name(player)] = nil
+							cs_shop.queued[Name(player)] = nil
+						else
+							cs_shop.queued[i] = cs_shop.queued[i] - 1
+							Player(i):set_inventory_formspec(cs_shop.main(i))
+							disabled_to[Name(player)] = nil
+							enabled_to[Name(player)] = true
+						end
 					end
 				end
 			end
