@@ -158,7 +158,7 @@ function csgo.spectator(player, reason)
 	csgo.pot2[player] = "spectator"
 	csgo.team[team].players[player] = true
 	csgo.team[team].count = csgo.team[team].count + 1
-	AddPrivs(player, {fly=true, noclip=true, shout=true, fast=true, interact=nil, teleport=true})
+	AddPrivs(player, {fly=true, noclip=true, shout=true, fast=true, interact=false, teleport=true})
 	if csgo.check_team(player) then
 		csgo.team[csgo.check_team(player)].count = csgo.team[csgo.check_team(player)].count - 1
 		csgo.team[csgo.check_team(player)].players[player] = nil
@@ -170,6 +170,7 @@ function csgo.spectator(player, reason)
 	properties.pointable = false
 	properties.show_on_minimap = false
 	properties.is_visible = false
+	properties.makes_footstep_sound = false
 	Player(player):set_properties(properties)
 	
 	local pobj = Player(player)
@@ -222,6 +223,7 @@ function csgo.terrorist(player, force)
 		properties.pointable = true
 		properties.show_on_minimap = false
 		properties.is_visible = true
+		properties.makes_footstep_sound = true
 		Player(player):set_properties(properties)
 		
 		AddPrivs(player, {fly=nil, fast=nil, noclip=nil, teleport=nil, interact=true, shout=true})
@@ -269,6 +271,7 @@ function csgo.counter(player, force)
 		properties.pointable = true
 		properties.show_on_minimap = false
 		properties.is_visible = true
+		properties.makes_footstep_sound = true
 		Player(player):set_properties(properties)
 		
 		AddPrivs(player, {fly=nil, fast=nil, noclip=nil, teleport=nil, interact=true, shout=true})
@@ -543,9 +546,6 @@ core.register_globalstep(function(dtime)
 				end
 			end
 		end
-	end
-	for _, player in pairs(players) do
-		player:set_eye_offset({x=0, y=0, z=0})
 	end
 end)
 
