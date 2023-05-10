@@ -45,8 +45,8 @@ local location = {
 	{x=wield_scale, y=wield_scale},
 }
 
-local function add_wield_entity(player)
-	if not player or not player:is_player() then
+local function add_wield_entity(player, t)
+	if not player or not player:is_player() and t ~= "spectator" then
 		return
 	end
 	local name = player:get_player_name()
@@ -167,7 +167,7 @@ local function verify_wielditems()
 	local name = player_iter()
 	if name then
 		local player = minetest.get_player_by_name(name)
-		if player and player:is_player() then
+		if player and player:is_player() and csgo.pot[name] ~= "spectator" then
 			local pos = player:get_pos()
 			pos.y = pos.y + 0.5
 			local wielding = false
@@ -202,6 +202,6 @@ minetest.register_item("wield3d:hand", {
 	wield_image = "blank.png",
 })
 
-minetest.register_on_joinplayer(function(player)
-	minetest.after(2, add_wield_entity, player)
+call.register_on_player_join_team(function(player, team)
+	minetest.after(2, add_wield_entity, player, team)
 end)
