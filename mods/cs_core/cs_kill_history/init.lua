@@ -148,6 +148,9 @@ function cs_kh.add(killerr, victim, weapon_image, comment, v_team_a)
 	else
 		weapon_image2 = weapon_image or "cs_files_hand.png"
 	end
+	if weapon_image == "" or weapon_image == " " then
+		weapon_image2 = "cs_files_hand.png"
+	end
 	
 	add_kill(
 		{text = killerr, color = kt_color or 0xFFF},
