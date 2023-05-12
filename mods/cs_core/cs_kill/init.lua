@@ -127,7 +127,7 @@ minetest.register_on_player_hpchange(function(player, hp_ch, reason)
 	end
 	
 	local value5 = csgo.team[csgo.pot[victim]].count - 1
-	
+	function empty() end
 	if victim and csgo.pot[victim] and csgo.pot[victim] ~= "spectator" then
 		if value5 <= 0 then
 			emtpy()
