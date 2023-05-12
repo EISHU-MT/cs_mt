@@ -203,5 +203,5 @@ minetest.register_item("wield3d:hand", {
 })
 
 call.register_on_player_join_team(function(player, team)
-	minetest.after(2, add_wield_entity, player, team)
+	minetest.after(2, add_wield_entity, Player(player), team)
 end)
