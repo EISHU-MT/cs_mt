@@ -33,7 +33,8 @@ dofile(modpath.."/defuser_hooks.lua")
 dofile(modpath.."/lua_mod.lua")
 dofile(modpath.."/if_item.lua")
 dofile(modpath.."/rules.lua")
-
+dofile(modpath.."/radio.lua")
+dofile(modpath.."/restrictions.lua")
 
 --Third Core
 dofile(modpath.."/core3.lua")
