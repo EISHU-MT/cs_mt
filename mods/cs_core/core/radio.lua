@@ -143,12 +143,14 @@ function radio.on_step(dtime)
 				end
 			end
 		end
+		radio.dtimer1 = 0
 	end
 	
 	if radio.dtimer2 >= 2 then
 		if radio.wait_again then
 			radio.wait_again = false
 		end
+		radio.dtimer2 = 0
 	end
 end
 
