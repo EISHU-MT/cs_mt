@@ -89,9 +89,9 @@ function radio.send_msg(team, msg, p)
 	if team and csgo.team[team] and msg and n then
 		for name in pairs(csgo.team[team].players) do
 			if core.player_exists(name) then
-				if radio.return_igns_players()[name] ~= true then
-					core.chat_send_player(name, core.colorize("#FFEF00", n.."[RADIO] ")..msg or "~NULL")
-				end
+				--if radio.return_igns_players()[name] ~= true then
+				core.chat_send_player(name, core.colorize("#FFEF00", n.."[RADIO] ")..msg or "~NULL")
+				--end
 			end
 		end
 	end
@@ -135,7 +135,7 @@ function radio.on_step(dtime)
 				print(csgo.check_team(name))
 				print(vector.distance(Player(player):get_pos(), c4.pos))
 					if value < vector.distance(Player(player):get_pos(), c4.pos) then
-						if vector.distance(Player(player):get_pos(), c4.pos) <= 9 then
+						if vector.distance(Player(player):get_pos(), c4.pos) <= 10 then
 							radio.send_msg("counter", radio.select_random_msg("reached_to_the_bomb"), name.." ")
 							radio.wait_again = true
 						end
