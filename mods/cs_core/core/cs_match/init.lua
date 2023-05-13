@@ -200,7 +200,7 @@ function cs_match.start_matches()
 		cs_core.log("action", "Starting {Maps, Values, Registers} for the server")
 
 		cs_map.new_match()
-		cs_death.register_spawn("all", counters_spawn()) -- ALL: terrorists and counters, spectators_spawn(): where the spectators spawn
+		--cs_death.register_spawn("all", counters_spawn()) -- ALL: terrorists and counters, spectators_spawn(): where the spectators spawn
 		
 		cs_match.register_matches(cs_match.registered_matches) -- Register again all matchs to be default, to change limit, see cs-core/core/core1.lua
 		
