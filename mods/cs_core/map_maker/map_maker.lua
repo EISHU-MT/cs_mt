@@ -16,12 +16,13 @@ local defaults = {
 function return_formspec()
 	local form = {
 	"formspec_version[6]" ..
-	"size[10.5,5]" ..
+	"size[10.5,6]" ..
 	"box[0,0;12.4,0.8;#009200]" ..
 	"label[4.9,0.4;Areas.]" ..
-	"field[0.2,1.3;10.1,1.7;str;Please set a name to this area.;Eg: Sector A]" ..
+	"field[0.2,1.3;10.1,1;str;Please set a name to this area.;Eg: Sector A]" ..
+	"field[0.2,2.8;10.1,1;rad;Radius of this area.;Eg: 10, (Optional)]" ..
 	"button_exit[0.1,4;10.3,0.8;decline;Cancel]" ..
-	"button_exit[0.1,3.1;10.3,0.8;accept;Accept]"
+	"button_exit[0.1,5;10.3,0.8;accept;Accept]"
 	}
 	return table.concat(form, "")
 end
@@ -165,7 +166,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 	if fields.accept and (fields.str ~= "Eg: Sector A" or fields.str ~= " " or fields.str ~= "") then
 		local pos = area_status[Name(player)].position
 		local name = replace_spaces(fields.str)
-		context.status[name] = {position = vector.new(pos), name = fields.str}
+		context.status[name] = {position = vector.new(pos), name = fields.str, rad = tonumber(fields.rad) or 10}
 		storage:set_string("status", core.serialize(context.status))
 		area_status[Name(player)] = nil
 		core.set_node(pos, {name="air"})
