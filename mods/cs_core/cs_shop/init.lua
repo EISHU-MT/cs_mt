@@ -633,17 +633,21 @@ minetest.register_on_joinplayer(function(player)
 	cs_shop.grenades.flashbang[p] = 0
 	cs_shop.grenades.smoke[p] = 0
 	cs_shop.grenades.frag_sticky[p] = 0
-	core.after(0.2, function(player)
-		cs_shop.enable_shopping(player)
-		cs_shop.queued[p] = 20
-	end)
 end)
 if minetest.settings:get_bool("cs_map.mapmaking", false) ~= true then
 	core.register_globalstep(on_step)
 end
 --minetest.register_on_joinplayer(on_joinp)
 
-
+call.register_on_player_join_team(function(player, team)
+	if team == "terrorist" then
+		cs_shop.enable_shopping(Player(player))
+		cs_shop.queued[player] = 20
+	elseif team == "counter" then
+		cs_shop.enable_shopping(Player(player))
+		cs_shop.queued[player] = 20
+	end
+end)
 
 
 
