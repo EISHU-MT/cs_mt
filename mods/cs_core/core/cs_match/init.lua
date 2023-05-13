@@ -151,6 +151,23 @@ function cs_match.finished_match(teamare1)
 					cb.registered_on_new_match[i]()
 				end
 				
+				for player, team in pairs(ccore) do
+					if player and team and csgo.team[team] and csgo.team[team].count ~= csgo.usrTlimit then
+						if minetest.settings:get_bool("cs_core.enable_env_debug", false) then
+							core.log("error", "Can't put player " .. player .. " in "..team.." team, its full!")
+						end
+						csgo.spectator(player, "Joined spectator team! because: Cannot join "..team)
+					elseif player and team and csgo.team[team] then
+						if minetest.settings:get_bool("cs_core.enable_env_debug", false) then
+							core.log("action", "Placing again the died player "..player.." into terrorist forces")
+						end
+						--error(player .. team)
+						csgo[team](player)
+						ccore[player] = nil
+					end
+					died[player] = nil
+				end
+				
 				core.after(3, function()
 					ccore = {}
 				end)
@@ -233,25 +250,6 @@ function cs_match.start_matches()
 
 end
 local function empty() end
-
-call.register_on_new_match(function()
-	for player, team in pairs(ccore) do
-		if player and team and csgo.team[team] and csgo.team[team].count ~= csgo.usrTlimit then
-			if minetest.settings:get_bool("cs_core.enable_env_debug", false) then
-				core.log("error", "Can't put player " .. player .. " in "..team.." team, its full!")
-			end
-			csgo.spectator(player, "Joined spectator team! because: Cannot join "..team)
-		elseif player and team and csgo.team[team] then
-			if minetest.settings:get_bool("cs_core.enable_env_debug", false) then
-				core.log("action", "Placing again the died player "..player.." into terrorist forces")
-			end
-			--error(player .. team)
-			csgo[team](player)
-			ccore[player] = nil
-		end
-		died[player] = nil
-	end
-end)
 
 
 
