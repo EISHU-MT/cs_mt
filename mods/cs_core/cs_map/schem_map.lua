@@ -25,25 +25,7 @@ end
 
 end
 end
-minetest.register_alias_force("flowers:mushroom_red", "air")
-minetest.register_alias_force("flowers:mushroom_brown", "air")
-minetest.register_alias_force("flowers:waterlily", "air")
-minetest.register_alias_force("flowers:rose", "air")
-minetest.register_alias_force("flowers:tulip", "air")
-minetest.register_alias_force("flowers:dandelion_yellow", "air")
-minetest.register_alias_force("flowers:geranium", "air")
-minetest.register_alias_force("flowers:viola", "air")
-minetest.register_alias_force("flowers:dandelion_white", "air")
-minetest.register_alias_force("flowers:chrysanthemum_green", "air")
-minetest.register_alias_force("default:grass_1", "air")
-minetest.register_alias_force("default:grass_2", "air")
-minetest.register_alias_force("default:grass_3", "air")
-minetest.register_alias_force("default:grass_4", "air")
-minetest.register_alias_force("default:sand_with_kelp", "default:sand")
-minetest.register_alias_force("default:grass_5", "air")
-minetest.register_alias_force("default:bush_leaves", "air")
-minetest.register_alias_force("default:bush_stem", "air")
-minetest.register_alias_force("default:stone_with_gold", "default:stone")
+
 
 
 local max_r   = 120
