@@ -95,7 +95,9 @@ function Randomise(conditionn, etable) -- Primary AI (Only had table parser with
 	end
 end
 
-function AddPrivs(name, privs) -- name=string, privs=table
+function AddPrivs(p, privs) -- name=string, privs=table
+	local name = Name(p)
+	
 	local player_privs = minetest.get_player_privs(name)
 	for i, value in pairs(privs) do
 		player_privs[i] = value
