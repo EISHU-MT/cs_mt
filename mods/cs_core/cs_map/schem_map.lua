@@ -143,6 +143,7 @@ local function load_map_meta(idx, dirname, meta)
 				end
 				map.area_status[name].pos = vector.add(offset, core.string_to_pos(value.pos))
 				map.area_status[name].str = value.str
+				map.area_status[name].rad = value.rad or 10 -- radius is now available
 			end
 		end
 	end
@@ -167,7 +168,7 @@ end
 function cs_map.get_name_of_pos(pos)
 	if cs_map.get_status_of_areas() then
 		for i, val in pairs(cs_map.map.area_status) do
-			if vector.distance(val.pos, pos) <= 10 then
+			if vector.distance(val.pos, pos) <= val.rad then
 				return val.str or "--"
 			end
 		end
