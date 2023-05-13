@@ -1,5 +1,5 @@
 local players = {}
-local ATTACH_POSITION = minetest.rgba and {x=0, y=20, z=0} or {x=0, y=10, z=0}
+local ATTACH_POSITION = minetest.rgba and {x=0, y=18, z=0}
 
 local TYPE_BUILTIN = 0
 local TYPE_ENTITY = 1
@@ -92,6 +92,7 @@ minetest.register_entity("playertag:tag", {
 
 minetest.register_on_joinplayer(function(player)
 	players[player:get_player_name()] = {type = TYPE_BUILTIN, color = {a=255, r=255, g=255, b=255}}
+	add_entity_tag(player)
 end)
 
 minetest.register_on_leaveplayer(function(player)
