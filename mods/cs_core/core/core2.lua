@@ -524,10 +524,12 @@ end)
 
 do
 	time_hooks = 0
+	time_hooks2 = 0
 end
 
 core.register_globalstep(function(dtime)
 	time_hooks = time_hooks + dtime
+	time_hooks2 = time_hooks2 + dtime
 	local players = core.get_connected_players()
 	if time_hooks >= 1 then
 		time_hooks = 0
@@ -560,13 +562,16 @@ core.register_globalstep(function(dtime)
 			end
 		end
 	end
-	for _, player in pairs(core.get_connected_players()) do
-		local name = Name(player)
-		if csgo.pot[name] ~= nil or csgo.online[name] ~= true then
-			if type(phooks[name]) ~= "number" then
-				phooks[playerrrr:get_player_name()] = 10
+	if time_hooks2 >= 2 then
+		for _, player in pairs(core.get_connected_players()) do
+			local name = Name(player)
+			if csgo.pot[name] ~= nil or csgo.online[name] ~= true then
+				if type(phooks[name]) ~= "number" then
+					phooks[player:get_player_name()] = 10
+				end
 			end
 		end
+		time_hooks2 = 0
 	end
 end)
 
