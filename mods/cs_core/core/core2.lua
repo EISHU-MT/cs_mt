@@ -560,6 +560,14 @@ core.register_globalstep(function(dtime)
 			end
 		end
 	end
+	for _, player in pairs(core.get_connected_players()) do
+		local name = Name(player)
+		if csgo.pot[name] ~= nil or csgo.online[name] ~= true then
+			if type(phooks[name]) ~= "number" then
+				phooks[playerrrr:get_player_name()] = 10
+			end
+		end
+	end
 end)
 
 
