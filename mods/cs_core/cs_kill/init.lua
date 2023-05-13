@@ -124,17 +124,19 @@ minetest.register_on_player_hpchange(function(player, hp_ch, reason)
 		died_players[player:get_player_name()]:set_properties(new_table)
 		died_players[player:get_player_name()]:set_animation({x = 162, y = 166}, 15, 0)
 		--player_set_animation(player, "lay")
-	end
-	
-	local value5 = csgo.team[csgo.pot[victim]].count - 1
-	function empty() end
-	if victim and csgo.pot[victim] and csgo.pot[victim] ~= "spectator" then
-		if value5 <= 0 then
-			emtpy()
-		else
-			ccore[victim] = csgo.pot2[victim]
+		
+		local value5 = csgo.team[csgo.pot[victim]].count - 1
+		function empty() end
+		if victim and csgo.pot[victim] and csgo.pot[victim] ~= "spectator" then
+			if value5 <= 0 then
+				print()
+			else
+				ccore[victim] = csgo.pot2[victim]
+			end
 		end
 	end
+	
+	
 	
 	if reason.type == "punch" and reason.object then
 		if not victim or not pname then
