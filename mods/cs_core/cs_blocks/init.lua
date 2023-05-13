@@ -25,17 +25,18 @@ minetest.register_node(":csgo:iglass", {
 })
 
 minetest.register_node(":csgo:trap", {
-	description = "Player Killer\n Used when the player is caught flying in the wall\n Must be used to fill free unused space!",
-	drawtype = "glasslike",
-	tiles = {"invisible.png"},
-	paramtype = "light",
-	sunlight_propogates = true,
-	walkable = false,
-	pointable = true,
-	damage_per_second = 20,
-	is_ground_content = false,
-	groups = {immortal = 1},
-	sounds = default.node_sound_glass_defaults(),
+		description = "Trap", 
+		drawtype = "airlike",
+		paramtype = "light",
+		sunlight_propagates = true,
+		walkable     = false,
+		pointable    = false,
+		diggable     = false,
+		buildable_to = false,
+		air_equivalent = true,
+		damage_per_second = 40,
+		tiles = {"blank.png"},
+		groups = {immortal = 1},
 })
 
 minetest.register_node(":csgo:kill", {
