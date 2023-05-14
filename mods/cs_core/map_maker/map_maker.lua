@@ -141,6 +141,27 @@ minetest.register_node(":cs_core:terrorists", {
 	end,
 })
 
+minetest.register_entity("map_maker:display", {
+	physical = false,
+	collisionbox = {0, 0, 0, 0, 0, 0},
+	visual = "cube",
+	-- wielditem seems to be scaled to 1.5 times original node size
+	visual_size = {x = 0.5, y = 0.5},
+	textures = {"cs_files_show_area.png"},
+	timer = 0,
+	glow = 10,
+
+	on_step = function(self, dtime)
+
+		self.timer = self.timer + dtime
+
+		-- remove after set number of seconds
+		if self.timer > 5 then
+			self.object:remove()
+		end
+	end
+})
+
 minetest.register_node("map_maker:area", {
 	description = "Area node.", 
 	drawtype = "nodebox",
@@ -155,6 +176,8 @@ minetest.register_node("map_maker:area", {
 	after_place_node = function(pos, placer)
 		area_status[Name(placer)] = {position = pos, usrd = placer}
 		core.show_formspec(Name(placer), "mm:areas", return_formspec())
+		
+		
 	end,
 	groups = {immortal = 1},
 })
@@ -170,6 +193,11 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 		storage:set_string("status", core.serialize(context.status))
 		area_status[Name(player)] = nil
 		core.set_node(pos, {name="air"})
+			local ent = minetest.add_entity(pos, "map_maker:display")
+			local r = ent:get_properties()
+			local rad = tonumber(fields.rad) or 10
+			r.visual_size = {x = rad / 2, y = rad / 2},
+			ent:set_properties(r)
 	elseif fields.decline then
 		core.chat_send_player(Name(player), core.colorize("#FF0000", "Declined."))
 		local pos = area_status[Name(player)].position
