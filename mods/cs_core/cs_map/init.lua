@@ -21,10 +21,6 @@ function cs_map.file_exists(subdir, target)
 	end
 end
 
--- Overridden by server mods
-function cs_map.can_cross(player)
-	return false
-end
 
 modpath = minetest.get_modpath(minetest.get_current_modname())
 

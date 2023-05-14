@@ -82,7 +82,7 @@ local function load_map_meta(idx, dirname, meta)
 		author        = meta:get("author"),
 		rotation      = meta:get("rotation"),
 		license       = meta:get("license"),
-		initial_stuff = initial_stuff and initial_stuff:split(","),
+		skybox        = cs_map.skybox_exists(dirname),
 		offset        = offset,
 				-- Functions
 		functions     = meta:get_bool("enable_functions", false),
