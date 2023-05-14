@@ -50,6 +50,7 @@ minetest.register_on_leaveplayer(function(player)
 		csgo.pot2[pname] = nil
 		died[pname] = nil
 		ccore[pname] = nil -- Fix possible crash
+		maintained_players[pname] = nil
 	end
 end)
 

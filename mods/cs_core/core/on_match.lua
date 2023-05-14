@@ -1,14 +1,16 @@
+local maintained_players = {}
 function csgo.off_movement()
 	for __, player in pairs(core.get_connected_players()) do
 		
 		local pname = player:get_player_name()
 		if not csgo.spect[pname] == true then
-		player:set_physics_override({
-			--gravity = 1090
-			speed = 0.2,
-			jump = 0.2
-			
-		})
+			maintained_players[pname] = player:get_physics_override()
+			player:set_physics_override({
+				--gravity = 1090
+				speed = 0.2,
+				jump = 0.2
+				
+			})
 		end
 		
 	end
@@ -18,11 +20,12 @@ function csgo.on_movement()
 		
 		local pname = player:get_player_name()
 		if not csgo.spect[pname] == true then
-		player:set_physics_override({
-			--gravity = 1090
-			speed = 1,
-			jump = 1
-		})
+			player:set_physics_override({
+				--gravity = 1090
+				speed = maintained_players[pname].speed,
+				jump = maintained_players[pname].jump
+			})
+			maintained_players[pname] = nil
 		end
 		
 	end
