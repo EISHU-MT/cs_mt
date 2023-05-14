@@ -92,13 +92,13 @@ minetest.register_craftitem(":bomb", {
 })
 minetest.register_node(":c4", {
     description = S("C4 Node\nIf hading this while playing will be reported."),
-    tiles = {"bomb_3.png", "bomb_1.png", "bomb_2.png"},
+    tiles = {"bomb.png"},
     groups = {immortal=1},
-    drawtype = "nodebox",
-    node_box = {
-        type = "fixed",
-        fixed = {-0.5, -0.4, -0.3, 0.2, 0, 0.7},
-    },
+    drawtype = "mesh",
+    visual_scale = 0.5,
+    paramtype = "light",
+	paramtype2 = "facedir",
+    mesh = "bomb.obj",
     on_place = function(itemstack, placer, pointed_thing)
         error()
     end,
