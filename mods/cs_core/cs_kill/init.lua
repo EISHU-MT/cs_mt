@@ -108,7 +108,7 @@ minetest.register_on_player_hpchange(function(player, hp_ch, reason)
 	local victim = player:get_player_name()
 	
 	
-	if player:get_hp() > 0 and player:get_hp() - hp_change <= 0 then
+	if player:get_hp() > 0 and player:get_hp() - hp_change <= 0 and csgo.pot[victim] and csgo.pot[victim] ~= "spectator" then
 		died_players[player:get_player_name()] = minetest.add_entity(player:get_pos(), "cs_player:dead_ent")
 		local new_table = table.copy(dead_ent)
 		local tex
