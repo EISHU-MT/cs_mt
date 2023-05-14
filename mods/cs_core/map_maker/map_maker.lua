@@ -11,7 +11,8 @@ local defaults = {
 	center = { x = 0, y = 0, z = 0, r = 115, h = 140 },
 	nodes = {},
 	areas = {},
-	status = {}
+	status = {},
+	physics = {jump = 1, speed = 1, gravity = 1},
 }
 function return_formspec()
 	local form = {
@@ -46,7 +47,8 @@ local context = {
 	status = core.deserialize(storage:get_string("areas")) or {},
 	barrier_r = storage:get_int("barrier_r"),
 	barrier_rot = storage:get_string("barrier_rot"),
-	barriers_placed = storage:get_int("barriers_placed") == 1
+	barriers_placed = storage:get_int("barriers_placed") == 1,
+	physics = storage:get_string("physics")
 }
 
 if context.mapname == "" then
@@ -80,6 +82,11 @@ if context.status == "" then
 	context.status = defaults.status
 else
 	context.status = core.deserialize(storage:get_string("status")) or {}
+end
+if context.physics == "" then
+	context.physics = defaults.physics
+else
+	context.physics = core.deserialize(storage:get_string("physics")) or {jump = 1, speed = 1, gravity = 1}
 end
 --------------------------------------------------------------------------------
 
@@ -487,6 +494,7 @@ function map_maker.export(name)
 	end
 	
 	meta:set("status", core.serialize(status_table))
+	meta:set("physics", storage:get_string("physics"))
 	meta:write()
 
 	minetest.after(0.1, function()
