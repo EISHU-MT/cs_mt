@@ -566,7 +566,7 @@ core.register_globalstep(function(dtime)
 			end
 		end
 	end
-	if time_hooks2 >= 2 then
+	if time_hooks2 >= 2 and (not minetest.settings:get_bool("cs_map.mapmaking", false)) then
 		for _, player in pairs(core.get_connected_players()) do
 			local name = Name(player)
 			if csgo.pot[name] ~= nil or csgo.online[name] ~= true then
