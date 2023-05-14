@@ -236,7 +236,11 @@ function csgo.terrorist(player, force)
 		
 		AddPrivs(player, {fly=nil, fast=nil, noclip=nil, teleport=nil, interact=true, shout=true})
 		Player(player):set_armor_groups({fleshy = 120})
-		player_core.upgrade_to_mode(player, "terrorist.b3d")
+		
+		local t = {"terrorist.b3d", "terrorist2.b3d"}
+		local n = #t
+		player_core.upgrade_to_mode(player, t[math.random(n)])
+		
 		cs_core.can_do_damage(player, "yes")
 		csgo.send_message(player .. " Joins the Terrorist forces", "terrorist")
 		if terrorists_spawn() then
