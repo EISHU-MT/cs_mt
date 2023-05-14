@@ -93,11 +93,11 @@ minetest.register_craftitem(":bomb", {
 minetest.register_node(":c4", {
     description = S("C4 Node\nIf hading this while playing will be reported."),
     tiles = {"bomb.png"},
-    groups = {immortal=1},
+    groups = {immortal=1, falling_node = 1},
     drawtype = "mesh",
     visual_scale = 0.5,
     paramtype = "light",
-	paramtype2 = "facedir",
+    paramtype2 = "facedir",
     mesh = "bomb.obj",
     on_place = function(itemstack, placer, pointed_thing)
         error()
