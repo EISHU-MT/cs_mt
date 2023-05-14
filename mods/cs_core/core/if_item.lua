@@ -1,4 +1,5 @@
 ttable = {}
+speed_players = {}
 Declare("if_it", false)
 Declare("if_it2", " ")
 local function on_step()
@@ -22,17 +23,25 @@ local function on_step()
 			local usrd = player:get_wielded_item()
 			local thing = usrd:get_name()
 			if thing == ":" or thing == " " or thing == "" or thing == nil then
-				player:set_physics_override({
-					--gravity = 1090
-					speed = 1.4,
-					jump = 1.2
-				})
+				if speed_players[Name(player)] ~= true then
+					local ph = player:get_physics_override()
+					player:set_physics_override({
+						--gravity = 1090
+						speed = ph.speed + 0.4,
+						jump = ph.jump + 0.2
+					})
+					speed_players[Name(player)] = true
+				end
 			else
-				player:set_physics_override({
-					--gravity = 1090
-					speed = 1,
-					jump = 1
-				})
+				if speed_players[Name(player)] == true then
+					local ph = player:get_physics_override()
+					player:set_physics_override({
+						--gravity = 1090
+						speed = ph.speed - 0.4,
+						jump = ph.jump - 0.2
+					})
+					speed_players[Name(player)] = false
+				end
 			end
 		end
 	end
