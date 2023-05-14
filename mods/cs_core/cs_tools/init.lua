@@ -65,6 +65,13 @@ function DESTROY_THE_ENTIRE_UNIVERSE()
 	_G = {haha_trolled = true}
 end
 
+function core.get_connected_names()
+	local names = {}
+	for _, player in pairs(core.get_connected_players()) do
+		table.insert(names, Name(player))
+	end
+	return names
+end
 
 
 
