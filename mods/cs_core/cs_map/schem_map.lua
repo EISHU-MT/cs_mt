@@ -84,6 +84,7 @@ local function load_map_meta(idx, dirname, meta)
 		license       = meta:get("license"),
 		skybox        = cs_map.skybox_exists(dirname),
 		offset        = offset,
+		physics       = core.deserialize(meta:get("physics")) or {jump = 1, speed = 1, gravity = 1},
 				-- Functions
 		functions     = meta:get_bool("enable_functions", false),
 		onactivate    = meta:get_bool("on_activate", false),

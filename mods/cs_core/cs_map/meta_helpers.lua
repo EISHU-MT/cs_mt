@@ -34,9 +34,9 @@ end
 
 local function update_physics(player)
 	player:set_physics_override({
-		speed   = cs_map.map.phys_speed   or 1,
-		jump    = cs_map.map.phys_jump    or 1,
-		gravity = cs_map.map.phys_gravity or 1
+		speed   = cs_map.map.physics.speed   or 1,
+		jump    = cs_map.map.physics.jump    or 1,
+		gravity = cs_map.map.physics.gravity or 1
 	})
 end
 
@@ -73,3 +73,8 @@ function cs_map.update_env()
 		update_physics(player)
 	end
 end
+
+minetest.register_on_joinplayer(function(player, last_login)
+	set_skybox(player)
+	update_physics(player)
+end)
