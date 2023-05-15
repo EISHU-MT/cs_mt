@@ -53,7 +53,7 @@ function cs_match.finished_match(teamare1)
 		cs_match.commenced_match = false
 		ctimer.pause()
 		function finishedmatch() return false end
-		core.log("action", "Starting new match, {ResetMaps,ResetSettings.}")
+		core.log("info", "Starting new match, {ResetMaps,ResetSettings.}")
 		for i = 1, #cb.registered_on_new_matches do
 			cb.registered_on_new_matches[i](teamare1)
 		end
@@ -100,7 +100,7 @@ function cs_match.finished_match(teamare1)
 			cb.registered_on_new_match[i]()
 		end
 		
-		cs_core.log("action", "Normal match commenced, available: " .. cs_match.available_matches)
+		core.log("info", "Normal match commenced, available: " .. cs_match.available_matches)
 		
 		for people in pairs(csgo.team[teamare1].players) do
 			bank.player_add_value(people, 100)
@@ -133,14 +133,14 @@ function cs_match.finished_match(teamare1)
 							poss = terrorists_spawn()
 							player:set_pos(poss)
 						else
-							cs_core.log("error", "By-Core: No position for terrorists found!")
+							core.log("error", "By-Core: No position for terrorists found!")
 						end
 					elseif csgo.pot[pname] == "counter" then
 						if counters_spawn() then
 							poss = counters_spawn()
 							player:set_pos(poss)
 						else
-							cs_core.log("error", "By-Core: No position for counters found!")
+							core.log("error", "By-Core: No position for counters found!")
 						end
 					elseif csgo.pot[pname] == "spectator" then
 						empty()
@@ -181,7 +181,7 @@ function cs_match.finished_match(teamare1)
 								if not ItemFind(Player(Playerr)) then
 									InvRef = Playerr:get_inventory()
 									InvRef:add_item("main", "bomb")
-									core.debug("green", "Giving the bomb to a random player ("..pname..")", "C4 API")
+									core.log("info", "Giving the bomb to a random player ("..pname..")")
 									has_bomb = pname
 									return
 								end
@@ -198,7 +198,7 @@ function cs_match.finished_match(teamare1)
 
 end
 function cs_match.start_matches()
-		cs_core.log("action", "Starting {Maps, Values, Registers} for the server")
+		ccore.log("info", "Starting {Maps, Values, Registers} for the server")
 
 		cs_map.new_match()
 		--cs_death.register_spawn("all", counters_spawn()) -- ALL: terrorists and counters, spectators_spawn(): where the spectators spawn
