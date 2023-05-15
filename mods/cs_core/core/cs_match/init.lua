@@ -78,6 +78,7 @@ function cs_match.finished_match(teamare1)
 					text = "Be Fast!! shop your arms before time reach!\n You Had 20 Seconds to shop.",
 					color = 0xFF9D00,
 				})
+				csgo.show_menu(player)
 			end
 				cs_buying.enable_shopping()
 			for i = 1, #cb.registered_on_new_match do
