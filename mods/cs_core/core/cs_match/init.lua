@@ -198,7 +198,7 @@ function cs_match.finished_match(teamare1)
 
 end
 function cs_match.start_matches()
-		ccore.log("info", "Starting {Maps, Values, Registers} for the server")
+		core.log("info", "Starting {Maps, Values, Registers} for the server")
 
 		cs_map.new_match()
 		--cs_death.register_spawn("all", counters_spawn()) -- ALL: terrorists and counters, spectators_spawn(): where the spectators spawn
