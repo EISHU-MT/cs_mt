@@ -1,6 +1,12 @@
 cs_match = {
 	registered_matches = {},
 	available_matches = {},
+	hooks = {
+		immortal = false,
+		immortal_players = {},
+		physics = false,
+		physics_players = {},
+	},
 }
 phud = {}
 -- *C* CORE
@@ -65,6 +71,7 @@ function cs_match.finished_match(teamare1)
 		
 		if not minetest.settings:get_bool("cs_map.mapmaking", false) then
 			for i, player in pairs(core.get_connected_players()) do
+				player:set_hp(20)
 				local pname = player:get_player_name()
 				core.chat_send_player(pname, "New Match. Remember there are " .. cs_match.available_matches .. " rounds")
 				phud[pname] = player:hud_add({
@@ -88,6 +95,7 @@ function cs_match.finished_match(teamare1)
 				ccore = {}
 			end
 			
+			cs_match.hooks.immortal = true
 			
 		end
 	elseif (cs_match.available_matches ~= 0)  then
@@ -99,6 +107,8 @@ function cs_match.finished_match(teamare1)
 		for i = 1, #cb.registered_on_new_match do
 			cb.registered_on_new_match[i]()
 		end
+		
+		cs_match.hooks.immortal = true
 		
 		core.log("info", "Normal match commenced, available: " .. cs_match.available_matches)
 		
@@ -114,6 +124,7 @@ function cs_match.finished_match(teamare1)
 		core.after(1, function()
 			if not minetest.settings:get_bool("cs_map.mapmaking", false) then
 				for i, player in pairs(core.get_connected_players()) do
+					player:set_hp(20)
 					local pname = player:get_player_name()
 					core.chat_send_player(pname, "New Match. Remember there are " .. cs_match.available_matches .. " rounds")
 					phud[pname] = player:hud_add({
@@ -127,6 +138,12 @@ function cs_match.finished_match(teamare1)
 						text = "Be Fast!! shop your arms before time reach!\n You Had 20 Seconds to shop.",
 						number = 0xFF9D00,
 					})
+					if ccore[pname] then
+						csgo[ccore[pname]](pname)
+					end
+					
+					player:set_armor_groups({fleshy = 120, immortal = 0})
+					cs_match.hooks.immortal_players[player:get_player_name()] = false
 					
 					if (csgo.pot[pname] == "terrorist") then
 						if terrorists_spawn() then
@@ -152,7 +169,7 @@ function cs_match.finished_match(teamare1)
 					cb.registered_on_new_match[i]()
 				end
 				
-				for player, team in pairs(ccore) do
+				--[[for player, team in pairs(ccore) do
 					if player and team and csgo.team[team] and csgo.team[team].count ~= csgo.usrTlimit then
 						if minetest.settings:get_bool("cs_core.enable_env_debug", false) then
 							core.log("error", "Can't put player " .. player .. " in "..team.." team, its full!")
@@ -167,7 +184,7 @@ function cs_match.finished_match(teamare1)
 						ccore[player] = nil
 					end
 					died[player] = nil
-				end
+				end--]]
 				
 				core.after(3, function()
 					ccore = {}
@@ -205,7 +222,11 @@ function cs_match.start_matches()
 		
 		cs_match.register_matches(cs_match.registered_matches) -- Register again all matchs to be default, to change limit, see cs-core/core/core1.lua
 		
+		csgo.off_movement()
+		
 		ctimer.pause()
+		
+		cs_match.hooks.immortal = true
 		
 		if not minetest.settings:get_bool("cs_map.mapmaking", false) then
 		if not alreadyVAR then
@@ -254,7 +275,22 @@ local function empty() end
 
 
 
-
+call.register_on_timer_commence(function()
+	for name, bool in pairs(cs_match.hooks.immortal_players) do
+		for _, pname in pairs(core.get_connected_names()) do
+			if name == pname and csgo.pot[name] and csgo.pot[name] ~= "spectator" then
+				local player = Player(name)
+				if player and player ~= "" then
+					local armor_groups = player:get_armor_groups()
+					player:set_armor_groups({
+						fleshy = armor_groups.fleshy or 120,
+						immortal = 0,
+					})
+				end
+			end
+		end
+	end
+end)
 
 
 minetest.register_on_leaveplayer(function(player)
