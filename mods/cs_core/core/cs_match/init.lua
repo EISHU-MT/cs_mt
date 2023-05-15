@@ -142,7 +142,11 @@ function cs_match.finished_match(teamare1)
 						csgo[ccore[pname]](pname)
 					end
 					
-					player:set_armor_groups({fleshy = 120, immortal = 0})
+					local armor_groups = player:get_armor_groups()
+					player:set_armor_groups({
+						fleshy = armor_groups.fleshy or 120,
+						immortal = 0,
+					})
 					cs_match.hooks.immortal_players[player:get_player_name()] = false
 					
 					if (csgo.pot[pname] == "terrorist") then
