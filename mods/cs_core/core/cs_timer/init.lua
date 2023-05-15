@@ -88,6 +88,7 @@ local function reg_glb(dtime)
 				function finishedmatch() return true end
 				
 				cs_match.commenced_match = true
+				cs_match.hooks.immortal = false
 				
 				color = 0xFFFFFF
 				
