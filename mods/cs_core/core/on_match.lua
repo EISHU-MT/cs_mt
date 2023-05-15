@@ -1,6 +1,8 @@
-local maintained_players = {}
+maintained_players = {}
 function csgo.off_movement()
+	cs_match.hooks.physics = true 
 	for __, player in pairs(core.get_connected_players()) do
+		
 		
 		local pname = player:get_player_name()
 		if not csgo.spect[pname] == true then
@@ -16,6 +18,7 @@ function csgo.off_movement()
 	end
 end
 function csgo.on_movement()
+	cs_match.hooks.physics = false
 	for __, player in pairs(core.get_connected_players()) do
 		
 		local pname = player:get_player_name()
