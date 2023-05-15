@@ -172,7 +172,7 @@ minetest.register_entity("map_maker:display", {
 minetest.register_node("map_maker:area", {
 	description = "Area node.", 
 	drawtype = "nodebox",
-	tiles = {"cs_files_area.png"},
+	tiles = {"cs_files_area.png", "cs_files_area.png", "cs_files_area.png", "cs_files_area.png", "cs_files_area.png", "cs_files_area.png", "cs_files_area.png"},
 	paramtype = "light",
 	sunlight_propagates = true,
 	walkable     = true,
@@ -203,7 +203,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 			local ent = minetest.add_entity(pos, "map_maker:display")
 			local r = ent:get_properties()
 			local rad = tonumber(fields.rad) or 10
-			r.visual_size = {x = rad / 2, y = rad / 2},
+			r.visual_size = {x = rad, y = rad},
 			ent:set_properties(r)
 	elseif fields.decline then
 		core.chat_send_player(Name(player), core.colorize("#FF0000", "Declined."))
@@ -483,7 +483,8 @@ function map_maker.export(name)
 		
 		status_table[name] = {
 			pos = minetest.pos_to_string(pos),
-			str = tabled.name
+			str = tabled.name,
+			rad = tabled.rad or 10
 		}
 		
 		--table.insert(status_table, {})
