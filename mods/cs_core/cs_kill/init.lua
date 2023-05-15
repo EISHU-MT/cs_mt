@@ -58,6 +58,10 @@ function cs_kill.translate_to_real_damage(damage)
 	end
 	local a1 = tostring(damage)
 
+	if not a1:find("-") then
+		return 0
+	end
+
 	local a2 = string.sub(a1, 2)
 
 	local a3 = tonumber(a2)
