@@ -57,7 +57,7 @@ function ctimer.pause(m)
 	core.chat_send_all("Buy armor & rifles or pistols for the fight!")
 end
 
-
+cs_match.commenced_match = false -- Fix bug
 
 local function reg_glb(dtime)
 	timed = timed + dtime
