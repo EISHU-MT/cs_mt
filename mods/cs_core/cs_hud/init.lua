@@ -90,7 +90,9 @@ end)
 minetest.register_globalstep(function(dtime)
 	for _, player in pairs(core.get_connected_players()) do
 		pname = player:get_player_name()
-		player:hud_change(thud_round[pname], "text", tostring(cshud.terrorist.number))
-		player:hud_change(chud_round[pname], "text", tostring(cshud.counter.number))
+		if thud_round[pname] and chud_round[pname] then
+			player:hud_change(thud_round[pname], "text", tostring(cshud.terrorist.number))
+			player:hud_change(chud_round[pname], "text", tostring(cshud.counter.number))
+		end
 	end
 end)
