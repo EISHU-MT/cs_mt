@@ -11,7 +11,7 @@ dofile(modpath.."/settings/join_leave_conf.lua")
 end
 --]]
 
---[[ THE V0.0 ENGINE CODE, DO NO UNCOMMENT!!
+--[[THE V0.0 ENGINE CODE, DO NO UNCOMMENT!!
 	for doit, arg1 in pairs(csgo.team) do
 		if (temp[doit].count == c_core.var.max_users or temp[doit].count > c_core.var.max_users) -- The second is immposible but ok....
 			print("[CORE] Unable to put player  {" .. pname .. "} in " .. doit .. " team. Proceding to put on another team...")
@@ -54,7 +54,25 @@ minetest.register_on_leaveplayer(function(player)
 	end
 end)
 
-
+call.register_on_player_join_team(function(name, team)
+	if team ~= "spectator" then
+		local player = Player(name)
+		if cs_match.hooks.immortal == true then
+			player:set_armor_groups({immortal = 1})
+			cs_match.hooks.immortal_players[player:get_player_name()] = true
+		else
+			player:set_armor_groups({fleshy = 120, immortal = 0})
+			cs_match.hooks.immortal_players[player:get_player_name()] = false
+		end
+		if cs_match.hooks.physics == true then
+			maintained_players[player:get_player_name()] = player:get_physics_override()
+			player:set_physics_override({
+				speed = 0.2,
+				jump = 0.2
+			})
+		end
+	end
+end)
 
 
 
