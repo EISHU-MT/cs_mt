@@ -13,8 +13,8 @@ dofile(modpath.."/core1.lua") -- Primary Core
 --Core1 dofiles
 dofile(modpath.."/cooldown.lua") -- CoolDown MINI-API
 dofile(modpath.."/api.lua") -- API
-dofile(modpath.."/l_j.lua") -- Leave/Join.
 dofile(modpath.."/callbacks.lua") -- Callbacks
+dofile(modpath.."/l_j.lua") -- Leave/Join.
 
 --clua.throw("Bad Argument to option `2`: Expected number, got NIL")
 
