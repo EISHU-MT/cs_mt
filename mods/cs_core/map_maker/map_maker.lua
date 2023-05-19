@@ -154,7 +154,7 @@ minetest.register_entity("map_maker:display", {
 	visual = "cube",
 	-- wielditem seems to be scaled to 1.5 times original node size
 	visual_size = {x = 0.5, y = 0.5},
-	textures = {"cs_files_show_area.png"},
+	textures = {"cs_files_show_area.png", "cs_files_show_area.png", "cs_files_show_area.png", "cs_files_show_area.png", "cs_files_show_area.png", "cs_files_show_area.png"},
 	timer = 0,
 	glow = 10,
 
