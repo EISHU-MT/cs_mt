@@ -4,7 +4,7 @@ function map_maker.show_gui(name)
 	local status_table = {}
 	for name, tabled in pairs(context.status) do
 		
-		table.insert(status_table, tabled.str or "Unrecognized Area")
+		table.insert(status_table, tabled.name or "Unrecognized Area")
 	end
 	
 	local formspec = {
