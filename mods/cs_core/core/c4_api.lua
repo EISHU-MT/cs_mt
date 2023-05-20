@@ -19,33 +19,42 @@ function c4.get_planter()
 	return c4.planter or "no one"
 end
 function c4.plant_bomb_at(pos, player)
-    if pos and Name(player) then
+	if pos and Name(player) then
 		if type(pos) ~= "table" then
 			error("c4.plant_bomb_at(): no table of position are found! or just a string...")
 		end
-        core.after(1, function(pos)
-        	pos.y = pos.y + 1 -- Fix bug
-            core.set_node(pos, {name="c4", param1=1, param2=1})
-            
-            for _, p in pairs(core.get_connected_players()) do
-                pname = p:get_player_name()
-                
-                hud_events.new(p, {
-			text = ("(!) The bomb is planted!"),
-			color = "warning",
-			quick = false,
-               })
-               
-            end
-        end, pos)
-        time = 120
-        ctimer.on_end_type("c4")
-        has_bomb = nil
-        c4.planter = player
-        bank.player_add_value(player, 50)
-        c4.pos = pos
+		core.after(1, function(pos)
+			local real_pos = pos
+			local node = minetest.get_node(pos)
+			local pos2 = pos
+			pos2.y = pos2.y - 1
+			local node2 = minetest.get_node(pos2)
+			if node.name == "air" and node2.name ~= "air" then
+				real_pos = pos
+			elseif node.name ~= "air" and node2.name ~= "air" then
+				real_pos = pos
+				real_pos.y = pos.y + 1
+			end
+			
+			core.set_node(real_pos, {name="c4", param1=1, param2=1})
+			
+			for _, p in pairs(core.get_connected_players()) do
+				pname = p:get_player_name()
+				hud_events.new(p, {
+					text = ("(!) The bomb is planted!"),
+					color = "warning",
+					quick = false,
+				})
+			end
+		end, pos)
+		time = 120
+		ctimer.on_end_type("c4")
+		has_bomb = nil
+		c4.planter = player
+		bank.player_add_value(player, 50)
+		c4.pos = pos
 		c4.planted = true
-    end
+	end
 end
 function c4.remove_bomb2()
 	minetest.set_node(c4.pos, {name="air"})
