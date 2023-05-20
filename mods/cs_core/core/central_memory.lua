@@ -78,5 +78,16 @@ minetest.register_globalstep(function()
 		end
 	end
 	
+	if not ccc(has_bomb) then
+		has_bomb = nil
+		local name = csgo.random_player("terrorist")
+		if name then
+			local player = Player(name)
+			if player then
+				Inv(player):add_item("main", ItemStack("bomb"))
+				has_bomb = name
+			end
+		end
+	end
 
 end)
