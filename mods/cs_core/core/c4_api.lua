@@ -3,7 +3,7 @@ c4 = {
     pos = {x=1,y=1,z=1},
 	planted = false,
     timer = 0,
-
+    callbacks = {},
 }
 c4c = {
     radio = 60,
@@ -12,6 +12,9 @@ c4c = {
     depend_on_range = false,
 	enable_deco = true,
 }
+function c4.register_on_bomb_explode(f)
+	table.insert(c4.callbacks, f or function() end)
+end
 function c4.get_planter()
 	return c4.planter or "no one"
 end
@@ -103,6 +106,10 @@ function c4.bomb_now()
 			end
 	end
 	c4.planted = false
+	
+	for i = 1, #c4.callbacks do
+		c4.callbacks[i](c4.planter)
+	end
 
 end
 
