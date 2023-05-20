@@ -98,6 +98,7 @@ minetest.register_node(":c4", {
     visual_scale = 0.5,
     paramtype = "light",
     paramtype2 = "facedir",
+    pointable = false,
     mesh = "bomb.obj",
     on_place = function(itemstack, placer, pointed_thing)
         error()
