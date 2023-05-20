@@ -36,7 +36,7 @@ function c4.plant_bomb_at(pos, player)
 				real_pos.y = pos.y + 1
 			end
 			
-			core.set_node(real_pos, {name="c4", param1=1, param2=1})
+			core.set_node(pos, {name="c4", param1=1, param2=1})
 			
 			for _, p in pairs(core.get_connected_players()) do
 				pname = p:get_player_name()
