@@ -12,7 +12,7 @@ c4c = {
     depend_on_range = false,
 	enable_deco = true,
 }
-function c4.register_on_bomb_explode(f)
+function c4.register_on_bomb(f)
 	table.insert(c4.callbacks, f or function() end)
 end
 function c4.get_planter()

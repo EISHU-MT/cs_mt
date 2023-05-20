@@ -119,7 +119,7 @@ call.register_on_add_killer(function(victim, killer, tabled)
 		end
 	end
 end)
-c4.register_on_bomb_explode(function(planter)
+c4.register_on_bomb(function(planter)
 	stats.bplanted.add_to(planter or "")
 end)
 -- Commands
