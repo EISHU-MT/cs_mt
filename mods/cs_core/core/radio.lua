@@ -38,20 +38,6 @@ radio = {
 			"What happening",
 			"What happened",
 		},
-		throw_flash = {
-			"I throwed the flashbang",
-			"I put flashbang at this area!",
-		},
-		throw_grenade = {
-			"dropped grenade, do not get near it!",
-			"i dropt a grenade at this area!",
-			"i put a grenade at this area",
-		},
-		throw_smoke = {
-			"Smoke!",
-			"A big big cloud is appearing at this area",
-			"I dropt smoke!",
-		},
 		i_got_it = {
 			"I got it!",
 			"Got it!",
@@ -61,36 +47,29 @@ radio = {
 			"Nooo!",
 			"Ill become ghosttt!",
 		},
-		got_kill = {
-			"I got ",
-			"Got ",
-		},
 	},
-	dtimer1 = 0,
-	dtimer2 = 0,
-	wait_again = false,
+	types = {
+		"1. Heard Something",
+		"2. Hurted",
+		"3. Hurted by teammate",
+		"4. Going to Sector B",
+		"5. Going to Sector A",
+		"6. Reached to the bomb",
+		"7. What happening",
+		"8. I got it!",
+		"9. Ill die",
+	},
+	people = {}
 }
-do
-	local strs = radio.storage:get_string("radio_ign_players")
-	if strs == "" or strs == " " or strs == nil then
-		local newtable = {
-					__null = true
-				}
-		local sr = core.serialize(newtable)
-		radio.storage:set_string("radio_ign_players", sr)
-	end
-end
-function radio.return_igns_players()
-	return core.deserialize(radio.storage:get_string("radio_ign_players")) or {}
-end
+
 
 function radio.send_msg(team, msg, p)
 	n = Name(p) or ""
 	if team and csgo.team[team] and msg and n then
 		for name in pairs(csgo.team[team].players) do
-			if core.player_exists(name) then
+			if Player(name) then
 				--if radio.return_igns_players()[name] ~= true then
-				core.chat_send_player(name, core.colorize("#FFEF00", n.."[RADIO] ")..msg or "~NULL")
+				core.chat_send_player(name, core.colorize("#FFEF00", "["..n.."RADIO] ")..msg or "~NULL")
 				--end
 			end
 		end
@@ -99,68 +78,96 @@ end
 
 function radio.select_random_msg(category)
 	if type(radio.msgs[category]) == "table" then
-		local value = #radio.msgs.category[category]
+		local value = #radio.msgs[category]
 		local svalue = math.random(value)
-		return radio.msgs.category[category][svalue] or "null"
+		return radio.msgs[category][svalue] or "null"
 	else
 		core.log("error", "Cannot find a category called: "..tostring(category))
 	end
 end
 
-
-function radio.on_kill(player, player_team, killer)
-	if player and players_team and killer then
-		radio.send_msg(csgo.check_team(killer), radio.select_random_msg("got_kill")..player, tostring(killer).." ")
+function radio.get_category_by_num(number)
+	if number == 1 then
+		category = "heard_something"
+	elseif number == 2 then
+		category = "hurted"
+	elseif number == 3 then
+		category = "hurted_by_teammate"
+	elseif number == 4 then
+		category = "going_to_b"
+	elseif number == 5 then
+		category = "going_to_a"
+	elseif number == 6 then
+		category = "reached_to_the_bomb"
+	elseif number == 7 then
+		category = "what_happening"
+	elseif number == 8 then
+		category = "i_got_it"
+	elseif number == 9 then
+		category = "ill_die"
+	else
+		category = "what_happening"
 	end
+	
+	return category
 end
 
-radio.table1 = {} -- Table with all players
-radio.table2 = {} -- Table with all players position maked with vector.distance() between c4 position if it exists
-radio.table3 = {test__ = 9000} -- Table with all players position maked with vector.distance() between c4 position if it exists (2)
+function radio.send_to_player(player)
+	core.show_formspec(Name(player), "radio:radio", "formspec_version[6]" .. "size[10.5,11]" .. "box[0,0;10.7,1;#FFFF00]" .. "label[0.2,0.4;Radio]" .. "button_exit[0.1,10;10.3,0.9;send;Send]" .. "textlist[0.1,1.8;10.3,8.1;list;"..table.concat(radio.types, ",")..";-1;false]" .. "label[3.8,1.4;Please select one]")
+end
 
-function radio.on_step(dtime)
-	radio.dtimer1 = radio.dtimer1 + dtime
-	radio.dtimer2 = radio.dtimer2 + dtime
-	
-	radio.table1 = core.get_connected_players()
-	for _, player in pairs(radio.table1) do
-		radio.table2[Name(player)] = vector.distance(Player(player):get_pos(), c4.pos)
+minetest.register_on_player_receive_fields(function(player, formname, fields)
+	if formname ~= "radio:radio" then
+		return
 	end
-	
-	if radio.dtimer1 >= 0.5 then
-		if c4.planted and radio.wait_again ~= true then
-			for name, value in pairs(radio.table2) do
-				if core.player_exists(name) and value and csgo.check_team(name) == "counter" then
-				print(value)
-				print(csgo.check_team(name))
-				print(vector.distance(Player(player):get_pos(), c4.pos))
-					if value < vector.distance(Player(player):get_pos(), c4.pos) then
-						if vector.distance(Player(player):get_pos(), c4.pos) <= 10 then
-							radio.send_msg("counter", radio.select_random_msg("reached_to_the_bomb"), name.." ")
-							radio.wait_again = true
-						end
-					end
-				end
+	if fields.list then
+		local t = core.explode_textlist_event(fields.list)
+		if t.type ~= "DCL" then
+			if radio.types[t.index] then
+				local category = radio.get_category_by_num(t.index)
+				core.chat_send_player(Name(player), "Selected: "..radio.select_random_msg(category))
+				radio.people[Name(player)] = category
 			end
 		end
-		radio.dtimer1 = 0
 	end
-	
-	if radio.dtimer2 >= 2 then
-		if radio.wait_again then
-			radio.wait_again = false
+	if fields.send then
+		if radio.people[Name(player)] then
+			radio.send_msg(csgo.pot[player:get_player_name()], radio.select_random_msg(radio.people[Name(player)]), " <"..player:get_player_name().."> ")
+			radio.people[Name(player)] = nil
+		else
+			core.chat_send_player(Name(player), "-!- Nothing selected.")
 		end
-		radio.dtimer2 = 0
 	end
-end
-
-core.register_globalstep(radio.on_step)
+end)
 
 
+local radio_def = {
+		params = "<number>",
+		description = "Send any message via radio",
+		func = function(name, param)
+			if param and param ~= "" and param ~= " " then
+				local n = tonumber(param)
+				if n then
+					if n > 9 then
+						n2 = 9
+					elseif n < 1 then
+						n2 = 1
+					else
+						n2 = n
+					end
+					if not n2 then
+						n2 = 7
+					end
+					local category = radio.get_category_by_num(n2)
+					radio.send_msg(csgo.pot[name], radio.select_random_msg(category or "what_happening"), " <"..name.."> ")
+				end
+			else
+				radio.send_to_player(name)
+			end
+		end,
+	}
 
-
-
-
+core.register_chatcommand("radio", radio_def)
 
 
 
