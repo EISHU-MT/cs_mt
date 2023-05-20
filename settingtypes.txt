@@ -1,4 +1,5 @@
 cs_map.mapmaking (Map maker) bool false
 cs_core.enable_env_debug (Print all in log every game action) bool false
 cs_core.enable_friend_shot (Enable friend shot) bool false
+cs_core.enable_player_stats (Enable stats [kills & deaths] for players) bool true
 
