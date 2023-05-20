@@ -16,8 +16,34 @@ minetest.register_node(":core:air", {
 	groups = {not_in_creative_inventory=1},
 })
 if not minetest.settings:get_bool("cs_map.mapmaking", false) then
-	minetest.register_alias("cs_core:terrorist", "air")
-	minetest.register_alias("cs_core:counter", "air")
+	minetest.register_node(":cs_core:terrorists", {
+		description = "Terrorist node",
+		drawtype = "airlike",
+		paramtype = "light",
+		sunlight_propagates = true,
+		walkable = false,
+		pointable = false,
+		diggable = false,
+		buildable_to = true,
+		floodable = true,
+		air_equivalent = true,
+		drop = "",
+		groups = {not_in_creative_inventory=1},
+	})
+	minetest.register_node(":cs_core:counters", {
+		description = "Counter node.",
+		drawtype = "airlike",
+		paramtype = "light",
+		sunlight_propagates = true,
+		walkable = false,
+		pointable = false,
+		diggable = false,
+		buildable_to = true,
+		floodable = true,
+		air_equivalent = true,
+		drop = "",
+		groups = {not_in_creative_inventory=1},
+	})
 end
 cs_core = {}
 local modpath = core.get_modpath(minetest.get_current_modname())
