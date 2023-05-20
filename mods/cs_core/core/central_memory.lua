@@ -2,17 +2,12 @@
 --
 -- BY EISHU
 --
-function temporal5()
-	list = core.get_connected_players()
-	core.after(2, temporal5)
-end
-core.after(0.5, temporal5)
 -- check by connected players.
 function ccc(player)
 	if player then
 		--local list = core.get_connected_players()
-		for _, str in pairs(list) do
-			str2 = str:get_player_name()
+		for _, str in pairs(core.get_connected_players()) do
+			local str2 = str:get_player_name()
 			--error(str.." null "..str2)
 			if str2 == player then
 				return true
@@ -78,14 +73,19 @@ minetest.register_globalstep(function()
 		end
 	end
 	
-	if not ccc(has_bomb) then
-		has_bomb = nil
-		local name = csgo.random_player("terrorist")
-		if name then
-			local player = Player(name)
-			if player then
-				Inv(player):add_item("main", ItemStack("bomb"))
-				has_bomb = name
+	if ccc(has_bomb) then
+		function empty() end
+		empty()
+	else
+		if c4.planted == false then
+			has_bomb = nil
+			local name = csgo.random_player("terrorist")
+			if name then
+				local player = Player(name)
+				if player then
+					Inv(player):add_item("main", ItemStack("bomb"))
+					has_bomb = name
+				end
 			end
 		end
 	end
