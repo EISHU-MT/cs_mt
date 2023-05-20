@@ -36,6 +36,7 @@ dofile(modpath.."/rules.lua")
 dofile(modpath.."/radio.lua")
 dofile(modpath.."/restrictions.lua")
 dofile(modpath.."/player_on_walk.lua")
+dofile(modpath.."/history.lua")
 
 --Third Core
 dofile(modpath.."/core3.lua")
