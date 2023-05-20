@@ -22,13 +22,17 @@ randomMSG = {
 "Remember if you afk, the game kicks you out",
 "Only One player can had the bomb and is need to be terrorist too",
 "When finished a match, remember to buy things befores it times out!",
-"To contribute maps, Get involved here!: github.com/EISHU92/cs_maps",
+"To contribute maps, Get involved here!: https://github.com/EISHU-MT/cs_maps",
 "This game are in dev state, expect bugs and report it to help us!",
 "This game is inspired by CS:GO Game",
 "To chat only with ur teammates use this command: /m",
 "To defuse a bomb maintain pressed the punch/dig button/touchpad and wait the seconds that require",
 "To report an bug or crash, use the command: /report <bug> <description>",
-"To report an player that is breaking the rules, use command: /report <name> <description>"
+"To report an player that is breaking the rules, use command: /report <name> <description>",
+"To check on a player stats, use /r <player> or using /rank",
+"Radio is available!. Use it for telling your position to your teammates, by using /radio <number of section *Optional!*>",
+"Radio has GUI for newcomers",
+"This game will be in ContentDB soon......"
 }
 time_to_say = 90
 rmtime = 0
