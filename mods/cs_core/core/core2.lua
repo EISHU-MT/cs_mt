@@ -493,7 +493,13 @@ minetest.register_on_joinplayer(function(playerrrr)
 		player:set_armor_groups({immortal=1})
 		
 		if csgo.team.terrorist.count ~= csgo.usrTlimit and csgo.team.counter.count ~= csgo.usrTlimit then
-			core.show_formspec(player:get_player_name(), "core:main", csgo.main())
+			if not history[Name(player)] then -- Check if player is cheating or not
+				core.show_formspec(player:get_player_name(), "core:main", csgo.main())
+			else
+				core.chat_send_player(Name(player), "-!- You Joined back in your team.")
+				local team = history[Name(player)]
+				csgo[team](Name(player))
+			end
 		elseif csgo.team.terrorist.count == csgo.usrTlimit then
 			csgo.counter(player:get_player_name())
 		elseif csgo.team.counter.count == csgo.usrTlimit then
