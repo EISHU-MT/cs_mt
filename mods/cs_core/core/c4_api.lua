@@ -24,17 +24,7 @@ function c4.plant_bomb_at(pos, player)
 			error("c4.plant_bomb_at(): no table of position are found! or just a string...")
 		end
 		core.after(1, function(pos)
-			local real_pos = pos
-			local node = minetest.get_node(pos)
-			local pos2 = pos
-			pos2.y = pos2.y - 1
-			local node2 = minetest.get_node(pos2)
-			if node.name == "air" and node2.name ~= "air" then
-				real_pos = pos
-			elseif node.name ~= "air" and node2.name ~= "air" then
-				real_pos = pos
-				real_pos.y = pos.y + 1
-			end
+			pos.y = pos.y + 1
 			
 			core.set_node(pos, {name="c4", param1=1, param2=1})
 			
