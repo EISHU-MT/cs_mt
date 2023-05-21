@@ -42,8 +42,9 @@ minetest.register_entity("cs_pt:name", {
 	static_save = false,
 })
 
-local function add(player)
+local function add(player, team)
 	-- The hiding nametag is handled by core
+	if not team then return end
 	local entity = core.add_entity(Player(player):get_pos(), "cs_pt:name")
 	local texture = "tag_bg.png"
 	local x = math.floor(134 - ((player:get_player_name():len() * 11) / 2))
@@ -58,6 +59,7 @@ local function add(player)
 		texture = texture.."^[combine:84x14:"..(x+i)..",0=W_".. n ..".png"
 		i = i + 11
 	end)
+	texture = texture.."^[colorize:"..csgo.get_team_colour(team)..":255"
 	entity:set_properties({ textures={texture} })
 	entity:set_attach(player, "", player_tags.configs.coords, {x=0, y=0, z=0})
 	player_tags.objs[player:get_player_name()] = entity
@@ -73,9 +75,11 @@ local function on_join_team(name, team)
 	if name and team and team == "spectator" then
 		player_tags.empty()
 	elseif name and team then
-		add(Player(name))
+		add(Player(name), team)
 	end
 end
+
+
 
 --core.register_on_joinplayer(on_join_player)
 core.register_on_leaveplayer(on_leave_player)
