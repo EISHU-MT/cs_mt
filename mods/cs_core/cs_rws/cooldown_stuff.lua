@@ -1,3 +1,4 @@
+scope_users = {}
 minetest.register_globalstep(function(dtime, player)
 	for _, player in pairs(minetest.get_connected_players()) do
 
@@ -8,8 +9,12 @@ minetest.register_globalstep(function(dtime, player)
 		player:hud_set_flags({
 			crosshair = false,
 		})
+	else
+		player:hud_set_flags({
+			crosshair = true,
+			wield_item = true,
+		})
 	end
-
 
  local w_item = player:get_wielded_item()
 
@@ -17,26 +22,38 @@ minetest.register_globalstep(function(dtime, player)
 local controls = player:get_player_control()
 if w_item:get_definition().weapon_zoom ~= nil then
 
-	if controls.zoom then
+	if controls.zoom and scope_users[player:get_player_name()] ~= true and cs_match.commenced_match == true then
 		player:hud_change(scope_hud, "text", "rangedweapons_scopehud.png")
 		player:hud_set_flags({
 			crosshair = false,
+			wield_item = false,
 		})
+		local physics = player:get_physics_override()
 		player:set_physics_override({
-			speed = 0.6,
+			speed = physics.speed - 0.5,
 		})
-	else
-player:hud_change(scope_hud, "text", "rangedweapons_empty_icon.png")
-	player:set_physics_override({
-		speed = 1,
-	})
-	--[[player:hud_set_flags({
-		crosshair = true,
-	})--]]
+		scope_users[player:get_player_name()] = true
+	elseif cs_match.commenced_match == true and not controls.zoom then
+		if scope_users[player:get_player_name()] == true then
+			scope_users[player:get_player_name()] = nil
+			player:hud_change(scope_hud, "text", "rangedweapons_empty_icon.png")
+			local physics = player:get_physics_override()
+			if cs_match.commenced_match == true then
+				if physics.speed >= 1 then
+					return
+				end
+				player:set_physics_override({
+					speed = physics.speed + 0.5,
+				})
+			end
+			--[[player:hud_set_flags({
+				crosshair = true,
+			})--]]
+		end
 	end
 
 local wpn_zoom = w_item:get_definition().weapon_zoom
-	if player:get_properties().zoom_fov ~= wpn_zoom then
+	if player:get_properties().zoom_fov ~= wpn_zoom and cs_match.commenced_match == true then
 		player:set_properties({zoom_fov = wpn_zoom})
 
 	end
