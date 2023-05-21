@@ -67,7 +67,7 @@ local function load_map_meta(idx, dirname, meta)
 		error("Map was not properly configured: " .. dirname .. "/map.conf")
 	end
 
-	local offset = vector.new(600 * idx, 0, 0)
+	local offset = vector.new(math.random(20000) * idx, 200 * idx, math.random(10000)) -- Solve some coordinates.
 
 	local initial_stuff = meta:get("initial_stuff")
 	local treasures = meta:get("treasures")
