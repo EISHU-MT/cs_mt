@@ -1,8 +1,10 @@
 All In cs_core mods: Licensed with LGPLv2.1-only
 All Textures in cs_core mods: Licensed with LGPLv2.1-only
+IN cs_core modpack:
+cs_rws is rangedweapons (With modified files)
+
 
 All mods in external_depends: 
-playertag licence: LGPLv2.1-only
 hud_events: LGPLv2.1-only (From Capture The Flag)
 Others: Their had his own licenses
 
