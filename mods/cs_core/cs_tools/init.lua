@@ -73,8 +73,15 @@ function core.get_connected_names()
 	return names
 end
 
-
-
+function RunCallbacks(tabled, ...)
+	if tabled and type(tabled) == "table" then
+		for i = 1, #tabled do
+			if type(tabled[i]) == "function" then
+				tabled[i](...)
+			end
+		end
+	end
+end
 
 
 
