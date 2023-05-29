@@ -2,7 +2,7 @@
 defuser_hooks_wait = 5
 defuser_hooks_wait2 = 7
 
-minetest.register_craftitem("core:defuser", {
+minetest.register_craftitem("cs_core:defuser", {
 	description = "Defuser\n only counters can had this.",
 	inventory_image = "defuser.png",
 	--[[on_use = function(item, player)

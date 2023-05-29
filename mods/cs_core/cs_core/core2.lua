@@ -397,9 +397,9 @@ minetest.register_chatcommand("t", {
     func = function(name, param)
     	local team = csgo.pot[name]
     	if team == "counter" then
-        csgo.send_message(minetest.colorize("#3491FF", " ** " .. param .. " **"), team, "["..name.." at "..cs_map.get_name_of_pos(Player(name):get_pos()).."]")
+        csgo.send_message(minetest.colorize("#3491FF", " ** " .. param .. " **"), team, "["..name.." at "..maps.get_name_of_pos(Player(name):get_pos()).."]")
         elseif team == "terrorist" then
-        csgo.send_message(minetest.colorize("#FFA900", " ** " .. param .. " **"), team, "["..name.." at "..cs_map.get_name_of_pos(Player(name):get_pos()).."]")
+        csgo.send_message(minetest.colorize("#FFA900", " ** " .. param .. " **"), team, "["..name.." at "..maps.get_name_of_pos(Player(name):get_pos()).."]")
         elseif team == "spectator" then
         csgo.send_message("["..name.."]"..minetest.colorize("#00C200", " ** " .. param .. " **"), team)
         end

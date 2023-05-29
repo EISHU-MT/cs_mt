@@ -63,7 +63,7 @@ function cs_match.finished_match(teamare1)
 		for i = 1, #cb.registered_on_new_matches do
 			cb.registered_on_new_matches[i](teamare1)
 		end
-		cs_map.new_match()
+		maps.new_map()
 		
 		cs_match.register_matches(cs_match.registered_matches) -- Register again all matchs to be default, to change limit, see cs-core/core/core1.lua
 		
@@ -221,7 +221,7 @@ end
 function cs_match.start_matches()
 		core.log("info", "Starting {Maps, Values, Registers} for the server")
 
-		cs_map.new_match()
+		maps.new_map()
 		--cs_death.register_spawn("all", counters_spawn()) -- ALL: terrorists and counters, spectators_spawn(): where the spectators spawn
 		
 		cs_match.register_matches(cs_match.registered_matches) -- Register again all matchs to be default, to change limit, see cs-core/core/core1.lua
