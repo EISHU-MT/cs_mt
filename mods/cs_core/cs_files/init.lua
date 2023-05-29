@@ -1,1 +1,1 @@
-core.debug("action", "files has been loaded")
+core.log("action", "files has been loaded")
