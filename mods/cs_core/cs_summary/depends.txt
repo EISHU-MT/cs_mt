@@ -1,1 +1,1 @@
-core
+cs_core
