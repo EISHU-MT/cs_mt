@@ -40,7 +40,7 @@ function reg_on_chat(name, msg)
 			local num = get_player(name)
 			if num >= 3 and num < 5 then
 				core.chat_send_all("### "..name.." left from cursing/swearing")
-				core.disconnect_player(name, t("Broke the rule 2nd"))
+				core.disconnect_player(name, t("Broke the rule N*2"))
 				return true
 			elseif num >= 5 then
 				css_queue[name] = 2

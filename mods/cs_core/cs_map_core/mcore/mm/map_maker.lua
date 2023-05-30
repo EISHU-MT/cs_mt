@@ -249,10 +249,10 @@ core.register_craftitem("mcore:wand", wand_def)
 -- Space replacer
 function replace_spaces(strings)
 	if not strings then
-		return
+		return "_"
 	end
-	local tabled = strings:split(" ")
-	return table.concat(tabled, "_")
+	local str = string:gsub(" ", "_")
+	return str
 end
 -- Real pos checker
 function is_real_pos(pos)
