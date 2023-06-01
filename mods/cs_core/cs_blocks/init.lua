@@ -118,3 +118,45 @@ minetest.register_node(":csgo:sign_b3", {
 	groups = { immortal = 1 },
 	sunlight_propagates = true,
 })
+minetest.register_node(":csgo:light_source", {
+	description = "Invisible node, transmits full light_source",
+	inventory_image = "default_wood.png^W_9.png",
+	paramtype = "light",
+	tiles = { "blank.png" },
+	walkable = false,
+	groups = { immortal = 1 },
+	sunlight_propagates = true,
+	pointable = core.settings:get_bool("cs_map.mapmaking", false)
+})
+minetest.register_node(":csgo:keep", {
+	description = "Invisible node, dont allows to othernodes remove this node\nUseful for blocking water & lava",
+	inventory_image = "default_wood.png^W_0.png",
+	paramtype = "light",
+	tiles = { "blank.png" },
+	walkable = false,
+	groups = { immortal = 1 },
+	sunlight_propagates = true,
+	pointable = core.settings:get_bool("cs_map.mapmaking", false)
+})
+for pusher= 1, 9 do
+	minetest.register_node(":csgo:pusher_" .. tostring(pusher), {
+		description = "Pusher level "..tostring(pusher),
+		inventory_image = "default_wood.png^W_"..tostring(pusher)..".png",
+		drawtype = "nodebox",
+		tiles = {"blank.png"},
+		paramtype = "light",
+		paramtype2 = "facedir",
+		sunlight_propagates = true,
+		node_box = {
+			type = "fixed",
+			fixed = {-0.5, -0.5, -0.5, 0.5, -0.4999, 0.5},
+		},
+		drop = "",
+		groups = {
+			immortal = 1,
+			fall_damage_add_percent = -100,
+			bouncy = pusher * 100,
+		},
+		pointable = core.settings:get_bool("cs_map.mapmaking", false)
+	})
+end
