@@ -1,4 +1,3 @@
-local storage = minetest.get_mod_storage("core")
 restart = false
 restartm = "This server is being restarted from operator request"
 -- Restart on finish all matchs
@@ -23,6 +22,7 @@ call.register_on_new_matches(function()
 end)
 
 do
+	local storage = csgo.request_modstorage()
 	local strs = storage:get_string("mods")
 	if strs == "" or strs == " " or strs == nil then
 		local newtable = {
@@ -51,45 +51,12 @@ do
 	end
 end
 
-
 core.register_chatcommand("report", {
 	description = "Report any bug or player",
 	params = "<bug or player> <description>",
 	func = function(name, param)
 		local tabled = param:split(" ")
-		local storage_of_reports = storage:get_string("reports")
-		if tabled and tabled[1] then
-			if tabled[2] then
-				if storage_of_reports ~= "" or storage_of_reports ~= nil then
-					local reports = core.deserialize(storage_of_reports)
-					if type(reports) == "table" then
-						table.insert(reports, "Player "..name.." reported: (Name: "..tabled[1]..", Desc: "..tabled[2]..")")
-					else
-						reports = {}
-						table.insert(reports, "Player "..name.." reported: (Name: "..tabled[1]..", Desc: "..tabled[2]..")")
-					end
-					storage:set_string("reports", core.serialize(reports))
-					core.chat_send_player(name, "-!- Report have been sent.")
-				else
-					local reports = {}
-					table.insert(reports, "Player "..name.." reported: (Name: "..tabled[1]..", Desc: "..tabled[2]..")")
-					storage:set_string("reports", core.serialize(reports))
-					core.chat_send_player(name, "-!- Report have been sent.")
-				end
-			else
-				core.chat_send_player(name, "-!- Description is not provided!")
-			end
-		else
-			core.chat_send_player(name, "-!- Name is not provided!")
-		end
-	end,
-})
-
-core.register_chatcommand("report", {
-	description = "Report any bug or player",
-	params = "<bug or player> <description>",
-	func = function(name, param)
-		local tabled = param:split(" ")
+		local storage = csgo.request_modstorage()
 		local storage_of_reports = storage:get_string("reports")
 		if tabled and tabled[1] then
 			if tabled[2] then
@@ -123,6 +90,7 @@ core.register_chatcommand("show_reports", {
 	params = "<nothing>",
 	privs = {kick=true},
 	func = function(name, param)
+		local storage = csgo.request_modstorage()
 		local storage_of_reports = storage:get_string("reports")
 		if storage_of_reports ~= "" or storage_of_reports ~= nil then
 			local data = core.deserialize(storage_of_reports) or {"Empty."}
@@ -139,6 +107,8 @@ function csgo.add_moderator_priv(priv)
 	if not priv then
 		return false, "-!- No privilegie have been found!"
 	end
+	
+	local storage = csgo.request_modstorage()
 	
 	local newtable = {}
 	for privs in pairs(core.registered_privileges) do
@@ -161,6 +131,7 @@ function csgo.delete_moderator_priv(priv)
 	if not priv then
 		return false, "-!- No privilegie have been found!"
 	end
+	local storage = csgo.request_modstorage()
 	local data = storage:get_string("moderator_privs")
 	local privilegies = core.deserialize(data)
 	privilegies[priv] = nil
@@ -170,6 +141,7 @@ function csgo.delete_moderator_priv(priv)
 end
 
 function csgo.get_moderator_privs()
+	local storage = csgo.request_modstorage()
 	local data = storage:get_string("moderator_privs")
 	local privilegies = core.deserialize(data)
 	return privilegies
@@ -179,6 +151,7 @@ end
 
 function csgo.set_moderator_privs(tabled)
 	if tabled then
+		local storage = csgo.request_modstorage()
 		local data = storage:get_string("moderator_privs")
 		local privilegies = core.serialize(tabled)
 		storage:set_string("moderator_privs", privilegies)
@@ -192,6 +165,7 @@ end
 function csgo.grant(mode, p)
 	local player = Player(p)
 	local name = Name(p)
+	local storage = csgo.request_modstorage()
 	if mode == "admin" then
 		local newtable = {}
 		for priv in pairs(core.registered_privileges) do
@@ -220,6 +194,7 @@ end
 function csgo.revoke_grant(mode, p)
 	local player = Player(p)
 	local name = Name(p)
+	local storage = csgo.request_modstorage()
 	if mode == "admin" then
 		minetest.set_player_privs(name, {interact=true, shout=true})
 		
@@ -263,6 +238,7 @@ core.register_chatcommand("revokeprivs", {
 minetest.register_on_joinplayer(function(player)
 	local name = Name(player)
 	if name then
+		local storage = csgo.request_modstorage()
 		local data = storage:get_string("mods")
 		local mods = core.deserialize(data)
 		

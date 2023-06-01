@@ -66,9 +66,10 @@ secs2 = tonumber(defuser_hooks_wait2)
 local function defuser_hooks(dtime)
 	timerd = timerd + dtime
 	if timerd >= 1 then
-		if ask_for_bomb() then
+		if ask_for_bomb and ask_for_bomb() then
 			if c4.planted then
-				for name in pairs(csgo.teams.counter.players) do
+				print(dump(csgo))
+				for name in pairs(csgo.team.counter.players) do
 					 if vector.distance(Player(name):get_pos(), c4.pos) >= 1 and vector.distance(Player(name):get_pos(), c4.pos) <= 3 then
 						local player = Player(Name)
 						local ctrl = player:get_player_control()

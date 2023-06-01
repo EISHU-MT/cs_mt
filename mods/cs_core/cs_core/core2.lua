@@ -1,5 +1,4 @@
 -- Only API and Menu
-local storage = minetest.get_mod_storage("core")
 cs_core.main_seconds = 10
 csgo = {}
 csgo = {
@@ -19,6 +18,16 @@ csgo = {
 	online = {},
 
 }
+
+-- Register storage (To be compatible with versions under 5.7.0)
+
+csgo.storage = minetest.get_mod_storage(core.get_current_modname())
+
+csgo.request_modstorage = function()
+	return csgo.storage
+end
+
+local storage = csgo.request_modstorage()
 phooks = {}
 csgo.usrTlimit = 20
 cs = {}
@@ -476,6 +485,10 @@ function doit(name)
 	end
 end
 
+function queue_to_player(name)
+	core.show_formspec(name, "core:main", csgo.main())
+end
+
 defuser_huds = {}
 
 minetest.register_on_joinplayer(function(playerrrr)
@@ -486,30 +499,6 @@ minetest.register_on_joinplayer(function(playerrrr)
 		
 		--local n = math.random(800, 20000)
 		--player:set_pos({x=0, y=n, z=0})
-		
-		phooks[playerrrr:get_player_name()] = 10
-		--print(phooks[playerrrr:get_player_name()])
-		
-		player:set_armor_groups({immortal=1})
-		
-		if csgo.team.terrorist.count ~= csgo.usrTlimit and csgo.team.counter.count ~= csgo.usrTlimit then
-			if history[Name(player)] then -- Check if player is cheating or not
-				core.chat_send_player(Name(player), "-!- You Joined back in your team.")
-				local team = history[Name(player)]
-				core.after(0.4, function(team, player)
-					csgo[team](Name(player))
-				end, team, player)
-			else
-				core.show_formspec(player:get_player_name(), "core:main", csgo.main())
-			end
-		elseif csgo.team.terrorist.count == csgo.usrTlimit then
-			csgo.counter(player:get_player_name())
-		elseif csgo.team.counter.count == csgo.usrTlimit then
-			csgo.terrorist(player:get_player_name())
-		else
-			csgo.spectator(player:get_player_name())
-			core.chat_send_player(player:get_player_name(), core.colorize("#FF3100", "We're sorry but the teams limit got reached... "))
-		end
 		
 		defuser_huds[playerrrr:get_player_name()] = playerrrr:hud_add({
 			hud_elem_type = "text",
@@ -527,6 +516,32 @@ minetest.register_on_joinplayer(function(playerrrr)
 			sneak_glitch = true,
 		})
 		player:hud_set_flags({minimap=false, basic_debug=false})
+		
+		phooks[playerrrr:get_player_name()] = 10
+		--print(phooks[playerrrr:get_player_name()])
+		
+		player:set_armor_groups({immortal=1})
+		
+		if csgo.team.terrorist.count ~= csgo.usrTlimit and csgo.team.counter.count ~= csgo.usrTlimit then
+			if history[Name(player)] then -- Check if player is cheating or not
+				core.chat_send_player(Name(player), "-!- You Joined back in your team.")
+				local team = history[Name(player)]
+				core.after(0.4, function(team, player)
+					csgo[team](Name(player))
+				end, team, player)
+				return
+			end
+			core.after(1, queue_to_player, Name(player))
+		elseif csgo.team.terrorist.count == csgo.usrTlimit then
+			csgo.counter(player:get_player_name())
+		elseif csgo.team.counter.count == csgo.usrTlimit then
+			csgo.terrorist(player:get_player_name())
+		else
+			csgo.spectator(player:get_player_name())
+			core.chat_send_player(player:get_player_name(), core.colorize("#FF3100", "We're sorry but the teams limit got reached... "))
+		end
+		
+		
 		--cs_buying.enable_shopping(player)
 		
 		

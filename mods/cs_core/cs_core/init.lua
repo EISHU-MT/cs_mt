@@ -52,3 +52,37 @@ dofile(modpath.."/cs_timer/init.lua")
 --Some functions
 dofile(modpath.."/kill_logs.lua")
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

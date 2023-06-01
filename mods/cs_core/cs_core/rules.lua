@@ -1,5 +1,4 @@
-local storage = minetest.get_mod_storage("core")
-local S = minetest.get_translator("core")
+local S = minetest.get_translator("cs_core")
 rules = {
 	queue = {}
 }
