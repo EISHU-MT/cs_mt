@@ -304,7 +304,7 @@ function csgo.counter(player, force)
 		Player(player):set_armor_groups({fleshy = 120})
 		player_core.upgrade_to_mode(player, "counter.b3d")
 		cs_core.can_do_damage(player, "yes")
-		csgo.send_message(player .. " Joins the Terrorist forces", "counter")
+		csgo.send_message(player .. " Joins the Counter-Terrorists forces", "counter")
 		if counters_spawn() then
 			Player(player):set_pos(RandomPos(counters_spawn(), 1))
 		else
