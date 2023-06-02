@@ -1,7 +1,7 @@
 # CS:MT/GO Project For MT
 Welcome to this repository! Here is where the **CS:MT** project stands, help us by sharing the project or by contributing code/textures/ideas. 
 
-[![ContentDB](https://content.minetest.net/packages/KareaGhandTrail/cs_mt/shields/title/)](https://content.minetest.net/packages/KareaGhandTrail/cs_mt/)
+[![ContentDB](https://content.minetest.net/packages/KareaGhandTrail/csgo_mt/shields/downloads/)](https://content.minetest.net/packages/KareaGhandTrail/csgo_mt/)
 
 ## Installation
 Download the code, By Downloading from **here** or downloading with command line
