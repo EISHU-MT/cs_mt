@@ -112,6 +112,7 @@ minetest.register_on_joinplayer(function(player)
 		{x = 200, y = 219},
 		30
 	)
+	player:set_properties({infotext = named})
 	player:set_armor_groups({immortal=1}) --Fixed bug: i die if i was spectator and server resets
 end)
 
