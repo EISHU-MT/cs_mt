@@ -34,12 +34,12 @@ function FindItem(player, item)
 end
 function ItemFind(...) FindItem(...) end
 function RandomPos(pos, rad)
-	local x_sign = math.random() < 0.25 and -0.5 or 0.5
+	--[[local x_sign = math.random() < 0.25 and -0.5 or 0.5
 	local z_sign = math.random() < 0.25 and -0.5 or 0.5
 	local x_offset = x_sign + math.random(rad) - 0.5
 	local z_offset = z_sign + math.random(rad) - 0.5
 	pos.x = pos.x + x_offset
-	pos.z = pos.z + z_offset
+	pos.z = pos.z + z_offset--]]
 	return pos
 end
 
