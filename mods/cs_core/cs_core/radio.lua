@@ -64,12 +64,12 @@ radio = {
 
 
 function radio.send_msg(team, msg, p)
-	n = Name(p) or ""
+	n = Name(p) or " "
 	if team and csgo.team[team] and msg and n then
 		for name in pairs(csgo.team[team].players) do
 			if Player(name) then
 				--if radio.return_igns_players()[name] ~= true then
-				core.chat_send_player(name, core.colorize("#FFEF00", "["..n.."RADIO] ")..msg or "~NULL")
+				core.chat_send_player(name, core.colorize("#FFEF00", "["..n.."RADIO ] ")..msg or "~NULL")
 				--end
 			end
 		end
