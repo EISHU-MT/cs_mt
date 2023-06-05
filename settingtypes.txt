@@ -1,6 +1,30 @@
+
+[Maps Engine]
+
+#    If map maker is on, then the CS:MT engine will dont start matches.
 cs_map.mapmaking (Map maker) bool false
-cs_core.enable_env_debug (Print all in log every game action) bool false
+
+[Engine]
+
+#    Enable CS:MT Engine, this may protect your stats from others.
+cs_core (Enable CS:MT Engine [If disabled it will crash] ) bool true
+
+#    Enable friend shot, if enabled, player cannot kills his teammates
 cs_core.enable_friend_shot (Enable friend shot) bool false
+
+[Advanced Settings]
+
+#    Maximun users for each team
+cs_core.max_users (Max users in each team) int 20 1 60
+
+#    Print every server/client action to prompt (debug.txt or terminal)
+cs_core.enable_env_debug (Print all in log every game action) bool false
+
+#    Player stats, if disabled it will dont had stats, like kills, deaths, planted bomb times, KD
 cs_core.enable_player_stats (Enable stats [kills & deaths] for players) bool true
+
+#    Enable bots or disable.
 cs_core.enable_bots (Enable BOTS [May crash because BOTS state is WorkInProgress]) bool false
 
+#    Maximun bots for each team
+cs_core.max_bots (Max bots in each team) int 10 1 20
