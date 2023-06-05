@@ -71,7 +71,11 @@ function CheckPlayer(name)
 end
 
 
-function bank.player_add_value(player, amount) 
+function bank.player_add_value(player, amount)
+	if player:find("BOT_") then
+		bots.bots_data[player].money = bots.bots_data[player].money + tonumber(amount)
+		return
+	end
 	if CheckPlayer(player) and bank.player[player] then
 		core.chat_send_player(player, core.colorize("#14FF14","You received $"..tostring(amount.."+")))
 			if bank.player[player].money then
@@ -81,8 +85,12 @@ function bank.player_add_value(player, amount)
 end
 --Remove some values of a player, can be by buying some arms
 function bank.rm_player_value(player, amount)
+	if player:find("BOT_") then
+		bots.bots_data[player].money = bots.bots_data[player].money - tonumber(amount)
+		return
+	end
 	if CheckPlayer(player) and bank.player[player] then
-		--core.chat_send_player(player, core.colorize("#14FF14","Transactions: $"..tostring(amount.."-")))
+		core.chat_send_player(player, "$" .. core.colorize("#FFB500", tostring(amount.."-")))
 		bank.player[player].money = bank.player[player].money - amount
 	end
 end
