@@ -18,6 +18,14 @@ terroristh = player:hud_add({ -- Terrorists hud
 	text = "Terrorist: "..csgo.team.terrorist.count,
 	number = 0xFFA900,
 })
+terroristhb = player:hud_add({ -- Terrorists hud
+	hud_elem_type = "text",
+	position = {x = 1, y = 0.075},
+	offset = {x=-100, y = 20},
+	scale = {x = 100, y = 100},
+	text = "TerroristBots: "..csgo.team.terrorist.count,
+	number = 0xFFA900,
+})
 
 counterh = player:hud_add({
 	hud_elem_type = "text",
@@ -28,16 +36,28 @@ counterh = player:hud_add({
 	number = 0x0081FF,
 })
 
+counterhb = player:hud_add({
+	hud_elem_type = "text",
+	position = {x = 1, y = 0.025},
+	offset = {x=-100, y = 20},
+	scale = {x = 100, y = 100},
+	text = "CountersBots: "..csgo.team.counter.count,
+	number = 0x0081FF,
+})
+
 end)
 --core.register
+
+
 
 function update_frames()
 	for __, name in pairs(core.get_connected_players()) do
 	--player = core.get_player_by_name(name)
 	
 	name:hud_change(counterh, "text", "Counters: "..csgo.team.counter.count)
+	name:hud_change(counterhb, "text", "CountersBots: "..csgo.team.counter.bots_count)
 	name:hud_change(terroristh, "text", "Terrorist: "..csgo.team.terrorist.count)
-	
+	name:hud_change(terroristhb, "text", "TerroristBots: "..csgo.team.terrorist.bots_count)
 	end
 core.after(0.5, update_frames)
 end
