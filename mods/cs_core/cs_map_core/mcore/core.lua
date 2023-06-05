@@ -18,7 +18,6 @@ function maps.select_map()
 end
 function maps.place_map(map_def)
 	if map_def and type(map_def) == "table" then
-		print(dump(map_def))
 		maps.emerge_with_callbacks(nil, map_def.pos1, map_def.pos2, function()
 			log("info", "Placing map: "..map_def.name)
 			local bool = minetest.place_schematic(map_def.pos1, map_def.mcore, map_def.rotation == "z" and "0" or "90")
