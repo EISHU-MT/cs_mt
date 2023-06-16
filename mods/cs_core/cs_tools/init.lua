@@ -83,6 +83,42 @@ function RunCallbacks(tabled, ...)
 	end
 end
 
+letters = {"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "p", "q", "z", "x", "y", "v", "o", "s", "w", "t", "r", "u", "p"}
+numbers = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "0"}
+
+function FormRandomString(lengh)
+	local string = {}
+	if not lengh then
+		return
+	end
+	local ln = #letters
+	local nn = #numbers
+	for i = 1, lengh do
+		local n = math.random(ln)
+		table.insert(string, letters[n])
+		local n = math.random(nn)
+		table.insert(string, numbers[n])
+	end
+	return table.concat(string, "")
+end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
