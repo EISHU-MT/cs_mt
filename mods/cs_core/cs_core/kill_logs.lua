@@ -23,8 +23,12 @@ function register_kill(player, killer)
 	end
 end
 
+function kills.add_to(pname, team)
+	kills[pname] = {kills = 0, deaths = 0, team = team}
+end
+
 call.register_on_player_join_team(function(pname, team)
-    kills[pname] = {kills = 0, deaths = 0, team = team}
+	kills.add_to(pname, team)
 end)
 
 call.register_on_kill_player(function(player, enemy, enemyt, playert)
