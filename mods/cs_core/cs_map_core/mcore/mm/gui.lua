@@ -1,23 +1,23 @@
-function return_formspec(rad_msg, wand_name)
+function return_formspec(rad_msg, wand_name, un, opt_cfg)
 	local form = {
 	"formspec_version[6]" ..
 	"size[10.5,6]" ..
 	"box[0,0;12.4,0.8;#009200]" ..
 	"label[4.9,0.4;"..tostring(wand_name or "").." ".."Areas.]" ..
-	"field[0.2,1.3;10.1,1;str;Please set a name to this area.;Eg: Sector A]" ..
-	"field[0.2,2.8;10.1,1;rad;Radius of this area.;"..tostring(rad_msg or "Eg: 10, (Optional)").."]" ..
+	"field[0.2,1.3;10.1,1;str;Please set a name to this area.;"..tostring(un or "Eg: Sector A").."]" ..
+	"field[0.2,2.8;10.1,1;rad;"..opt_cfg or "Radius of this area."..";"..tostring(rad_msg or "Eg: 10, (Optional)").."]" ..
 	"button_exit[0.1,4;10.3,0.8;decline;Cancel]" ..
 	"button_exit[0.1,5;10.3,0.8;accept;Accept]"
 	}
 	return table.concat(form, "")
 end
 
-function wand_formspec(pos1, pos2)
+function wand_formspec(pos1, pos2, opt)
 	return "formspec_version[6]" ..
 	"size[10.5,4]" ..
 	"box[-0.1,1;10.6,2;#6ABBE8]" ..
 	"box[0,0;10.5,1;#00FFFF]" ..
-	"label[0.4,0.5;Wand Menu]" ..
+	"label[0.4,0.5;"..opt or "".."Wand Menu]" ..
 	"label[0.4,2;Pos 1: "..tostring(pos1 or "<non set>").."]" ..
 	"label[0.4,2.6;Pos 2: "..tostring(pos2 or "<non set>").."]" ..
 	"label[0.4,1.4;Positions]" ..
