@@ -16,6 +16,7 @@ csgo = {
 	spect = {}, -- Spectators from menu
 	teamed = {}, -- if player enter in a team
 	online = {},
+	bots_limit = tonumber(minetest.settings:get("cs_core.max_bots"))
 
 }
 
@@ -29,7 +30,7 @@ end
 
 local storage = csgo.request_modstorage()
 phooks = {}
-csgo.usrTlimit = 20
+csgo.usrTlimit = tonumber(minetest.settings:get("cs_core.max_users"))
 cs = {}
 function cs.s_t(name)
 player_api.set_textures(name, "red.png")
@@ -71,7 +72,7 @@ for team, def in pairs(csgo.team) do -- Insert
 		coc = 0x008C0B
 		fco = "#00FF00"
 	end
-	csgo.team[team] = {count = 0, players = {}, inf = true, colour = co, colour_code = coc, form_color = fco}
+	csgo.team[team] = {count = 0, players = {}, inf = true, colour = co, colour_code = coc, form_color = fco, bots = {}, bots_count = 0, total_count = 0}
 	table.insert(csgo.ctl, team)
 end
 
@@ -85,6 +86,23 @@ function csgo.enemy_team(team)
 			return "spectator"
 		end
 		return false, "nothing"
+	end
+end
+
+function csgo.is_team(str, type)
+	if not str then
+		return false, "no_team"
+	end
+	if type == "combat" then
+		if str == "counter" or str == "terrorist" then
+			return true, "true"
+		else
+			return false, "non-combat-team"
+		end
+	elseif not type then
+		if str == "counter" or str == "terrorist" or str == "spectator" then
+			return true, "true"
+		end
 	end
 end
 
@@ -132,7 +150,7 @@ function csgo.check_compressed_player(player)
 end
 
 function csgo.check_team(player)
-	return csgo.pot[player] or "spectator"
+	return csgo.pot[player] or ""
 end
 
 function csgo.send_message(message, team, player) -- Send a message to every player in the specified team.
@@ -168,7 +186,7 @@ function csgo.spectator(player, reason)
 	csgo.team[team].players[player] = true
 	csgo.team[team].count = csgo.team[team].count + 1
 	AddPrivs(player, {fly=true, noclip=true, shout=true, fast=true, interact=false, teleport=true})
-	if csgo.check_team(player) then
+	if csgo.check_team(player) and csgo.check_team(player) ~= "" and csgo.check_team(player) ~= "spectator" then
 		csgo.team[csgo.check_team(player)].count = csgo.team[csgo.check_team(player)].count - 1
 		csgo.team[csgo.check_team(player)].players[player] = nil
 	end
@@ -212,7 +230,7 @@ function csgo.terrorist(player, force)
 		csgo.spectator(player, "has joined spectators, no space for terrorist team")
 		minetest.log("warning", "Unavailable space for team counters. Ignoring for this time....")
 	else
-		if csgo.check_team(player) then
+		if csgo.check_team(player) and csgo.check_team(player) ~= "" then
 			csgo.team[csgo.check_team(player)].count = csgo.team[csgo.check_team(player)].count - 1
 			csgo.team[csgo.check_team(player)].players[player] = nil
 		end
@@ -268,7 +286,7 @@ function csgo.counter(player, force)
 		csgo.spectator(player, "has joined spectators, no space for counter team")
 		minetest.log("warning", "Unavailable space for team counters. Ignoring for this time....")
 	else
-		if csgo.check_team(player) then
+		if csgo.check_team(player) and csgo.check_team(player) ~= "" then
 			csgo.team[csgo.check_team(player)].count = csgo.team[csgo.check_team(player)].count - 1
 			csgo.team[csgo.check_team(player)].players[player] = nil
 		end
@@ -557,6 +575,11 @@ end
 core.register_globalstep(function(dtime)
 	time_hooks = time_hooks + dtime
 	time_hooks2 = time_hooks2 + dtime
+	for team, teamtable in pairs(csgo.teams) do
+		local count = teamtable.count
+		local bcount = teamtable.bots_count
+		csgo.teams[team].total_count = count + bcount
+	end
 	local players = core.get_connected_players()
 	if time_hooks >= 1 then
 		time_hooks = 0
