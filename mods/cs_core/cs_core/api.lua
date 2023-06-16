@@ -48,7 +48,7 @@ function cs_core.can_do_damage(person, option)
 end
 
 function cs_core.ask_can_do_damage(person)
-if (cs_api[person].damage == false) then
+if cs_api[person] and (cs_api[person].damage == false) then
 return false
 else
 return true
