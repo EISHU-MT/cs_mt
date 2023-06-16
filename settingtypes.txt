@@ -28,3 +28,24 @@ cs_core.enable_bots (Enable BOTS [May crash because BOTS state is WorkInProgress
 
 #    Maximun bots for each team
 cs_core.max_bots (Max bots in each team) int 10 1 20
+
+#    End speed value of falling, same as: velocity.y, Example: velocity.y = 1 (Only for Bots)
+#    [DEPRECATED!]
+cs_core.end_velocity_y (Max stop falling speed) float 1.0 0.0 10.0
+
+#    Gravity for bots
+cs_core.bots_gravity (Bots gravity) float 9.81 0.0 20.0
+
+#    Max path finder lengh for Bots, This may affect at the perfomance of the server
+cs_core.max_path_finder_lengh (Path Finder Lengh) int 100 1 6000
+
+#    View range for bots
+cs_core.view_range (Bots view range) int 50 1 65535
+
+#    Default bullet damage
+#    Used when a bot shoots a bullet and bullet dont had damage field, the bullet with empty damage field uses this
+cs_core.default_bullet_damage (Bullets damage) int 10 1 65535
+
+#    Velocity for bots gun, some guns may wont include gun_velocity field in the arms spec, so
+#    this is used for velocity
+cs_core.view_range (Bots view range) int 30 1 65535
