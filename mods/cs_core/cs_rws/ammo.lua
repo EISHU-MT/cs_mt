@@ -122,7 +122,7 @@ end
 end 
 
 
-minetest.sound_play("default_dig_cracky", {self.object:get_pos(), gain = 1.0})
+minetest.sound_play("default_dig_cracky", {self.object:get_pos(), gain = 1.0, max_hear_distance = 40})
 
 if ignite > 0 then
 
@@ -146,7 +146,7 @@ if string.find(minetest.get_node(moveresult.collisions[1].node_pos).name,"door_w
 
 minetest.swap_node(moveresult.collisions[1].node_pos, {name = "air"})
 minetest.add_item(moveresult.collisions[1].node_pos, "default:wood 5")
-minetest.sound_play("rangedweapons_woodbreak",{moveresult.collisions[1].node_pos})
+minetest.sound_play("rangedweapons_woodbreak",{moveresult.collisions[1].node_pos, max_hear_distance = 40})
 
 end end
 
@@ -215,7 +215,7 @@ if math.random(1,100) <= nodePen then
 		glow = 2,
 	})
 	end
-minetest.sound_play("default_dig_cracky", {self.object:get_pos(), gain = 1.0})
+minetest.sound_play("default_dig_cracky", {self.object:get_pos(), gain = 0.6, max_hear_distance = 40})
 self.object:set_properties({collisionbox = {0,0,0,0,0,0}})
 --minetest.chat_send_all("hit")
 self.object:set_velocity(moveresult.collisions[1].old_velocity)
@@ -223,7 +223,7 @@ else
 
 if minetest.get_item_group(minetest.get_node(moveresult.collisions[1].node_pos).name, "leaves") > 0  then
 
-minetest.sound_play("default_dig_snappy", {self.object:get_pos(), gain = 1.5})
+minetest.sound_play("default_dig_snappy", {self.object:get_pos(), gain = 0.5, max_hear_distance = 40})
 
 for i = 1,math.random(3,6) do
 	minetest.add_particle({
