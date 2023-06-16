@@ -57,6 +57,8 @@ function ctimer.pause(m)
 	core.chat_send_all("Buy armor & rifles or pistols for the fight!")
 end
 
+ctimer.switcher = false
+
 cs_match.commenced_match = false -- Fix bug
 
 local function reg_glb(dtime)
@@ -70,6 +72,12 @@ local function reg_glb(dtime)
 			time = time - 1
 			if time < 10 then
 				color = 0xFF5454
+				if bots and ctimer.switcher ~= true then
+					bots.start_engine()
+					ctimer.switcher = true
+				elseif bots then
+					bots.reset_bots()
+				end
 			end
 			if time == 0 then
 				cs_buying.disable_shopping()
