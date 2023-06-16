@@ -21,6 +21,10 @@ minetest.register_on_punchplayer(function(player, hitter, time_from_last_punch, 
 		return
 	end
 	
+	if victim == "" or victim:find("BOT") or pname:find("BOT") or pname == "" then -- Avoid crash
+		return
+	end
+	
 	if (cs_core.ask_can_do_damage(pname) == false) or csgo.spect[pname] then
 		hud_events.new(hitter, {
 			text = S("You can't damage others players!!"),
@@ -109,10 +113,18 @@ local dead_ent = {
 
 minetest.register_on_player_hpchange(function(player, hp_ch, reason)
 	if cs_match.commenced_match == true then --Be sure if the match is continued or a fail.
+		
 		local hp_change = cs_kill.translate_to_real_damage(hp_ch)
 		if not hp_change then
 			return true
 		end
+		
+		if reason.object and reason.object:get_properties().infotext:find("BOT") then -- Verify if the killer is an bot
+			bots.on_kill(player, reason.object, hp_change, {bot_name=""}, "player") -- Fix & Add new things
+			bots.log("action", "[CsKills=>CsBotsKills] On Kills is being executed.")
+			return
+		end
+		
 		local pname
 		if reason.object then
 			pname = reason.object:get_player_name()
