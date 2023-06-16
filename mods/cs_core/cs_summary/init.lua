@@ -14,8 +14,9 @@ function summary.calculate_players(players_table)
 	local table2 = {}
 	local table3 = {}
 	for i, player in pairs(players_table) do
-		if player then
+		if player and type(kills[player]) == "table" then
 			table.insert(table1, player)
+			--print(i, dump(player))
 			table2[player] = kills[player].kills or 0
 			table3[player] = kills[player].deaths or 0
 		end
@@ -43,7 +44,11 @@ function summary.add_by_values(players, players_kills, players_deaths, inverse_k
 			color = csgo.team[ea].colour or "#00FF00"
 		end
 		if color and players_kills[str] and players_deaths[str] then
-			table.insert(uplayers, color.."Player "..str.." kills: "..players_kills[str].."\\, deaths: "..players_deaths[str])
+			if str:find("BOT") then
+				table.insert(uplayers, color.."BOT "..str.." kills: "..players_kills[str].."\\, deaths: "..players_deaths[str])
+			else
+				table.insert(uplayers, color.."Player "..str.." kills: "..players_kills[str].."\\, deaths: "..players_deaths[str])
+			end
 		end
 	end
 	return uplayers
