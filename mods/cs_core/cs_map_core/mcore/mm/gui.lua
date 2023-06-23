@@ -1,11 +1,14 @@
 function return_formspec(rad_msg, wand_name, un, opt_cfg)
+	opt_cfg = opt_cfg or "Enter a radius number for area"
+	rad_msg = rad_msg or "10"
+	un = un or "Eg: spawn"
 	local form = {
 	"formspec_version[6]" ..
 	"size[10.5,6]" ..
 	"box[0,0;12.4,0.8;#009200]" ..
-	"label[4.9,0.4;"..tostring(wand_name or "").." ".."Areas.]" ..
-	"field[0.2,1.3;10.1,1;str;Please set a name to this area.;"..tostring(un or "Eg: Sector A").."]" ..
-	"field[0.2,2.8;10.1,1;rad;"..opt_cfg or "Radius of this area."..";"..tostring(rad_msg or "Eg: 10, (Optional)").."]" ..
+	"label[4.9,0.4;"..wand_name.." ".."Areas.]" ..
+	"field[0.2,1.3;10.1,1;str;Please set a name to this area.;"..un.."]" ..
+	"field[0.2,2.8;10.1,1;rad;"..opt_cfg..";"..rad_msg.."]" ..
 	"button_exit[0.1,4;10.3,0.8;decline;Cancel]" ..
 	"button_exit[0.1,5;10.3,0.8;accept;Accept]"
 	}
@@ -17,9 +20,9 @@ function wand_formspec(pos1, pos2, opt)
 	"size[10.5,4]" ..
 	"box[-0.1,1;10.6,2;#6ABBE8]" ..
 	"box[0,0;10.5,1;#00FFFF]" ..
-	"label[0.4,0.5;"..opt or "".."Wand Menu]" ..
-	"label[0.4,2;Pos 1: "..tostring(pos1 or "<non set>").."]" ..
-	"label[0.4,2.6;Pos 2: "..tostring(pos2 or "<non set>").."]" ..
+	"label[0.4,0.5;".. opt .. "Wand Menu]" ..
+	"label[0.4,2;Pos 1: "..pos1.."]" ..
+	"label[0.4,2.6;Pos 2: "..pos2.."]" ..
 	"label[0.4,1.4;Positions]" ..
 	"box[0,3;10.6,1;#D40505]" ..
 	"button[0.1,3.1;5.1,0.8;reset;Reset positions]" ..
@@ -203,15 +206,15 @@ minetest.register_chatcommand("gui", {
 })
 
 minetest.register_on_player_receive_fields(function(player, formname, fields)
-	if formname ~= "mm:areas" or formname ~= "mm:wand" or formname ~= "mm:wand1" then
+	if formname ~= "mm:areas" and formname ~= "mm:wand" and formname ~= "mm:wand1" then
 		return
 	end
 	if formname == "mm:areas" then
 		if fields.accept and (fields.str ~= "Eg: Sector A" or fields.str ~= " " or fields.str ~= "") then
 			local pos = area_status[Name(player)].position
 			local name = replace_spaces(fields.str)
-			context.status[name] = {position = vector.new(pos), name = fields.str, rad = tonumber(fields.rad) or 10, nonradius = false}
-			storage:set_string("status", core.serialize(context.status))
+			mod_contextSTATUS(name, {position = vector.new(pos), name = fields.str, rad = tonumber(fields.rad) or 10, nonradius = false})
+			--storage:set_string("status", core.serialize(context.status))
 			area_status[Name(player)] = nil
 			core.set_node(pos, {name="air"})
 				local ent = minetest.add_entity(pos, "mcore:display")
@@ -240,8 +243,9 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 			if pos1 and pos2 then
 				local name = replace_spaces(fields.str)
 				local dist = vector.distance(pos1, pos2)
-				if not dist >= 100 then
-					context.status[name] = {positions = {pos1 = pos1, pos2 = pos2}, name = fields.str, nonradius = true}
+				if not (dist >= 100) then
+					mod_contextSTATUS(name, {positions = {pos1 = pos1, pos2 = pos2}, name = fields.str, nonradius = true})
+					--storage:set_string("status", core.serialize(return_context().status))
 					for _, pos in pairs(wand_nodes) do
 						core.set_node(pos, {name="air"})
 					end

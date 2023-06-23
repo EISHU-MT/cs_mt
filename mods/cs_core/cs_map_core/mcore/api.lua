@@ -9,6 +9,11 @@ function maps.register_map(map_name, def)
 		
 		if map.failed ~= true then
 			maps.reg_maps[map_name or data.name] = map
+			if arapi_is_loaded then
+				if map.bots_areas then
+					arapi.reload_all_areas(map)
+				end
+			end
 			maps.update_core()
 		else
 			core.log("error", "Seems like the map '"..map_name.."' had incorrect definition or something failed")

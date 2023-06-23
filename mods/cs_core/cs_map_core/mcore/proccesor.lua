@@ -26,6 +26,7 @@ function process_meta(content)
 		offset = content.offset,
 		physics = core.deserialize(content.meta:get("physics")) or {jump = 1, speed = 1, gravity = 1},
 		status = core.deserialize(content.meta:get("status")),
+		bots_areas = core.deserialize(content.meta:get("bots_areas")),
 		teams = {
 			terrorist = add(content.offset, core.string_to_pos(content.meta:get("team.terrorist"))),
 			counter = add(content.offset, core.string_to_pos(content.meta:get("team.counter"))),

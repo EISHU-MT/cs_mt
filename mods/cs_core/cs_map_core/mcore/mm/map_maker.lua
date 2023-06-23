@@ -48,6 +48,11 @@ function return_context()
 	return context
 end
 
+function mod_contextSTATUS(name, contents)
+	context.areas[name] = contents
+	storage:get_string("areas", core.serialize(context.areas))
+end
+
 -- Wand for areas!
 local wand_def = {
 	description = "Wand of Areas\nSets positions for non-radius areas\nRight-click an node to set 1. or 2. position.",
@@ -103,7 +108,7 @@ local wand_def = {
 		if not wand[name] then
 			wand[name] = {pos1 = nil, pos2 = nil}
 		end
-		core.show_formspec(Name(user), "mm:wand", wand_formspec(core.pos_to_string(wand[name].pos1 or {x = 0, y = 0, z = 0}) or "<non set>", core.pos_to_string(wand[name].pos2 or {x = 0, y = 0, z = 0}) or "<non set>"))
+		core.show_formspec(Name(user), "mm:wand", wand_formspec(core.pos_to_string(wand[name].pos1 or {x = 0, y = 0, z = 0}) or "<non set>", core.pos_to_string(wand[name].pos2 or {x = 0, y = 0, z = 0}) or "<non set>", ""))
 	end,
 }
 
@@ -251,7 +256,7 @@ function replace_spaces(strings)
 	if not strings then
 		return "_"
 	end
-	local str = string:gsub(" ", "_")
+	local str = strings:gsub(" ", "_")
 	return str
 end
 -- Real pos checker
