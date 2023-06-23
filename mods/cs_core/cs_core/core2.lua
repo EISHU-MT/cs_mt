@@ -575,10 +575,12 @@ end
 core.register_globalstep(function(dtime)
 	time_hooks = time_hooks + dtime
 	time_hooks2 = time_hooks2 + dtime
-	for team, teamtable in pairs(csgo.teams) do
+	for team, teamtable in pairs(csgo.team) do
 		local count = teamtable.count
 		local bcount = teamtable.bots_count
-		csgo.teams[team].total_count = count + bcount
+		if (bcount + count) ~= csgo.team[team].total_count then
+			csgo.team[team].total_count = count + bcount
+		end
 	end
 	local players = core.get_connected_players()
 	if time_hooks >= 1 then
