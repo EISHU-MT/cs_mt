@@ -101,7 +101,7 @@ minetest.register_node(":c4", {
     pointable = false,
     mesh = "bomb.obj",
     on_place = function(itemstack, placer, pointed_thing)
-        error()
+        print()
     end,
 })
 
