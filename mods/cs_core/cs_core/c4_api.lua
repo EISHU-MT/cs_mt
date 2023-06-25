@@ -114,9 +114,10 @@ end
 
 -- Beep when the bomb is on
 function hooks(dtime)
+	
 	c4.timer = c4.timer + dtime
 	if c4.planted == true then
-		
+		core.check_for_falling(c4.pos) -- Check node
 		-- Increase the beeps when the time is less.
 		if time > 90 and time < 120 then
 			time_to = 0.8
