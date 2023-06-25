@@ -77,6 +77,7 @@ local wield_entity = {
 	collisionbox = {-0.125,-0.125,-0.125, 0.125,0.125,0.125},
 	visual = "wielditem",
 	textures = {"wield3d:hand"},
+	pointable = false,
 	wielder = nil,
 	timer = 0,
 	static_save = false,
@@ -199,7 +200,7 @@ minetest.register_entity("wield3d:wield_entity", wield_entity)
 
 minetest.register_item("wield3d:hand", {
 	type = "none",
-	wield_image = "blank.png",
+	wield_image = "knife.png",
 })
 
 call.register_on_player_join_team(function(player, team)
