@@ -68,6 +68,7 @@ end
 local function on_leave_player(player)
 	if player and type(player_tags.objs[player:get_player_name()]) == "userdata" then
 		player_tags.objs[player:get_player_name()]:remove()
+		player_tags.objs[player:get_player_name()] = nil
 	end
 end
 
@@ -81,6 +82,11 @@ end
 
 local function on_step()
 	for name, obj in pairs(player_tags.objs) do
+		if csgo.pot[name] == "spectator" then
+			player_tags.objs[name]:remove()
+			player_tags.objs[name] = nil
+			return
+		end
 		for _, name2 in pairs(core.get_connected_names()) do
 			if name == name2 then
 				return
