@@ -66,14 +66,14 @@ local function add(player, team)
 end
 
 local function on_leave_player(player)
-	if type(player_tags.objs[player:get_player_name()]) == "userdata" then
+	if player and type(player_tags.objs[player:get_player_name()]) == "userdata" then
 		player_tags.objs[player:get_player_name()]:remove()
 	end
 end
 
 local function on_join_team(name, team)
 	if name and team and team == "spectator" then
-		player_tags.empty()
+		on_leave_player(Player(name)) -- Delete nametag.
 	elseif name and team then
 		add(Player(name), team)
 	end
