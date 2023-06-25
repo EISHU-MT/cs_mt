@@ -166,6 +166,10 @@ function cs_match.finished_match(teamare1)
 					elseif csgo.pot[pname] == "spectator" then
 						empty()
 					end
+					
+					if died_players[player:get_player_name()] then
+						died_players[player:get_player_name()]:remove() -- Remove the body
+					end
 				end
 				
 				cs_buying.enable_shopping()
@@ -192,6 +196,7 @@ function cs_match.finished_match(teamare1)
 				
 				core.after(3, function()
 					ccore = {}
+					died = {} -- reset
 				end)
 				
 				if ask_for_bomb() then
@@ -300,6 +305,7 @@ end)
 minetest.register_on_leaveplayer(function(player)
 	local playern = player:get_player_name()
 	ccore[playern] = nil
+	died[playern] = nil
 	if has_bomb == playern then
 		has_bomb = nil
 	end
