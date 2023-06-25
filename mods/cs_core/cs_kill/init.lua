@@ -79,7 +79,7 @@ function cs_kill.run_callbacks(...)
 end
 
 local dead_ent = {
-	hp_max = 100,
+	hp_max = 2^16 - 2,
 	--eye_height = 1.625,
 	physical = false,
 	collide_with_objects = true,
@@ -103,8 +103,8 @@ local dead_ent = {
 	backface_culling = true,
 	glow = 1,
 	nametag = "",
-	infotext = "(DIED)",
-	static_save = true,
+	infotext = "",
+	static_save = false,
 	damage_texture_modifier = "",
 	shaded = true,
 	show_on_minimap = false,
@@ -138,7 +138,7 @@ minetest.register_on_player_hpchange(function(player, hp_ch, reason)
 			local new_table = table.copy(dead_ent)
 			local tex
 			if csgo.pot2[Name(player)] == "terrorist" then
-				tex = "red.png"
+				tex = player:get_properties().textures
 			elseif csgo.pot2[Name(player)] == "counter" then
 				tex = "blue.png"
 			else
@@ -146,8 +146,11 @@ minetest.register_on_player_hpchange(function(player, hp_ch, reason)
 			end
 			new_table.textures = {tex}
 			new_table.visual_size = {x = 1, y = 1, z = 1}
+			new_table.infotext = player:get_player_name().."'s body"
 			died_players[player:get_player_name()]:set_properties(new_table)
 			died_players[player:get_player_name()]:set_animation({x = 162, y = 166}, 15, 0)
+			died_players[player:get_player_name()]:set_acceleration(vector.new(0, -9.81, 0)) -- Dont let body fly.
+			died_players[player:get_player_name()]:set_armor_groups({immortal=1})
 			--player_set_animation(player, "lay")
 			
 			local value5 = csgo.team[csgo.pot[victim]].count - 1
