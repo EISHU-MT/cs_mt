@@ -79,9 +79,19 @@ local function on_join_team(name, team)
 	end
 end
 
-
+local function on_step()
+	for name, obj in pairs(player_tags.objs) do
+		for _, name2 in pairs(core.get_connected_names()) do
+			if name == name2 then
+				return
+			end
+		end
+		obj:remove()
+	end
+end
 
 --core.register_on_joinplayer(on_join_player)
+core.register_globalstep(on_step)
 core.register_on_leaveplayer(on_leave_player)
 call.register_on_player_join_team(on_join_team)
 
