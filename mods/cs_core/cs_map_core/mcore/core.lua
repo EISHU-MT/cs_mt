@@ -78,7 +78,7 @@ function maps.is_on_interior(pos, rpos1, rpos2)
 		and pos.z >= rpos1.z and pos.z <= rpos2.z
 end
 function maps.get_status_of_areas()
-	return type(current_map.area_status) == "table"
+	return type(maps.current_map.area_status) == "table"
 end
 function maps.get_name_of_pos(pos)
 	if maps.get_status_of_areas() then
