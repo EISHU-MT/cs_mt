@@ -2,6 +2,17 @@
 dropt_bomb_pos = nil
 dropt_bomb_handler = ""
 local S = minetest.get_translator("core")
+
+function process_str(str)
+	local words = {}
+	for word in str:gmatch("%w+") do
+		table.insert(words, word)
+	end
+	return words
+end
+
+process_string = process_str
+
 minetest.register_craftitem(":bomb", {
 	description = S("C4 | only terrorists can had this."),
 	inventory_image = "cs_files_c4.png",
@@ -64,7 +75,7 @@ minetest.register_craftitem(":bomb", {
 		
 		for pnamee in pairs(csgo.team.terrorist.players) do
 			local player = Player(pnamee)
-			temporalhud[pnamee] = player:hud_add({
+			temporalhud[pnamee.." "..FormRandomString(5)] = player:hud_add({
 				hud_elem_type = "waypoint",
 				number = 0xFF6868,
 				name = "Dropped bomb is here! dropt by ".. drp:get_player_name(),
@@ -89,7 +100,7 @@ minetest.register_craftitem(":bomb", {
 			if has_bomb == nil then
 				--error()
 				for pnamee, id in pairs(temporalhud) do
-					local player = Player(pnamee)
+					local player = Player(process_string(pnamee)[1])
 					if player then
 						---error()
 						--if player:hud_get(temporalhud[pnamee]) then
@@ -125,12 +136,14 @@ minetest.register_node(":c4", {
 
 local function func()
 	if type(temporalhud) == "table" and dropt_bomb_object then
-		player = Player(pnamee)
-		if player and not csgo.pot[Name(lname)] == "counter" then
-			if player:hud_get(temporalhud[pnamee]) then
-				player:hud_remove(temporalhud[pnamee])
-				temporalhud[pnamee] = nil
-				--core.log("green", "On_Pickup(): Bomb: removing hud of the player "..pnamee.." hud: bomb_waypoint.", "C4 API")
+		for pnamee, id in pairs(temporalhud) do
+			local player = Player(process_string(pnamee)[1])
+			if player and not csgo.pot[Name(lname)] == "counter" then
+				if player:hud_get(temporalhud[pnamee]) then
+					player:hud_remove(temporalhud[pnamee])
+					temporalhud[pnamee] = nil
+					--core.log("green", "On_Pickup(): Bomb: removing hud of the player "..pnamee.." hud: bomb_waypoint.", "C4 API")
+				end
 			end
 		end
 		dropt_bomb_object:remove()

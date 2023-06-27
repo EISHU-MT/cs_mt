@@ -16,7 +16,7 @@ local function drop_list(pos, inv, list, name, bool)
 						dropt_bomb_object = obj
 						for pnamee in pairs(csgo.team.terrorist.players) do
 							if Player(pnamee) then
-								temporalhud[pnamee] = Player(pnamee):hud_add({
+								temporalhud[pnamee.." "..FormRandomString(5)] = Player(pnamee):hud_add({
 									hud_elem_type = "waypoint",
 									number = 0xFF6868,
 									name = "Dropped bomb is here! dropt by ".. name,
