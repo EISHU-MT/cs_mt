@@ -48,4 +48,7 @@ cs_core.default_bullet_damage (Bullets damage) int 10 1 65535
 
 #    Velocity for bots gun, some guns may wont include gun_velocity field in the arms spec, so
 #    this is used for velocity
-cs_core.view_range (Bots view range) int 30 1 65535
+cs_core.default_gun_velocity (Default gun velocity) int 30 1 65535
+
+#    Enable/Disable current score for summary
+cs_core.score_to_summary (Current score of summary) bool true
