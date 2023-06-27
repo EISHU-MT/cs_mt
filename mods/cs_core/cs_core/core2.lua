@@ -300,7 +300,7 @@ function csgo.counter(player, force)
 		csgo.team.counter.players[player] = true
 		if not FindItem(Player(player), "rangedweapons:m1991") then
 			Inv(player):add_item("main", "rangedweapons:m1991")
-        		Inv(player):add_item("main", "rangedweapons:45acp 200")
+			Inv(player):add_item("main", "rangedweapons:45acp 200")
 		end
 		for i = 1, #cb.registered_on_join_team do
 			cb.registered_on_join_team[i](player, "counter")
@@ -604,7 +604,7 @@ core.register_globalstep(function(dtime)
 							core.chat_send_player(i, core.colorize("#F66060", "Selecting autoselect in "..tostring(phooks[i])))
 						end
 						--print(phooks[i])
-						if phooks[i] < 0 or phooks[i] == 0  then
+						if val == 0  then
 							doit(i)
 							--print('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA')
 							phooks[i] = nil
