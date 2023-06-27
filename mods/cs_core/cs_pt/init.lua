@@ -30,16 +30,25 @@ player_tags = {
 }
 
 minetest.register_entity("cs_pt:name", {
-	visual = "sprite",
-	visual_size = {x=2.16, y=0.18, z=2.16},
-	textures = {"invisible.png"},
-	pointable = false,
-	on_punch = function() return true end,
-	physical = false,
-	is_visible = true,
-	backface_culling = false,
-	makes_footstep_sound = false,
-	static_save = false,
+	initial_properties = {
+		visual = "sprite",
+		visual_size = {x=2.16, y=0.18, z=2.16},
+		textures = {"invisible.png"},
+		pointable = false,
+		on_punch = function() return true end,
+		physical = false,
+		is_visible = true,
+		backface_culling = false,
+		makes_footstep_sound = false,
+		static_save = false,
+	},
+	attachedto = "",
+	on_step = function(self)
+		if self.attachedto == "" then self.object:remove() end
+		if csgo.check_team(self.attachedto) ~= "counter" and csgo.check_team(self.attachedto) ~= "terrorist" then
+			self.object:remove()
+		end
+	end
 })
 
 local function add(player, team)
@@ -62,6 +71,8 @@ local function add(player, team)
 	texture = texture.."^[colorize:"..csgo.get_team_colour(team)..":255"
 	entity:set_properties({ textures={texture} })
 	entity:set_attach(player, "", player_tags.configs.coords, {x=0, y=0, z=0})
+	local luaent = entity:get_luaentity()
+	luaent.attachedto = player:get_player_name()
 	player_tags.objs[player:get_player_name()] = entity
 end
 
