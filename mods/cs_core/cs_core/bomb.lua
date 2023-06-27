@@ -1,4 +1,6 @@
 -- Registers bomb
+dropt_bomb_pos = nil
+dropt_bomb_handler = ""
 local S = minetest.get_translator("core")
 minetest.register_craftitem(":bomb", {
 	description = S("C4 | only terrorists can had this."),
@@ -44,19 +46,30 @@ minetest.register_craftitem(":bomb", {
 			return "bomb -1"
 		end
 		
-		if has_bomb then
+		if has_bomb and has_bomb ~= Name(drp) then
 			return "bomb -1"
 		end
+		
+		--core.item_drop(ItemStack("bomb"), drp, pos)
+		
+		local pos = player:get_pos()
+		pos.y = math.floor(pos.y + 0.5)
+		local obj = minetest.add_item(pos, itm)
+		obj:set_velocity({ x = math.random(-1, 1), y = 5, z = math.random(-1, 1) })
+		dropt_bomb_object = obj
+		dropt_bomb_pos = pos
+		dropt_bomb_handler = Name(drp)
+		
 		temporalhud = {}
 		
 		for pnamee in pairs(csgo.team.terrorist.players) do
-			player = Player(pnamee)
+			local player = Player(pnamee)
 			temporalhud[pnamee] = player:hud_add({
 				hud_elem_type = "waypoint",
 				number = 0xFF6868,
 				name = "Dropped bomb is here! dropt by ".. drp:get_player_name(),
 				text = "m",
-				world_pos = pos
+				world_pos = obj:get_pos()
 			})
 			hud_events.new(Player(pnamee), {
 				text = ("(!) The bomb is being dropped!"),
@@ -65,20 +78,25 @@ minetest.register_craftitem(":bomb", {
 			})
 		end
 		has_bomb = nil
-		core.item_drop(itm, drp, pos)
-		return "bomb -1"
+		
+		return ItemStack("")
 	end,
 	on_pickup = function(_, lname, table)
+		if csgo.check_team(Name(lname)) ~= "terrorist" then
+			return false
+		end
 		if type(temporalhud) == "table" then
 			if has_bomb == nil then
-				for pnamee in pairs(temporalhud) do
-					player = Player(pnamee)
-					if player and not csgo.pot[Name(lname)] == "counter" then
-						if player:hud_get(temporalhud[pnamee]) then
-							player:hud_remove(temporalhud[pnamee])
+				--error()
+				for pnamee, id in pairs(temporalhud) do
+					local player = Player(pnamee)
+					if player then
+						---error()
+						--if player:hud_get(temporalhud[pnamee]) then
+							player:hud_remove(id)
 							temporalhud[pnamee] = nil
-							core.debug("green", "On_Pickup(): Bomb: removing hud of the player "..pnamee.." hud: bomb_waypoint.", "C4 API")
-						end
+							--core.debug("green", "On_Pickup(): Bomb: removing hud of the player "..pnamee.." hud: bomb_waypoint.", "C4 API")
+						--end
 					end
 				end
 				local inv = lname:get_inventory()
@@ -104,4 +122,33 @@ minetest.register_node(":c4", {
         print()
     end,
 })
+
+local function func()
+	if type(temporalhud) == "table" and dropt_bomb_object then
+		player = Player(pnamee)
+		if player and not csgo.pot[Name(lname)] == "counter" then
+			if player:hud_get(temporalhud[pnamee]) then
+				player:hud_remove(temporalhud[pnamee])
+				temporalhud[pnamee] = nil
+				--core.log("green", "On_Pickup(): Bomb: removing hud of the player "..pnamee.." hud: bomb_waypoint.", "C4 API")
+			end
+		end
+		dropt_bomb_object:remove()
+	end
+end
+
+call.register_on_new_match(func)
+
+
+
+
+
+
+
+
+
+
+
+
+
 
