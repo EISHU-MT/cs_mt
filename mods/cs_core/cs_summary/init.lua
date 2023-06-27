@@ -16,7 +16,7 @@ function summary.calculate_players(players_table)
 	local table4 = {}
 	if minetest.settings:get("cs_core.score_to_summary", true) then
 		for i, player in pairs(players_table) do
-			if player and type(kills[player]) == "table" then
+			if player and player ~= "add_to" and type(kills[player]) == "table" then
 				table.insert(table1, player)
 				table2[player] = kills[player].score or 0
 				table4[player] = kills[player].kills or 0
