@@ -147,12 +147,14 @@ local rank_definition = {
 					local dn = stats.player.get_deaths(param)
 					local bp = stats.player.get_bplanted(param)
 					local kd = stats.player.calculate_kd(param)
-					local n = tonumber
+					local s = score.get_score_of(param) or "-!-"
+					local n = tostring
 					s(name, c("#42BE00", "=====Player  Stats====="))
 					s(name, c("#42BE00", "Kills: ")..c("#FF3A3A", n(kn)))
 					s(name, c("#42BE00", "Deaths: ")..c("#FF3A3A", n(dn)))
 					s(name, c("#42BE00", "Planted Bombs: ")..c("#FF9100", n(bp)))
 					s(name, c("#42BE00", "K/D: ")..c("#FF3A3A", n(kd)))
+					s(name, c("#42BE00", "Score: ")..c("#FF3A3A", n(s)))
 					s(name, c("#42BE00", "==End of Player Stats=="))
 					return
 				else
@@ -169,12 +171,14 @@ local rank_definition = {
 				local dn = stats.player.get_deaths(name)
 				local bp = stats.player.get_bplanted(name)
 				local kd = stats.player.calculate_kd(name)
+				local s = score.get_score_of(name) or "-!-"
 				local n = tostring
 				s(name, c("#42BE00", "=====Player  Stats====="))
 				s(name, c("#42BE00", "Kills: ")..c("#FF3A3A", n(kn)))
 				s(name, c("#42BE00", "Deaths: ")..c("#FF3A3A", n(dn)))
 				s(name, c("#42BE00", "Planted Bombs: ")..c("#FF9100", n(bp)))
 				s(name, c("#42BE00", "K/D: ")..c("#FF3A3A", n(kd)))
+				s(name, c("#42BE00", "Score: ")..c("#FF3A3A", n(s)))
 				s(name, c("#42BE00", "==End of Player Stats=="))
 			end
 		end,
