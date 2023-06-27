@@ -11,7 +11,7 @@ end
 call.register_on_new_matches(function()
 	core.after(5, function()
 		for pname, stats in pairs(kills) do
-			if type(stats) == "table" then
+			if pname ~= "add_to" then
 				stats.kills = 0
 				stats.deaths = 0
 				stats.score = 0
