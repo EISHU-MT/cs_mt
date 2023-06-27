@@ -13,6 +13,18 @@ function summary.calculate_players(players_table)
 	local table1 = {}
 	local table2 = {}
 	local table3 = {}
+	local table4 = {}
+	if minetest.settings:get("cs_core.score_to_summary", true) then
+		for i, player in pairs(players_table) do
+			if player and type(kills[player]) == "table" then
+				table.insert(table1, player)
+				table2[player] = kills[player].score or 0
+				table4[player] = kills[player].kills or 0
+				table3[player] = kills[player].deaths or 0
+			end
+		end
+		return table1, table2, table3, table4
+	end
 	for i, player in pairs(players_table) do
 		if player and type(kills[player]) == "table" then
 			table.insert(table1, player)
@@ -21,7 +33,7 @@ function summary.calculate_players(players_table)
 			table3[player] = kills[player].deaths or 0
 		end
 	end
-    return table1, table2, table3, {}
+	return table1, table2, table3, table4
 end
 --[[
     players={
@@ -29,10 +41,30 @@ end
     }
 
 ]]
-function summary.add_by_values(players, players_kills, players_deaths, inverse_kills)
+function summary.add_by_values(players, players_kills, players_deaths, scr)
 	--[[
 		this was the hardest thing i did.
 	]]
+	if minetest.settings:get("cs_core.score_to_summary", true) then
+		table.sort(players, function (n1, n2) return players_kills[n1] > players_kills[n2] end)
+		uplayers = {}
+		for i, str in pairs(players) do
+			core.debug("green", "Creating list row: "..i.." for "..str, "CS:GO Summary")
+			local ea = kills[str].team or "spectator"
+			local color
+			if ea then
+				color = csgo.team[ea].colour or "#00FF00"
+			end
+			if color and players_kills[str] and players_deaths[str] then
+				if str:find("BOT") then
+					table.insert(uplayers, color.."BOT "..str.." kills: "..players_kills[str].."\\, deaths: "..players_deaths[str])
+				else
+					table.insert(uplayers, color.."Player "..str.." score: "..players_kills[str].."\\, deaths: "..players_deaths[str].."\\, kills: "..scr[str])
+				end
+			end
+		end
+		return uplayers
+	end
 	table.sort(players, function (n1, n2) return players_kills[n1] > players_kills[n2] end)
 	--local splayers = players
 	uplayers = {}
