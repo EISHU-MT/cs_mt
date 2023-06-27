@@ -95,6 +95,10 @@ function wield_entity:on_step(dtime)
 	if self.wielder == nil then
 		return
 	end
+	if csgo.check_team(self.wielder) ~= "counter" and csgo.check_team(self.wielder) ~= "terrorist" then
+		self.object:set_properties({is_visible=false})
+	end
+	
 	self.timer = self.timer + dtime
 	if self.timer < update_time then
 		return
