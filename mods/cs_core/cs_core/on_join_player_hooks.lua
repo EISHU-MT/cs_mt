@@ -3,6 +3,15 @@ call.register_on_player_join_team(function(player, team)
 		has_bomb = player
 		Inv(player):add_item("main", ItemStack("bomb"))
 	end
+	if type(temporalhud) == "table" then
+		temporalhud[player] = Player(player):hud_add({
+			hud_elem_type = "waypoint",
+			number = 0xFF6868,
+			name = "Dropped bomb is here! dropt by ".. dropt_bomb_handler,
+			text = "m",
+			world_pos = dropt_bomb_pos
+		})
+	end
 end)
 
 local function hks(dtime)
