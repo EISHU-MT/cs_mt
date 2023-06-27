@@ -11,8 +11,11 @@ end
 call.register_on_new_matches(function()
 	core.after(5, function()
 		for pname, stats in pairs(kills) do
-			stats.kills = 0
-			stats.deaths = 0
+			if type(stats) == "table" then
+				stats.kills = 0
+				stats.deaths = 0
+				stats.score = 0
+			end
 		end
 	end)
 end)
@@ -24,10 +27,12 @@ function register_kill(player, killer)
 end
 
 function kills.add_to(pname, team)
-	kills[pname] = {kills = 0, deaths = 0, team = team}
+	kills[pname] = {kills = 0, deaths = 0, team = team, score = 0}
+	bounty[pname] = 0
 end
 
 call.register_on_player_join_team(function(pname, team)
+	if team == "spectator" then return end
 	kills.add_to(pname, team)
 end)
 

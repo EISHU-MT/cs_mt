@@ -38,6 +38,11 @@ dofile(modpath.."/restrictions.lua")
 dofile(modpath.."/player_on_walk.lua")
 dofile(modpath.."/history.lua")
 
+dofile(modpath.."/score_core.lua")
+dofile(modpath.."/score_callbacks.lua")
+
+dofile(modpath.."/bounty.lua")
+
 --Third Core
 dofile(modpath.."/core3.lua")
 
