@@ -121,7 +121,7 @@ function cs_kh.add(killerr, victim, weapon_image, comment, v_team_a)
 	print(victim)
 	
 	print(csgo.pot[killerr])
-	print(csgo.pot[victimm])
+	print(v_team_a)
 	--]]
 	local k_team = csgo.pot[killerr]
 	local v_team = v_team_a
