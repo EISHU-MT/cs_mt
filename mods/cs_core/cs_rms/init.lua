@@ -32,7 +32,20 @@ randomMSG = {
 "To check on a player stats, use /r <player> or using /rank",
 "Radio is available!. Use it for telling your position to your teammates, by using /radio <number of section *Optional!*>",
 "Radio has GUI for newcomers",
-"This game will be in ContentDB soon......"
+"Global shop is added! Visit it with /gs to buy external things",
+"To buy costumes just search in /gs",
+"Apples now can be used! Buy some with /gs",
+"Remember things in /gs is not free!, uses score as money.",
+"Buying 'Unavailable!' adds something special to your inventory... Go discover it!",
+"Score is same as money, when getting more, your moar rich, Dont waste all!",
+"Remember some items in G.S. menu may be limited, like Christmas event, Hallowen event... All.",
+"Dont be in front of the sniper! Or he will kill you!",
+"Every good player, like campsniping player, had a bounty, every kill that does their do sums their bounty, 100, 200, 300 and more!",
+"When a terrorist player dies and it had the bomb, for terrorists teammates the bomb is a waypoint, for counters not.",
+"Did you discovered that the bomb when dropped cant be picked up for counters, if picked up, thats cheating.",
+"The bots may be so dumb, but they had a very very good aim. So be careful!",
+"Whats the best sniper: m200 or AWP?",
+"This game is very very unstable, so report any crash."
 }
 time_to_say = 90
 rmtime = 0
