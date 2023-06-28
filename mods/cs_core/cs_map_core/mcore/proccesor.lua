@@ -39,6 +39,7 @@ function process_meta(content)
 		failed = false,
 		pos1 = vector.add(content.offset, { x = -r, y = -h / 2, z = -r }),
 		pos2 = vector.add(content.offset, { x = r, y = h / 2, z = r }),
+		area_status = {},
 	}
 	
 	if type(map.status) == "table" then
