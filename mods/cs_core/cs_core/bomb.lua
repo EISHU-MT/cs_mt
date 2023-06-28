@@ -150,6 +150,33 @@ local function func()
 	end
 end
 
+local function check_if_bomb()
+	for player, contents in pairs(csgo.team.terrorist.players) do
+		if Inv(player):contains_item("main", "bomb") then
+			return true
+		end
+	end
+end
+
+
+local function glbstep()
+	if check_if_bomb() then
+		if temporalhud then
+			for pnamee, id in pairs(temporalhud) do
+				local player = Player(process_string(pnamee)[1])
+				if player and not csgo.pot[Name(lname)] == "counter" then
+					if player:hud_get(temporalhud[pnamee]) then
+						player:hud_remove(temporalhud[pnamee])
+						temporalhud[pnamee] = nil
+						--core.log("green", "On_Pickup(): Bomb: removing hud of the player "..pnamee.." hud: bomb_waypoint.", "C4 API")
+					end
+				end
+			end
+		end
+	end
+end
+
+
 call.register_on_new_match(func)
 
 
