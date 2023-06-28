@@ -44,7 +44,7 @@ minetest.register_entity("cs_pt:name", {
 	},
 	attachedto = "",
 	on_step = function(self)
-		if self.attachedto == "" then self.object:remove() end
+		if (self.attachedto == "" or self.attachedto:find("BOT")) then self.object:remove() end
 		if csgo.check_team(self.attachedto) ~= "counter" and csgo.check_team(self.attachedto) ~= "terrorist" then
 			self.object:remove()
 		end
