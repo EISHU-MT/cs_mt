@@ -40,8 +40,9 @@ local c = core.colorize
 
 function gift.buy(player, item)
 	if item.on_buy then
-		item.on_buy(player, item)
+		local nameea = item.on_buy(player, item)
 		score.rmv_score_to(player, item.price)
+		core.chat_send_player(Name(player), c("#00FF20", "[G.S.] ")..c("#00C819", "You received ")..c("#009C14", nameea)..c("#00C819", ", substracted score from you: ")..c("#DDFF00", tostring(item.price).."."))
 		return
 	end
 	local itemS = ItemStack(item.item)
