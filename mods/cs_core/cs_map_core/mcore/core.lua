@@ -82,7 +82,7 @@ function maps.get_status_of_areas()
 end
 function maps.get_name_of_pos(pos)
 	if maps.get_status_of_areas() then
-		for i, val in pairs(current_map.area_status) do
+		for i, val in pairs(maps.current_map.area_status) do
 			if val.not_radius ~= true then
 				if vector.distance(val.pos, pos) <= val.rad then
 					return val.str or "--"

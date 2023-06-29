@@ -251,6 +251,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 					end
 					wand_nodes = {}
 				end
+				wand[Name(player)] = nil
 			end
 		elseif fields.decline then
 			core.chat_send_player(Name(player), core.colorize("#FF0000", "Declined."))
