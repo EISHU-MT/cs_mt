@@ -264,6 +264,8 @@ function is_real_pos(pos)
 	return type(pos) == "table" and type(pos.x) == "number" and type(pos.y) == "number" and type(pos.z) == "number"
 end
 
+is_real_position = is_real_pos -- Bug check & Bug fix
+
 local function get_teams()
 	local negative = nil
 	local positive = nil
