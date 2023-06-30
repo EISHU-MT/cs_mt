@@ -135,18 +135,22 @@ minetest.register_node(":c4", {
 })
 
 local function func()
-	if type(temporalhud) == "table" and dropt_bomb_object then
-		for pnamee, id in pairs(temporalhud) do
-			local player = Player(process_string(pnamee)[1])
-			if player and not csgo.pot[Name(lname)] == "counter" then
-				if player:hud_get(temporalhud[pnamee]) then
-					player:hud_remove(temporalhud[pnamee])
-					temporalhud[pnamee] = nil
-					--core.log("green", "On_Pickup(): Bomb: removing hud of the player "..pnamee.." hud: bomb_waypoint.", "C4 API")
+	if type(temporalhud) == "table" then
+		if dropt_bomb_object then
+			for pnamee, id in pairs(temporalhud) do
+				local player = Player(process_string(pnamee)[1])
+				if player and not csgo.pot[Name(lname)] == "counter" then
+					if player:hud_get(temporalhud[pnamee]) then
+						player:hud_remove(temporalhud[pnamee])
+						temporalhud[pnamee] = nil
+						--core.log("green", "On_Pickup(): Bomb: removing hud of the player "..pnamee.." hud: bomb_waypoint.", "C4 API")
+					end
 				end
 			end
+			temporalhud = nil
+			dropt_bomb_object:remove()
+			return
 		end
-		dropt_bomb_object:remove()
 	end
 end
 
@@ -172,13 +176,46 @@ local function glbstep()
 					end
 				end
 			end
+			temporalhud = nil
+		end
+	else
+		if temporalhud then
+			local not_ok = false
+			for pname, id in pairs(temporalhud) do -- Do internal process
+				local player = Player(process_string(pname)[1])
+				local pos = player:hud_get(id).world_pos
+				if pos then
+					local objs = core.get_objects_inside_radius(pos, 5)
+					if objs then
+						for _, obj in pairs(objs) do
+							if obj:get_luaentity() then
+								local ent = obj:get_luaentity()
+								if ent.itemstring == "bomb" then
+									return -- Do nothing
+								end
+							end
+						end
+					end
+				end
+			end
+		--	if not_ok == true then
+				for pname, id in pairs(temporalhud) do
+					local player = Player(process_string(pname)[1])
+					if player:hud_get(temporalhud[pname]) then
+						player:hud_remove(temporalhud[pname])
+						temporalhud[pname] = nil
+						--core.log("green", "On_Pickup(): Bomb: removing hud of the player "..pnamee.." hud: bomb_waypoint.", "C4 API")
+					end
+				end
+				temporalhud = nil
+			--end
 		end
 	end
 end
 
 
 call.register_on_new_match(func)
-
+core.register_globalstep(glbstep)
 
 
 
