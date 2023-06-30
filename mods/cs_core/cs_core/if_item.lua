@@ -20,6 +20,18 @@ local function on_step()
 	end
 	for _, player in pairs(core.get_connected_players()) do
 		if cs_match.commenced_match ~= false then
+			
+			-- Fix actual bug when new_matches is proccesed and players still with 0.2 ~ 0.5 of speed.
+			local phs = player:get_physics_override()
+			if phs then
+				if phs.speed < 0.7 then
+					player:set_physics_override({speed=1})
+				end
+				if phs.jump < 0.7 then
+					player:set_physics_override({jump=1})
+				end
+			end
+			
 			local usrd = player:get_wielded_item()
 			local thing = usrd:get_name()
 			if thing == ":" or thing == " " or thing == "" or thing == nil then
