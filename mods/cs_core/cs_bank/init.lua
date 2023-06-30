@@ -85,7 +85,8 @@ function bank.player_add_value(player, amount)
 end
 --Remove some values of a player, can be by buying some arms
 function bank.rm_player_value(player, amount)
-	if player:find("BOT_") then
+--error(player)
+	if player:find("BOT_") and bots.bots_data[player] then
 		bots.bots_data[player].money = bots.bots_data[player].money - tonumber(amount)
 		return
 	end
