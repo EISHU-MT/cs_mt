@@ -4,7 +4,7 @@ local S = minetest.get_translator("core")
 
 -- Core 1 Dofiles
 
-version = "V1.8 DevStates"
+version = "V2.0 ShootingStars"
 --Initial core settings:
 --Cores
 --dofile(modpath.."/core3.lua") -- 3ND CORE --- Player Customise
