@@ -57,7 +57,7 @@ function summary.add_by_values(players, players_kills, players_deaths, scr)
 			end
 			if color and players_kills[str] and players_deaths[str] then
 				if str:find("BOT") then
-					table.insert(uplayers, color.."BOT "..str.." kills: "..players_kills[str].."\\, deaths: "..players_deaths[str])
+					table.insert(uplayers, color.."BOT "..str.." kills: "..scr[str].."\\, deaths: "..players_deaths[str])
 				else
 					table.insert(uplayers, color.."Player "..str.." score: "..players_kills[str].."\\, deaths: "..players_deaths[str].."\\, kills: "..scr[str])
 				end
