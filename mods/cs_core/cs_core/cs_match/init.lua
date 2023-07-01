@@ -73,7 +73,7 @@ function cs_match.finished_match(teamare1)
 			for i, player in pairs(core.get_connected_players()) do
 				player:set_hp(20)
 				local pname = player:get_player_name()
-				core.chat_send_player(pname, "New Match. Remember there are " .. cs_match.available_matches .. " rounds")
+				core.chat_send_player(pname, "New Match. There are " .. cs_match.available_matches .. " matches left")
 				phud[pname] = player:hud_add({
 					hud_elem_type = "text",
 					--texture = "",
@@ -82,7 +82,7 @@ function cs_match.finished_match(teamare1)
 					offset = {x = 30, y = 100},
 					size = {x = 1.5},
 					alignment = {x = 0, y = -1},
-					text = "Be Fast!! shop your arms before time reach!\n You Had 20 Seconds to shop.",
+					text = "Shop quickly, buy you weapons before the match starts!\n You have 20 Seconds to shop.",
 					color = 0xFF9D00,
 				})
 				csgo.show_menu(player)
@@ -110,7 +110,7 @@ function cs_match.finished_match(teamare1)
 		
 		cs_match.hooks.immortal = true
 		
-		core.log("info", "Normal match commenced, available: " .. cs_match.available_matches)
+		core.log("info", "Normal match started, available: " .. cs_match.available_matches)
 		
 		for people in pairs(csgo.team[teamare1].players) do
 			bank.player_add_value(people, 100)
@@ -126,7 +126,7 @@ function cs_match.finished_match(teamare1)
 				for i, player in pairs(core.get_connected_players()) do
 					player:set_hp(20)
 					local pname = player:get_player_name()
-					core.chat_send_player(pname, "New Match. Remember there are " .. cs_match.available_matches .. " rounds")
+					core.chat_send_player(pname, "New Match. There are " .. cs_match.available_matches .. " matches left")
 					phud[pname] = player:hud_add({
 						hud_elem_type = "text",
 						--texture = "",
@@ -135,7 +135,7 @@ function cs_match.finished_match(teamare1)
 						offset = {x = 30, y = 100},
 						size = {x = 1.5},
 						alignment = {x = 0, y = -1},
-						text = "Be Fast!! shop your arms before time reach!\n You Had 20 Seconds to shop.",
+						text = "Shop quickly, buy your weapons before the match starts!\n You have 20 Seconds to shop.",
 						number = 0xFF9D00,
 					})
 					if ccore[pname] then
@@ -185,7 +185,7 @@ function cs_match.finished_match(teamare1)
 						csgo.spectator(player, "Joined spectator team! because: Cannot join "..team)
 					elseif player and team and csgo.team[team] then
 						if minetest.settings:get_bool("cs_core.enable_env_debug", false) then
-							core.log("action", "Placing again the died player "..player.." into terrorist forces")
+							core.log("action", "Respawning killed player "..player.." into terrorist forces")
 						end
 						--error(player .. team)
 						csgo[team](player)
@@ -244,8 +244,8 @@ function cs_match.start_matches()
 		if player and not hud:exists(player, "temp000x15") then
 			playeree = player:get_player_name()
 			player:get_inventory():set_list("main", {})
-			core.chat_send_player(playeree, "You joined on a continued match, matches remaining: " .. cs_match.available_matches)
-			minetest.chat_send_player(playeree, "Be Fast!! shop your arms before time reach!\nYou Had ".. minetest.colorize("#FF8282", "20")  .." Seconds to shop.")
+			core.chat_send_player(playeree, "You joined in the middle of a match, matches remaining: " .. cs_match.available_matches)
+			minetest.chat_send_player(playeree, "Shop quickly, buy your weapons before the match starts\nYou have ".. minetest.colorize("#FF8282", "20")  .." Seconds to shop.")
 		cs_buying.enable_shopping(player)
 		
 		core.after(35, cs_buying.disable_shopping, player)
