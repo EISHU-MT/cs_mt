@@ -160,3 +160,6 @@ for pusher= 1, 9 do
 		pointable = core.settings:get_bool("cs_map.mapmaking", false)
 	})
 end
+
+core.register_alias("cs_map:stone", "csgo:node")
+core.register_alias("cs_map:ind_glass", "csgo:iglass")
