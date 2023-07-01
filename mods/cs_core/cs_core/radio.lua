@@ -4,60 +4,61 @@ radio = {
 	msgs = { -- category
 		heard_something = {
 			"I heard something...",
-			"Theres a loud sound near me",
-			"someone hiding loudly",
-			"A suspicius sound i heard",
+			"There is a loud noise nearby",
+			"Someone is making noise",
+			"I heard something suspicious",
 		},
 		hurted = {
 			"Aaaah! Any help here!",
-			"I need help!",
+			"Help me, please!",
 			"Help!",
-			"Someone shooting at me!",
-			"Someone of enemy team is hurting me!",
+			"Someone is shootinh at me!",
+			"The enemy is killing me!",
 		},
 		hurted_by_teammate = {
 			"Stop!",
-			"Im not an enemy!",
-			"U better stop",
+			"I'm not an enemy!",
+			"Halt!",
+			"Shoot the enemy, not me!"
 		},
 		going_to_b = {
-			"I am near at Sector B",
-			"Im going to Sector B",
+			"I am going to Sector B",
+			"I'm moving to Sector B",
 		},
 		going_to_a = {
-			"I am near from Sector A",
-			"Im reaching Sector A",
+			"I am going to Sector A",
+			"Im moving to Sector A",
 		},
 		reached_to_the_bomb = {
 			"I found the bomb!",
-			"I reached to the bomb",
-			"I am near at the bomb",
-			"I got at bomb area!",
+			"I discovered the bomb",
+			"I am near the bomb",
+			"I found the bomb area!",
 		},
 		what_happening = { -- Random msgs
-			"What happening",
-			"What happened",
+			"What is happening?",
+			"What happened?",
 		},
 		i_got_it = {
 			"I got it!",
 			"Got it!",
 		},
 		ill_die = {
-			"Aaaaah! Noooo! ill dieee!",
-			"Nooo!",
-			"Ill become ghosttt!",
+			"Help! I'm going to die!",
+			"No! I'm dying!",
+			"I'm going to be a ghost!",
 		},
 	},
 	types = {
-		"1. Heard Something",
-		"2. Hurted",
-		"3. Hurted by teammate",
-		"4. Going to Sector B",
-		"5. Going to Sector A",
-		"6. Reached to the bomb",
-		"7. What happening",
-		"8. I got it!",
-		"9. Ill die",
+		"1. Heard Something Nearby",
+		"2. Hurt",
+		"3. Attacked by Teammate",
+		"4. Moving to Sector B",
+		"5. Moving to Sector A",
+		"6. Found the Bomb",
+		"7. What is happening?",
+		"8. I've got it!",
+		"9. I'm gonna die!",
 	},
 	people = {}
 }
@@ -90,23 +91,23 @@ function radio.get_category_by_num(number)
 	if number == 1 then
 		category = "heard_something"
 	elseif number == 2 then
-		category = "hurted"
+		category = "hurt"
 	elseif number == 3 then
-		category = "hurted_by_teammate"
+		category = "hurt_by_teammate"
 	elseif number == 4 then
 		category = "going_to_b"
 	elseif number == 5 then
 		category = "going_to_a"
 	elseif number == 6 then
-		category = "reached_to_the_bomb"
+		category = "found_the_bomb"
 	elseif number == 7 then
-		category = "what_happening"
+		category = "what_is_happening"
 	elseif number == 8 then
 		category = "i_got_it"
 	elseif number == 9 then
-		category = "ill_die"
+		category = "im_gonna_die"
 	else
-		category = "what_happening"
+		category = "what_is_happening"
 	end
 	
 	return category
