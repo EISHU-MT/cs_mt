@@ -87,7 +87,7 @@ function radio.select_random_msg(category)
 	end
 end
 
-function radio.get_category_by_num(number)
+function radio.get_category_by_num(number) --this may need some fixing, I'm not sure if this breaks it. (SuperStarSonic)
 	if number == 1 then
 		category = "heard_something"
 	elseif number == 2 then
