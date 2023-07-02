@@ -81,8 +81,8 @@ end
 local dead_ent = {
 	hp_max = 2^16 - 2,
 	--eye_height = 1.625,
-	physical = true,
-	collide_with_objects = false,
+	physical = false,
+	collide_with_objects = true,
 	collisionbox = { -0.5, -0.5, -0.5, 0.5, 0.5, 0.5 },  -- default
 	selectionbox = { -0.5, -0.5, -0.5, 0.5, 0.5, 0.5, rotate = false },
 	pointable = false,

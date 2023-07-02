@@ -2,20 +2,13 @@ function Player(p)
 	if type(p) == "userdata" then
 		return p
 	elseif type(p) == "string" then
-		if p:find("BOT") then
-			return bots.get_bot_by_name(p)
-		else
-			return core.get_player_by_name(p)
-		end
+		return core.get_player_by_name(p)
 	end
 end
 function Name(p)
 	if type(p) == "string" then
 		return p
 	elseif type(p) == "userdata" then
-		if bots.is_bot(p) then
-			return p:get_luaentity():get_bot_name()
-		end
 		return p:get_player_name()
 	end
 end

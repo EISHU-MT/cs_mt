@@ -68,7 +68,7 @@ minetest.register_on_dieplayer(function(player)
 	local player_name = player:get_player_name()
 	local node = minetest.registered_nodes[minetest.get_node(player:getpos()).name]
 	if (csgo.online[player] == true) then
-	csgo.spectator(player_name, "Died, he's now a spectator")
+	csgo.spectator(player_name, "Died, they are now a spectator")
 	end
 end)
 

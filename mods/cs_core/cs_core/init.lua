@@ -7,7 +7,7 @@ local S = minetest.get_translator("core")
 version = "V2.0 ShootingStars"
 --Initial core settings:
 --Cores
---dofile(modpath.."/core3.lua") -- 3ND CORE --- Player Customise
+--dofile(modpath.."/core3.lua") -- Third CORE --- Player Customise
 dofile(modpath.."/core1.lua") -- Primary Core
 
 --Core1 dofiles

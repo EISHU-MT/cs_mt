@@ -3,7 +3,7 @@ defuser_hooks_wait = 5
 defuser_hooks_wait2 = 7
 
 minetest.register_craftitem("cs_core:defuser", {
-	description = "Defuser\n only counters can had this.",
+	description = "Defuser\n only counters can have this.",
 	inventory_image = "defuser.png",
 	--[[on_use = function(item, player)
 		local inf = clua.get_player_inf(player)
@@ -38,21 +38,21 @@ minetest.register_craftitem("cs_core:defuser", {
 						end, player)
 					else
 						hud_events.new(player, {
-							text = "(!) Not near at the bomb!",
+							text = "(!) Not close enough to the bomb!",
 							color = "warning",
 							quick = true,
 						})
 					end
 				else
 					hud_events.new(player, {
-						text = "(!) The bomb inst planted!",
+						text = "(!) The bomb is not planted!",
 						color = "warning",
 						quick = true,
 					})
 				end
 			else
 				hud_events.new(player, {
-					text = "(!!) Its illegal to use defuser on a map that has bomb_planting disabled!\n -CLua",
+					text = "(!!) bomb_planting is disabled!\n -CLua",
 					color = "danger",
 					quick = true,
 				})
@@ -63,12 +63,12 @@ minetest.register_craftitem("cs_core:defuser", {
 	end,--]]
 	on_drop = function(itm, drp, pos)
 		hud_events.new(drp, {
-			text = "(!) Cant drop a defuser!",
+			text = "(!) Cannot drop a defuser!",
 			color = "warning",
 			quick = true,
 		})
 	end,
 	on_pickup = function(_, lname, table)
-		error("core/defuser.lua: line 19: Defuser have been dropped, on pickup: <= on drop!")
+		error("core/defuser.lua: line 19: Defuser has been dropped, on pickup: <= on drop!")
 	end,
 })

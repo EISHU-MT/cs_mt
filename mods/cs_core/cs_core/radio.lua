@@ -87,11 +87,11 @@ function radio.select_random_msg(category)
 	end
 end
 
-function radio.get_category_by_num(number) -- Start of menu core (This may crash if edited)
+function radio.get_category_by_num(number)
 	if number == 1 then
 		category = "heard_something"
 	elseif number == 2 then
-		category = "hurted"
+		category = "hurt"
 	elseif number == 3 then
 		category = "hurt_by_teammate"
 	elseif number == 4 then
@@ -99,19 +99,19 @@ function radio.get_category_by_num(number) -- Start of menu core (This may crash
 	elseif number == 5 then
 		category = "going_to_a"
 	elseif number == 6 then
-		category = "reached_to_the_bomb"
+		category = "found_the_bomb"
 	elseif number == 7 then
-		category = "what_happening"
+		category = "what_is_happening"
 	elseif number == 8 then
 		category = "i_got_it"
 	elseif number == 9 then
-		category = "ill_die"
+		category = "im_gonna_die"
 	else
-		category = "what_happening"
+		category = "what_is_happening"
 	end
 	
 	return category
-end -- End of menu core
+end
 
 function radio.send_to_player(player)
 	core.show_formspec(Name(player), "radio:radio", "formspec_version[6]" .. "size[10.5,11]" .. "box[0,0;10.7,1;#FFFF00]" .. "label[0.2,0.4;Radio]" .. "button_exit[0.1,10;10.3,0.9;send;Send]" .. "textlist[0.1,1.8;10.3,8.1;list;"..table.concat(radio.types, ",")..";-1;false]" .. "label[3.8,1.4;Please select one]")
