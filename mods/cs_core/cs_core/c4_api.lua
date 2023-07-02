@@ -21,7 +21,7 @@ end
 function c4.plant_bomb_at(pos, player)
 	if pos and Name(player) then
 		if type(pos) ~= "table" then
-			error("c4.plant_bomb_at(): no table of position are found! or just a string...")
+			error("c4.plant_bomb_at(): no position table found! or just a string...")
 		end
 		core.after(1, function(pos)
 			pos.y = pos.y + 1
@@ -31,7 +31,7 @@ function c4.plant_bomb_at(pos, player)
 			for _, p in pairs(core.get_connected_players()) do
 				pname = p:get_player_name()
 				hud_events.new(p, {
-					text = ("(!) The bomb is planted!"),
+					text = ("(!) The bomb has been planted!"),
 					color = "warning",
 					quick = false,
 				})

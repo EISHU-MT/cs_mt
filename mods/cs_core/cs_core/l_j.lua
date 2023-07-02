@@ -14,8 +14,8 @@ end
 --[[THE V0.0 ENGINE CODE, DO NO UNCOMMENT!!
 	for doit, arg1 in pairs(csgo.team) do
 		if (temp[doit].count == c_core.var.max_users or temp[doit].count > c_core.var.max_users) -- The second is immposible but ok....
-			print("[CORE] Unable to put player  {" .. pname .. "} in " .. doit .. " team. Proceding to put on another team...")
-			print("[CORE] Putting her to be a spectator....")
+			print("[CORE] Unable to put player  {" .. pname .. "} in " .. doit .. " team. Trying to put them on another team...")
+			print("[CORE] Making them a spectator....")
 			csgo.spectator(pname)
 		else
 			print("[CORE] Putting player {" .. pname .. "} in " .. doit)

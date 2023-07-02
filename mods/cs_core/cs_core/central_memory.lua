@@ -29,7 +29,7 @@ minetest.register_globalstep(function()
 				empty() -- Ignore if the player is online
 				--core.debug("green", "Fixed player: "..pname, "CS:GO Core")
 			else
-				cs_core.log("warn", "Non-exixsting player found: "..pname)
+				cs_core.log("warn", "Non-existing player found: "..pname)
 				he_team = "terrorist"
 				csgo.op[pname] = nil
 				csgo.pt[pname] = nil
@@ -55,7 +55,7 @@ minetest.register_globalstep(function()
 				empty() -- Ignore if the player is online
 				--core.debug("green", "Fixed player: "..pname, "CS:GO Core")
 			else
-				cs_core.log("warn", "Non-exixsting player found: "..pname)
+				cs_core.log("warn", "Non-existing player found: "..pname)
 				he_team = "counter"
 				csgo.op[pname] = nil
 				csgo.pt[pname] = nil

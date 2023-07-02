@@ -3,12 +3,12 @@ rules = {
 	queue = {}
 }
 rules.list = {
-	S("1. No Hacked Clients!"),
+	S("1. No 'Hacked Clients!"),
 	S("2. No swearing/cursing"),
 	S("3. Respect others & Admins & Mods"),
 	S("4. No sexual content"),
-	S("5. No sharing private info"),
-	S("6. No being rude."),
+	S("5. Don't share private info"),
+	S("6. Do not be rude."),
 	S("-----------------"),
 	S("Admins & Mods desitions are final"),
 }
@@ -20,7 +20,7 @@ function rules.return_form()
 		"label[4.9,0.5;Rules]" ..
 		"textlist[0.2,1.3;10.1,8.5;;"..table.concat(rules.list, ",")..";1;false]" ..
 		"button_exit[0.2,10;4.9,0.8;accept;I Accept!]" ..
-		"button_exit[5.4,10;4.9,0.8;x;I dont care!]"
+		"button_exit[5.4,10;4.9,0.8;x;I Don't Accept!]"
 	}
 	return table.concat(rules, "")
 end

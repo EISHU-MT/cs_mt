@@ -2,7 +2,7 @@ restart = false
 restartm = "This server is being restarted from operator request"
 -- Restart on finish all matchs
 core.register_chatcommand("queue_restart", {
-	description = "Restart server on finish all matchs",
+	description = "Restart server on finish all matches",
 	params = "<message>",
 	func = function(name, param)
         --Param is optional
@@ -39,18 +39,18 @@ core.register_chatcommand("report", {
 						table.insert(reports, "Player "..name.." reported: (Name: "..tabled[1]..", Desc: "..tabled[2]..")")
 					end
 					storage:set_string("reports", core.serialize(reports))
-					core.chat_send_player(name, "-!- Report have been sent.")
+					core.chat_send_player(name, "-!- Report has been sent.")
 				else
 					local reports = {}
 					table.insert(reports, "Player "..name.." reported: (Name: "..tabled[1]..", Desc: "..tabled[2]..")")
 					storage:set_string("reports", core.serialize(reports))
-					core.chat_send_player(name, "-!- Report have been sent.")
+					core.chat_send_player(name, "-!- Report has been sent.")
 				end
 			else
 				core.chat_send_player(name, "-!- Description is not provided!")
 			end
 		else
-			core.chat_send_player(name, "-!- Name is not provided!")
+			core.chat_send_player(name, "-!- Name not provided!")
 		end
 	end,
 })

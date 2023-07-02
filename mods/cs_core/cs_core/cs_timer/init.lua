@@ -128,13 +128,13 @@ local function reg_glb(dtime)
 						to_end = nil
 					else
 						if csgo.team.counter.count > csgo.team.terrorist.count then
-							opts.r = Randomise("Select random", {"the terrorist team is so tiny!", "timed out have been reached", "too low players in the game!"})
+							opts.r = Randomise("Select random", {"the terrorist team is so small!", "time has been reached", "not enough players in the game!"})
 							opts.n = tonumber(1)
 						elseif csgo.team.terrorist.count > csgo.team.counter.count then
-							opts.r = Randomise("Select random", {"the counter team is so tiny!", "timed out", "too low players!"})
+							opts.r = Randomise("Select random", {"the counter team is so small!", "time has been reached", "not enough players!"})
 							opts.n = tonumber(2)
 						elseif csgo.team.terrorist.count == csgo.team.counter.count then
-							opts.r = "By algotrithm this team have win!"
+							opts.r = "By algotrithm this team has win!"
 							opts.n = math.random(2)
 						end
 						

@@ -337,7 +337,7 @@ function preparenow(messa)
 if (messa) then
 cs_core.message = messa
 else
-cs_core.message = "Select Fast!! in 10 seconds this menu closes and theres no back!"
+cs_core.message = "Select quickly, in 10 seconds this menu closes. And you cannot get it back!"
 end
 end
 function csgo.main(name)
@@ -348,7 +348,7 @@ function csgo.main(name)
 	"label[0.3,0.5;Counter Strike Like]" ..
 	"label[12,0.5;Version: "..version.."]" ..
 	"label[4.3,10.4; ]" ..
-	"label[0.1,8.9; Theres a limit of players in every team Terrorists Limit: "..tostring(csgo.usrTlimit).."\n Counters Limit: "..tostring(csgo.usrTlimit).."]" ..
+	"label[0.1,8.9; Theres a limit of players in every team. Terrorists Limit: "..tostring(csgo.usrTlimit).."\n Counters Limit: "..tostring(csgo.usrTlimit).."]" ..
 	"button[7,1.1;3,7.5;spect;Spectator]" ..
 	"image_button[0,1.1;7,7.5;core_counter.png;counterr;Counter Terrorists\nCount: ".. minetest.formspec_escape(csgo.team.counter.count) ..";false;true;core_counterstart.png]" ..
 	"image_button[10,1.1;7,7.5;core_terrorist.png;terrorist;Terrorists Forces\nCount: ".. minetest.formspec_escape(csgo.team.terrorist.count) ..";false;true;core_terroriststart.png]" ..
@@ -379,7 +379,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 	if fields.terrorist then
         local pname = player:get_player_name()
         if not csgo.team.terrorist.count == csgo.usrTlimit then
-        var = "no teams had to join. Because teams limit reached"
+        var = "No teams joined, because team limit was reached."
         csgo.spectator(pname, var)
         else
         csgo.terrorist(pname) 
@@ -403,7 +403,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
     
     if fields.spect then
         local pname = player:get_player_name()
-        local var = "will be a spectator, reason: no died but required from main menu."
+        local var = "will be a spectator, reason: did not die, but was required from main menu."
         csgo.spectator(pname, var)
         core.close_formspec(pname, "core:main")
     end
@@ -556,7 +556,7 @@ minetest.register_on_joinplayer(function(playerrrr)
 			csgo.terrorist(player:get_player_name())
 		else
 			csgo.spectator(player:get_player_name())
-			core.chat_send_player(player:get_player_name(), core.colorize("#FF3100", "We're sorry but the teams limit got reached... "))
+			core.chat_send_player(player:get_player_name(), core.colorize("#FF3100", "The teams limit has been reached... "))
 		end
 		
 		
@@ -699,12 +699,12 @@ minetest.register_on_dieplayer(function(player, reason)
 		
 		local playerr = player:get_player_name()
 		if csgo.pot[playerr] == "terrorist" and (csgo.team.terrorist.count == tokc_TEMP) then
-		mess = "The last player " .. playerr .. " in terrorist team did a suicide today!.." -- LOL
+		mess = "The last player " .. playerr .. " in terrorist killed themselves!" -- LOL
 		cs_match.finished_match("counter")
 		annouce.winner("counter", mess)
 		end
 		if csgo.pot[playerr] == "counter" and (csgo.team.counter.count == tokc_TEMP) then
-		mess = "The last player " .. playerr .. " in counters team did a suicide today!.." -- LOL
+		mess = "The last player " .. playerr .. " in counters team killed themselves!" -- LOL
 		cs_match.finished_match("terrorist")
 		annouce.winner("terrorist", mess)
 		
@@ -729,10 +729,10 @@ minetest.register_on_dieplayer(function(player, reason)
 		died[pname] = true
 
 		if finishedmatch() == false then
-		core.debug("green", "Putting player "..pname.." into dead players to be respawned again later...", "CS:GO Core")
+		core.debug("green", "Making player "..pname.." spectator to be respawned again later...", "CS:GO Core")
 		ccore.teams[he_team].players[pname] = true
 		
-		csgo.send_message(pname .. " will be a spectator. because he died. ", "spectator")
+		csgo.send_message(pname .. " will be a spectator. because they died. ", "spectator")
 		player:set_armor_groups({immortal = 1})
 		--minetest.set_player_privs(pname, {fly=true, fast=true, noclip=true, teleport=true, shout=true}) -- Teleport Is a feature
 		end

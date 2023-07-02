@@ -14,7 +14,7 @@ end
 process_string = process_str
 
 minetest.register_craftitem(":bomb", {
-	description = S("C4 | only terrorists can had this."),
+	description = S("C4 | only terrorists can have the bomb."),
 	inventory_image = "cs_files_c4.png",
 	on_use = function(item, player)
 		local inf = {pos = player:get_pos(), name = player:get_player_name(), inv = player:get_inventory()}
@@ -37,7 +37,7 @@ minetest.register_craftitem(":bomb", {
 					end
 				else
 					hud_events.new(player, {
-						text = S("(!) The bomb cant be placed here!"),
+						text = S("(!) The bomb can't be placed here!"),
 						color = "warning",
 						quick = true,
 					})
@@ -45,7 +45,7 @@ minetest.register_craftitem(":bomb", {
 			end
 		else
 			hud_events.new(player, {
-				text = S("(!) The bomb cant be planted on a map that had the bomb_planting disabled"),
+				text = S("(!) bomb_planting is disabled"),
 				color = "danger",
 				quick = true,
 			})
@@ -78,12 +78,12 @@ minetest.register_craftitem(":bomb", {
 			temporalhud[pnamee.." "..FormRandomString(5)] = player:hud_add({
 				hud_elem_type = "waypoint",
 				number = 0xFF6868,
-				name = "Dropped bomb is here! dropt by ".. drp:get_player_name(),
+				name = "Bomb was dropped! dropped by ".. drp:get_player_name(),
 				text = "m",
 				world_pos = obj:get_pos()
 			})
 			hud_events.new(Player(pnamee), {
-				text = ("(!) The bomb is being dropped!"),
+				text = ("(!) The bomb has been dropped!"),
 				color = "warning",
 				quick = false,
 			})
@@ -120,7 +120,7 @@ minetest.register_craftitem(":bomb", {
 	end,
 })
 minetest.register_node(":c4", {
-    description = S("C4 Node\nIf hading this while playing will be reported."),
+    description = S("C4 Node\nWill be reported when in possesion of C4 node."), -- the most concise version of this sentance is too long
     tiles = {"bomb.png"},
     groups = {immortal=1, falling_node = 1},
     drawtype = "mesh",
