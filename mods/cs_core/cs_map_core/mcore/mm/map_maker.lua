@@ -581,8 +581,8 @@ function export(name)
 			}
 		elseif tabled.nonradius == true then
 			if is_real_position(tabled.positions.pos1) and is_real_position(tabled.positions.pos2) then
-				local pos1 = vector.subtract(tabled.position.pos1, context.center)
-				local pos2 = vector.subtract(tabled.position.pos2, context.center)
+				local pos1 = vector.subtract(tabled.positions.pos1, context.center)
+				local pos2 = vector.subtract(tabled.positions.pos2, context.center)
 				status_table[name] = {
 					pos = {p1 = minetest.pos_to_string(pos1), p2 = minetest.pos_to_string(pos2)},
 					str = tabled.name,
