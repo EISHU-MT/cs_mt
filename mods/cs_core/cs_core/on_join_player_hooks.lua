@@ -1,6 +1,6 @@
 call.register_on_player_join_team(function(player, team)
 	if ((not has_bomb) or (not Player(has_bomb))) and csgo.team.terrorist.count - 1 == 0 and team == "terrorist" then
-		if bomb_holder == "" then
+		if bomb_holder == "" or bomb_holder == nil then
 			has_bomb = player
 			Inv(player):add_item("main", ItemStack("bomb"))
 		end
