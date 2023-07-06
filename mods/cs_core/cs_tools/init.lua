@@ -13,8 +13,10 @@ function Name(p)
 	if type(p) == "string" then
 		return p
 	elseif type(p) == "userdata" then
-		if bots.is_bot(p) then
-			return p:get_luaentity():get_bot_name()
+		if bots then
+			if bots.is_bot(p) then
+				return p:get_luaentity():get_bot_name()
+			end
 		end
 		return p:get_player_name()
 	end
