@@ -65,6 +65,10 @@ function maps.new_map()
 		return spect
 	end
 	
+	-- Might want to remove nodes for bots
+	core.set_node(def.teams.counter, {name="air"})
+	core.set_node(def.teams.terrorist, {name="air"})
+	
 	function ask_for_bomb() return def.bareas.a ~= nil and def.bareas.b ~= nil end
 end
 

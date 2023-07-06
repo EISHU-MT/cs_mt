@@ -72,6 +72,9 @@ local function defuser_hooks(dtime)
 				for name in pairs(csgo.team.counter.players) do
 					 if vector.distance(Player(name):get_pos(), c4.pos) >= 1 and vector.distance(Player(name):get_pos(), c4.pos) <= 3 then
 						local player = Player(Name)
+						if not player then
+							return
+						end
 						local ctrl = player:get_player_control()
 						if ctrl.dig and (player:get_wielded_item():get_name() == "core:defuser" or player:get_wielded_item():get_name() == ":" or player:get_wielded_item():get_name() == "") then
 							if player_defusing ~= name then

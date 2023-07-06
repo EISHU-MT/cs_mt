@@ -19,7 +19,7 @@ function c4.get_planter()
 	return c4.planter or "no one"
 end
 function c4.plant_bomb_at(pos, player)
-	if pos and Name(player) then
+	if pos then
 		if type(pos) ~= "table" then
 			error("c4.plant_bomb_at(): no position table found! or just a string...")
 		end

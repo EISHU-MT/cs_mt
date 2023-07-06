@@ -1,9 +1,11 @@
 call.register_on_player_join_team(function(player, team)
 	if ((not has_bomb) or (not Player(has_bomb))) and csgo.team.terrorist.count - 1 == 0 and team == "terrorist" then
-		has_bomb = player
-		Inv(player):add_item("main", ItemStack("bomb"))
+		if bomb_holder == "" then
+			has_bomb = player
+			Inv(player):add_item("main", ItemStack("bomb"))
+		end
 	end
-	if type(temporalhud) == "table" then
+	if type(temporalhud) == "table" and team == "terrorist" then
 		temporalhud[player] = Player(player):hud_add({
 			hud_elem_type = "waypoint",
 			number = 0xFF6868,

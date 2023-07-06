@@ -89,7 +89,7 @@ minetest.register_craftitem(":bomb", {
 			})
 		end
 		has_bomb = nil
-		
+		bomb_holder = ""
 		return ItemStack("")
 	end,
 	on_pickup = function(_, lname, table)
@@ -116,6 +116,9 @@ minetest.register_craftitem(":bomb", {
 			end
 		end
 		temporalhud = nil
+		dropt_bomb_object = nil
+		bomb_holder = lname:get_player_name()
+		ReportBombPicked(Name(lname))
 		table.ref:remove()
 	end,
 })
@@ -149,21 +152,35 @@ local function func()
 			end
 			temporalhud = nil
 			dropt_bomb_object:remove()
+			dropt_bomb_object = nil
 			return
 		end
 	end
 end
 
-local function check_if_bomb()
+function check_if_bomb()
 	for player, contents in pairs(csgo.team.terrorist.players) do
 		if Inv(player):contains_item("main", "bomb") then
-			return true
+			return true, Player(player)
 		end
 	end
 end
 
 
 local function glbstep()
+	-- Fix bomb obj 
+	if cs_match.commenced_match == false then
+		dropt_bomb_object = nil
+	end
+	if dropt_bomb_object then
+		if type(dropt_bomb_object) then
+			if dropt_bomb_object:get_yaw() then
+				-- Dont do nothing
+			else -- That might be a dead object (when picked up)
+				dropt_bomb_object = nil
+			end
+		end
+	end
 	if check_if_bomb() then
 		if temporalhud then
 			for pnamee, id in pairs(temporalhud) do
@@ -178,6 +195,30 @@ local function glbstep()
 			end
 			temporalhud = nil
 		end
+		
+		-- Animations (Bomb in back of a player or bot)
+		
+		local _, player = check_if_bomb()
+		local objs = player:get_children()
+		local corrected = false
+		
+		for _, obj in pairs(objs) do
+			local luaentity = obj:get_luaentity()
+			if luaentity and luaentity.animated_bomb_obj then
+				corrected = true
+			end
+		end
+		
+		if corrected ~= true then
+			local pos = player:get_pos()
+			local obj = core.add_entity(pos, "c4:bomb_entity")
+			
+			if obj then
+				obj:set_attach(player, "", vector.new(1, 9, -1.6))
+				obj:set_properties({nametag = "Bomb <"..Name(player)..">"})
+			end
+		end
+		
 	else
 		if temporalhud then
 			local not_ok = false
@@ -190,7 +231,7 @@ local function glbstep()
 						for _, obj in pairs(objs) do
 							if obj:get_luaentity() then
 								local ent = obj:get_luaentity()
-								if ent.itemstring == "bomb" then
+								if ent and ent.itemstring == "bomb" then
 									return -- Do nothing
 								end
 							end
@@ -213,6 +254,9 @@ local function glbstep()
 	end
 end
 
+function ReportBombPicked(usr)
+	csgo.send_message(core.colorize("#FFCA4A", "Bomb have been picked up by "..usr), "terrorist")
+end
 
 call.register_on_new_match(func)
 core.register_globalstep(glbstep)
