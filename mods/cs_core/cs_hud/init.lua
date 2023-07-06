@@ -75,7 +75,7 @@ elseif team == "terrorist" then
     cshud.terrorist.number = cshud.terrorist.number + 1
     core.debug("action", "Terrorist Forces wins!")
 elseif team == "spectator" then
-    cs_core.log("error", "cs_hud mod: *spectator* team cant be a winner, returning as an error")
+    cs_core.log("error", "cs_hud mod: *spectator* team cant win, returning as an error")
     error("***Spectator team cant be the winner!")
 end
 
